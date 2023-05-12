@@ -1,0 +1,24 @@
+version: '3.7'
+
+# 컴퓨터들
+services:
+  # 컴퓨터이름
+  wisc-backend: # express
+    build:
+      context: . # 현위치에 같이 있어요
+      dockerfile: Dockerfile # 실행할 파일명
+    volumes:
+      - ./src:/wisc/src
+    ports:
+      - 3000:3000
+    env_file:
+      - ./.env.docker
+
+  # 컴퓨터이름
+  wisc-database: # mysql
+    image: mysql:latest
+    environment:
+      MYSQL_DATABASE: 'wisc-database'
+      MYSQL_ROOT_PASSWORD: '1324'
+    ports:
+      - 3306:3306
