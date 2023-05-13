@@ -6,10 +6,10 @@ type User {
   id: String!
   name: String!
   email: String!
-  password: String!
   phone: String!
   point: Int!
   image: String!
+  deletedAt: DateTime!
 }
 
 type PointTransaction {
@@ -92,4 +92,15 @@ type Mutation {
 input CreatePointTransactionInput {
   impUid: String!
   amount: Int!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
 }
