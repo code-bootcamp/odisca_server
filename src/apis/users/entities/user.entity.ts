@@ -1,5 +1,11 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { triggerAsyncId } from 'async_hooks';
+import {
+  Column,
+  DeleteDateColumn,
+  Entity,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -12,23 +18,26 @@ export class User {
   @Field(() => String)
   name: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field(() => String)
   email: string;
 
   @Column()
-  @Field(() => String)
   password: string;
 
   @Column()
   @Field(() => String)
   phone: string;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   point: number;
 
-  @Column()
-  @Field(() => String)
+  @Column({ default: 'defaultImageUrl' })
+  @Field(() => String, { defaultValue: 'defaultImageUrl' })
   image: string;
+
+  @DeleteDateColumn()
+  @Field(() => Date)
+  deletedAt: Date;
 }
