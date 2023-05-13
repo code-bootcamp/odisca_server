@@ -7,4 +7,4 @@ import { StudyCafesService } from './studyCafes.service';
   // controllers: [],
   providers: [StudyCafesResolver, StudyCafesService],
 })
-export class StudyCafeModule {}
+export class StudyCafesModule {}
