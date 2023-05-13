@@ -11,3 +11,9 @@ export class CreatePointTransactionInput {
   @Field(() => Int)
   amount: number;
 }
+
+@InputType()
+export class CancelPointTransactionInput {
+  @Field(() => String)
+  impUid: string;
+}

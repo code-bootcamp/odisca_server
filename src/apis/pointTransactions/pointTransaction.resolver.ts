@@ -1,9 +1,13 @@
 import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { PointTransaction } from './entities/pointTransaction.entity';
-import { CreatePointTransactionInput } from './dto/create-pointTransactions.input';
-import { IContext } from './interfaces/context';
+import {
+  CancelPointTransactionInput,
+  CreatePointTransactionInput,
+} from './dto/create-pointTransactions.input';
+import { IContext } from '../../common/interfaces/context';
 import { PointTransactionsService } from './pointTransaction.service';
+import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 
 @Resolver()
 export class PointTransactionsResolver {
@@ -11,7 +15,7 @@ export class PointTransactionsResolver {
     private readonly pointTransactionsService: PointTransactionsService,
   ) {}
 
-  @UseGuards()
+  @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => PointTransaction)
   createPointTransaction(
     @Args('createPointTransactionInput')
@@ -21,6 +25,21 @@ export class PointTransactionsResolver {
     const user = context.req.user;
     const impUid = createPointTransactionInput.impUid;
     const amount = createPointTransactionInput.amount;
-    return this.pointTransactionsService.create({ impUid, amount, user });
+    return this.pointTransactionsService.createForPayment({
+      impUid,
+      amount,
+      user,
+    });
+  }
+
+  @UseGuards(GqlAuthGuard('access'))
+  cancelPointTransaction(
+    @Args('cancelPointTransactionInput')
+    cancelPointTransactionInput: CancelPointTransactionInput,
+    @Context() context: IContext,
+  ) {
+    const user = context.req.user;
+    const impUid = cancelPointTransactionInput.impUid;
+    this.pointTransactionsService.cancel({ impUid, user });
   }
 }
