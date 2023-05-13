@@ -1,12 +1,14 @@
 import { Module } from '@nestjs/common';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
-import { StudyCafeModule } from './apis/studyCafes/studyCafes.module';
+import { StudyCafesModule } from './apis/studyCafes/studyCafes.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { PointTransactionsModule } from './apis/pointTransactions/pointTransaction.module';
 
 @Module({
   imports: [
-    StudyCafeModule,
+    PointTransactionsModule,
+    StudyCafesModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/common/graphql/schema.gql',
