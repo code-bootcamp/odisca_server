@@ -1,4 +1,4 @@
-import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Administer } from 'src/apis/administers/entities/administer.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
@@ -33,12 +33,12 @@ export class StudyCafe {
   @Field(() => String)
   operatingTime: string;
 
-  @Column()
-  @Field(() => Int)
+  @Column({ type: 'decimal', precision: 9, scale: 6 })
+  @Field(() => Float)
   lat: number;
 
-  @Column()
-  @Field(() => Int)
+  @Column({ type: 'decimal', precision: 9, scale: 6 })
+  @Field(() => Float)
   lon: number;
 
   @Column()
