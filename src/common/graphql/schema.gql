@@ -2,6 +2,21 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type User {
+  id: String!
+  name: String!
+  email: String!
+  phone: String!
+  point: Int!
+  image: String!
+  deletedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
 type Administer {
   id: String!
   name: String!
@@ -28,22 +43,12 @@ type StudyCafe {
   administer: Administer!
 }
 
-type User {
+type Visit {
   id: String!
-  name: String!
-  email: String!
-  password: String!
-  phone: String!
-  point: Int!
-  image: String!
-}
-
-type Seat {
-  id: String!
-  number: String!
-  expiredTime: Int!
-  studyCafe: StudyCafe!
+  createdAt: DateTime!
+  review: Review!
   user: User!
+  studyCafe: StudyCafe!
 }
 
 type Review {
@@ -54,19 +59,25 @@ type Review {
   visit: Visit!
 }
 
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
-type Visit {
+type Seat {
   id: String!
-  createdAt: DateTime!
-  review: Review!
-  user: User!
+  number: String!
+  expiredTime: Int!
   studyCafe: StudyCafe!
+  user: User!
 }
 
 type Query {
   fetchStudyCafes: String
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+}
+
+input CreateUserInput {
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
 }
