@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PointTransaction } from './entities/pointTransaction.entity';
 import { User } from '../users/entities/user.entity';
-import { PointTransactionsResolver } from './pointTransaction.resolver';
-import { PointTransactionsService } from './pointTransaction.service';
+import { PointTransactionsResolver } from './pointTransactions.resolver';
+import { PointTransactionsService } from './pointTransactions.service';
 
 @Module({
   imports: [

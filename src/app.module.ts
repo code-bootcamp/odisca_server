@@ -3,8 +3,9 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { StudyCafesModule } from './apis/studyCafes/studyCafes.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PointTransactionsModule } from './apis/pointTransactions/pointTransaction.module';
+import { PointTransactionsModule } from './apis/pointTransactions/pointTransactions.module';
 import { UsersModule } from './apis/users/users.module';
+import { ReviewsModule } from './apis/reviews/reviews.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { AdministersModule } from './apis/administers/administers.module';
 import { CacheModule } from '@nestjs/cache-manager';
@@ -16,6 +17,7 @@ import { CacheModule } from '@nestjs/cache-manager';
     PointTransactionsModule,
     StudyCafesModule,
     UsersModule,
+    ReviewsModule,
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/common/graphql/schema.gql',

@@ -6,7 +6,7 @@ import {
   CreatePointTransactionInput,
 } from './dto/create-pointTransactions.input';
 import { IContext } from '../../common/interfaces/context';
-import { PointTransactionsService } from './pointTransaction.service';
+import { PointTransactionsService } from './pointTransactions.service';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 
 @Resolver()
@@ -37,9 +37,9 @@ export class PointTransactionsResolver {
     @Args('cancelPointTransactionInput')
     cancelPointTransactionInput: CancelPointTransactionInput,
     @Context() context: IContext,
-  ) {
+  ): Promise<PointTransaction> {
     const user = context.req.user;
     const impUid = cancelPointTransactionInput.impUid;
-    this.pointTransactionsService.cancel({ impUid, user });
+    return this.pointTransactionsService.cancel({ impUid, user });
   }
 }

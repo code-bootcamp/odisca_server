@@ -19,7 +19,7 @@ import {
   IPointTransactionsServiceCreateForPayment,
   IPointTransactionsServiceFindByImpUidAndUser,
   IPointTransactionsServiceFindOneByImpUid,
-} from './interfaces/pointTransaction-service.interface';
+} from './interfaces/pointTransactions-service.interface';
 
 @Injectable()
 export class PointTransactionsService {

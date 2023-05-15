@@ -57,14 +57,6 @@ type StudyCafe {
   administer: Administer!
 }
 
-type Seat {
-  id: String!
-  number: String!
-  expiredTime: Int!
-  studyCafe: StudyCafe!
-  user: User!
-}
-
 type Visit {
   id: String!
   createdAt: DateTime!
@@ -81,6 +73,14 @@ type Review {
   visit: Visit!
 }
 
+type Seat {
+  id: String!
+  number: String!
+  expiredTime: Int!
+  studyCafe: StudyCafe!
+  user: User!
+}
+
 type Query {
   fetchLoginAdminister: Administer!
   fetchLoginUser: User!
@@ -92,6 +92,7 @@ type Mutation {
   updateLoginAdminister(updateLoginAdministerInput: UpdateLoginAdministerInput!): Administer!
   Login(loginInput: LoginInput!): String!
   createUser(createUserInput: CreateUserInput!): User!
+  createReview(createReviewInput: CreateReviewInput!): Review!
   updateLoginUser(updateLoginUserInput: UpdateLoginUserInput!): User!
   createPointTransaction(createPointTransactionInput: CreatePointTransactionInput!): PointTransaction!
 }
@@ -120,6 +121,11 @@ input CreateUserInput {
   email: String!
   password: String!
   phone: String!
+}
+
+input CreateReviewInput {
+  content: String!
+  visitId: String!
 }
 
 input UpdateLoginUserInput {
