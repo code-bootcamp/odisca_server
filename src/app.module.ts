@@ -5,16 +5,24 @@ import { StudyCafesModule } from './apis/studyCafes/studyCafes.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PointTransactionsModule } from './apis/pointTransactions/pointTransaction.module';
 import { UsersModule } from './apis/users/users.module';
+import { AuthModule } from './apis/auth/auth.module';
+import { AdministersModule } from './apis/administers/administers.module';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
+    AdministersModule,
+    AuthModule,
     PointTransactionsModule,
     StudyCafesModule,
     UsersModule,
-
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/common/graphql/schema.gql',
+      context: ({ req, res }) => ({
+        req,
+        res,
+      }),
     }),
     TypeOrmModule.forRoot({
       type:
@@ -29,6 +37,10 @@ import { UsersModule } from './apis/users/users.module';
       entities: [__dirname + '/apis/**/*.entity.*'],
       synchronize: true,
       logging: true,
+    }),
+    CacheModule.register({
+      url: 'redis://my-redis:6379',
+      isGlobal: true,
     }),
   ],
   // controllers: [AppController],
