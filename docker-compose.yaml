@@ -22,3 +22,8 @@ services:
       MYSQL_ROOT_PASSWORD: '1324'
     ports:
       - 3306:3306
+
+  wisc-redis:
+    image: redis:latest
+    ports:
+      - 6379:6379

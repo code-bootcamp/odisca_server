@@ -10,9 +10,9 @@ export class Administer {
 
   @Column()
   @Field(() => String)
-  name: number;
+  name: string;
 
-  @Column()
+  @Column({ unique: true })
   @Field(() => String)
   email: string;
 
@@ -24,7 +24,7 @@ export class Administer {
   @Field(() => String)
   phone: string;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   point: number;
 }
