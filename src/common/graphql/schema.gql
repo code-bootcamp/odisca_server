@@ -82,17 +82,37 @@ type Review {
 }
 
 type Query {
+  fetchLoginAdminister: Administer!
+  fetchLoginUser: User!
   fetchStudyCafes: String
 }
 
 type Mutation {
-  createPointTransaction(createPointTransactionInput: CreatePointTransactionInput!): PointTransaction!
+  createAdminister(createAdministerInput: CreateAdministerInput!): Administer!
+  updateLoginAdminister(updateLoginAdministerInput: UpdateLoginAdministerInput!): Administer!
+  Login(loginInput: LoginInput!): String!
   createUser(createUserInput: CreateUserInput!): User!
+  updateLoginUser(updateLoginUserInput: UpdateLoginUserInput!): User!
+  createPointTransaction(createPointTransactionInput: CreatePointTransactionInput!): PointTransaction!
 }
 
-input CreatePointTransactionInput {
-  impUid: String!
-  amount: Int!
+input CreateAdministerInput {
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
+}
+
+input UpdateLoginAdministerInput {
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
+}
+
+input LoginInput {
+  email: String!
+  password: String!
 }
 
 input CreateUserInput {
@@ -100,4 +120,16 @@ input CreateUserInput {
   email: String!
   password: String!
   phone: String!
+}
+
+input UpdateLoginUserInput {
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
+}
+
+input CreatePointTransactionInput {
+  impUid: String!
+  amount: Int!
 }
