@@ -15,6 +15,10 @@ export class Seat {
   number: string;
 
   @Column()
+  @Field(() => String)
+  location: string;
+
+  @Column()
   @Field(() => Int)
   expiredTime: number;
 
