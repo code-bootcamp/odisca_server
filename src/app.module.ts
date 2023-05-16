@@ -9,7 +9,9 @@ import { ReviewsModule } from './apis/reviews/reviews.module';
 import { AuthModule } from './apis/auth/auth.module';
 import { AdministersModule } from './apis/administers/administers.module';
 import { CacheModule } from '@nestjs/cache-manager';
-
+import { ConfigModule } from '@nestjs/config';
+import * as redisStore from 'cache-manager-redis-store';
+import { MailerModule } from '@nest-modules/mailer';
 @Module({
   imports: [
     AdministersModule,
@@ -18,6 +20,8 @@ import { CacheModule } from '@nestjs/cache-manager';
     StudyCafesModule,
     UsersModule,
     ReviewsModule,
+    MailerModule,
+    ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: 'src/common/graphql/schema.gql',
@@ -41,7 +45,11 @@ import { CacheModule } from '@nestjs/cache-manager';
       logging: true,
     }),
     CacheModule.register({
-      url: 'redis://my-redis:6379',
+      // redis 어디에 저장할래?
+      store: redisStore,
+      // redis 주소(ip주소) // docker로 실행하는 경우 도커주소
+      url: 'redis://wisc-redis:6379',
+      // 전역에서 한번에 주입시키는 법
       isGlobal: true,
     }),
   ],

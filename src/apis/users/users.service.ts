@@ -6,6 +6,7 @@ import {
   IUsersServiceCreate,
   IUsersServiceFindOneByEmail,
   IUsersServiceFindOneById,
+  IUsersServiceSoftDelete,
 } from './interfaces/users-service.interface';
 import * as bcrypt from 'bcrypt';
 
@@ -21,9 +22,10 @@ export class UsersService {
   }
 
   // 이메일 중복 존재 검증
-  findOneByEmail({ email }: IUsersServiceFindOneByEmail) {
+  findOneByEmail({ email }: IUsersServiceFindOneByEmail): Promise<User> {
     return this.usersRepository.findOne({ where: { email } });
   }
+
   // 회원 등록
   async create({ createUserInput }: IUsersServiceCreate): Promise<User> {
     const { name, email, password, phone } = createUserInput;
@@ -49,5 +51,11 @@ export class UsersService {
       ...user,
       ...updateLoginUserInput,
     });
+  }
+
+  // 회원 정보 삭제(탈퇴)
+  async softDelete({ userId }: IUsersServiceSoftDelete): Promise<boolean> {
+    const result = await this.usersRepository.softDelete({ id: userId });
+    return result.affected ? true : false;
   }
 }
