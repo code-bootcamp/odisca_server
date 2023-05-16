@@ -15,9 +15,10 @@ export class PointTransactionsResolver {
     private readonly pointTransactionsService: PointTransactionsService,
   ) {}
 
+  // 포인트결제 생성
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => PointTransaction)
-  createPointTransaction(
+  createLoginPointTransaction(
     @Args('createPointTransactionInput')
     createPointTransactionInput: CreatePointTransactionInput,
     @Context() context: IContext,
@@ -25,15 +26,18 @@ export class PointTransactionsResolver {
     const user = context.req.user;
     const impUid = createPointTransactionInput.impUid;
     const amount = createPointTransactionInput.amount;
-    return this.pointTransactionsService.createForPayment({
+    console.log(user);
+    return this.pointTransactionsService.create({
       impUid,
       amount,
       user,
     });
   }
 
+  // 포인트 결제 취소
   @UseGuards(GqlAuthGuard('access'))
-  cancelPointTransaction(
+  @Mutation(() => PointTransaction)
+  cancelLoginPointTransaction(
     @Args('cancelPointTransactionInput')
     cancelPointTransactionInput: CancelPointTransactionInput,
     @Context() context: IContext,

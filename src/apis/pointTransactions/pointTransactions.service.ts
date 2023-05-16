@@ -20,6 +20,7 @@ import {
   IPointTransactionsServiceFindByImpUidAndUser,
   IPointTransactionsServiceFindOneByImpUid,
 } from './interfaces/pointTransactions-service.interface';
+import { IamportService } from '../iamport/iamport.service';
 
 @Injectable()
 export class PointTransactionsService {
@@ -30,7 +31,9 @@ export class PointTransactionsService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
 
-    private readonly dataSource: DataSource, // private readonly iamportService: IamportService,
+    private readonly dataSource: DataSource,
+
+    private readonly iamportService: IamportService,
   ) {}
 
   findOneByImpUid({
@@ -46,17 +49,9 @@ export class PointTransactionsService {
     if (result) throw new ConflictException('이미 등록된 결제 아이디입니다.');
   }
 
-  async createForPayment({
-    impUid,
-    amount,
-    user,
-  }: IPointTransactionsServiceCreateForPayment): Promise<PointTransaction> {
-    // await this.iamportService.checkPaid({ impUid, amount }); // 결제완료 상태인지 검증하기
-    await this.checkDuplication({ impUid }); // 이미 결제됐던 id인지 검증하기
+  ///////////////////////////////////////////////////////////////////////////////////////
 
-    return this.create({ impUid, amount, user });
-  }
-
+  // 포인트 결제 등록 API
   async create({
     impUid,
     amount,
@@ -67,16 +62,20 @@ export class PointTransactionsService {
     await queryRunner.startTransaction('SERIALIZABLE');
 
     try {
+      await this.iamportService.checkPaid({ impUid, amount });
+      await this.checkDuplication({ impUid });
+
+      // PointTransaction 테이블에 거래기록 1줄 생성
       const pointTransaction = this.pointTransactionsRepository.create({
         impUid,
         amount,
         user: _user,
-        status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
+        status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT, // 'PAYMENT'
       });
 
       await queryRunner.manager.save(pointTransaction);
 
-      // 유저 조회할 때 다른 사람들이 조회 못하게 lock
+      // 유저 포인트 조회
       const user = await queryRunner.manager.findOne(User, {
         where: { id: _user.id },
         lock: { mode: 'pessimistic_write' },
@@ -87,13 +86,10 @@ export class PointTransactionsService {
         ...user,
         point: user.point + amount,
       });
-
       await queryRunner.manager.save(updatedUser);
 
-      // 확정(lock 해제)
       await queryRunner.commitTransaction();
 
-      // 최종 결과 리턴
       return pointTransaction;
     } catch (error) {
       // 결제 전 상태로 돌아가기
@@ -106,61 +102,67 @@ export class PointTransactionsService {
 
   ////////////////////////////////////////////////////////////////////////////////
 
-  checkAlreadyCanceled({
-    pointTransactions,
-  }: IPointTransactionsServiceCheckAlreadyCanceled): void {
-    const canceledPointTransactions = pointTransactions.filter(
-      (el) => el.status === POINT_TRANSACTION_STATUS_ENUM.CANCEL,
-    );
-    if (canceledPointTransactions.length) {
-      throw new ConflictException('이미 취소된 결제 아이디입니다.');
-    }
-  }
-
-  checkHasCancelablePoint({
-    pointTransactions,
-  }: IPointTransactionsServiceCheckHasCancelablePoint): void {
-    const paidPointTransactions = pointTransactions.filter(
-      (el) => el.status === POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
-    );
-    if (!paidPointTransactions.length) {
-      throw new UnprocessableEntityException('결제 기록이 존재하지 않습니다.');
-    }
-    if (paidPointTransactions[0].user.point < paidPointTransactions[0].amount) {
-      throw new UnprocessableEntityException('포인트가 부족합니다.');
-    }
-  }
-
-  findByImpUidAndUser({
-    impUid,
-    user,
-  }: IPointTransactionsServiceFindByImpUidAndUser): Promise<
-    PointTransaction[]
-  > {
-    return this.pointTransactionsRepository.find({
-      where: { impUid, user: { id: user.id } },
-      relations: ['user'],
-    });
-  }
-
+  // 포인트 결제 취소 API
   async cancel({
     impUid,
-    user,
+    user: _user,
   }: IPointTransactionsServiceCancel): Promise<PointTransaction> {
-    const pointTransactions = await this.findByImpUidAndUser({ impUid, user }); // 결제내역 조회하기
-    this.checkAlreadyCanceled({ pointTransactions }); // 이미 취소된 id인지 검증
-    this.checkHasCancelablePoint({ pointTransactions }); // 포인트가 취소하기에 충분히 있는지 검증하기
+    const queryRunner = this.dataSource.createQueryRunner();
+    await queryRunner.connect();
+    await queryRunner.startTransaction('SERIALIZABLE');
 
-    // 결제 취소하기
-    // const canceledAmount = await this.iamportService.cancel({ impUid });
+    try {
+      const pointTransactionCancel = await queryRunner.manager.findOne(
+        PointTransaction,
+        {
+          where: { impUid, status: POINT_TRANSACTION_STATUS_ENUM.CANCEL },
+          lock: { mode: 'pessimistic_write' },
+        },
+      );
 
-    // 취소된 결과 등록하기
-    return this.create({
-      impUid,
-      // amount: -canceledAmount,
-      amount: 3000, // iamport 연결 후 수정
-      user,
-      status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
-    });
+      const pointTransaction = await queryRunner.manager.findOne(
+        PointTransaction,
+        {
+          where: { impUid },
+          lock: { mode: 'pessimistic_write' },
+        },
+      );
+
+      if (pointTransactionCancel) {
+        throw new UnprocessableEntityException('이미 취소된 내역입니다.');
+      } else {
+        await this.iamportService.cancel({ impUid });
+
+        // 유저 포인트 조회
+        const user = await queryRunner.manager.findOne(User, {
+          where: { id: _user.id },
+          lock: { mode: 'pessimistic_write' },
+        });
+
+        // 유저 포인트 업데이트
+        const updatedUser = this.usersRepository.create({
+          ...user,
+          point: user.point - pointTransaction.amount,
+        });
+        await queryRunner.manager.save(updatedUser);
+
+        const cancelPointTransaction = this.pointTransactionsRepository.create({
+          impUid,
+          amount: -pointTransaction.amount,
+          user: _user,
+          status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
+        });
+
+        await queryRunner.manager.save(cancelPointTransaction);
+
+        await queryRunner.commitTransaction();
+
+        return cancelPointTransaction;
+      }
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+    } finally {
+      await queryRunner.release();
+    }
   }
 }
