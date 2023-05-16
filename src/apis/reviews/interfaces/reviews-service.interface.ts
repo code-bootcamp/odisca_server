@@ -5,3 +5,14 @@ export interface IReviewsServiceCreate {
   user: IAuthUser['user'];
   visitId: string;
 }
+
+export interface IReviewsServiceUpdate {
+  reviewId: string;
+  content: string;
+  user: IAuthUser['user'];
+  visitId: string;
+}
+
+export interface IReviewsServiceFindOneByVisitId {
+  visitId: string;
+}
