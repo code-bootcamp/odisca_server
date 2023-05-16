@@ -12,6 +12,7 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 import { MailerModule } from '@nest-modules/mailer';
+import { VisitModule } from './apis/visit/visit.module';
 @Module({
   imports: [
     AdministersModule,
@@ -21,6 +22,7 @@ import { MailerModule } from '@nest-modules/mailer';
     UsersModule,
     ReviewsModule,
     MailerModule,
+    VisitModule,
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
