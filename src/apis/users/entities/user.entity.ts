@@ -38,6 +38,6 @@ export class User {
   image: string;
 
   @DeleteDateColumn()
-  @Field(() => Date)
-  deletedAt: Date;
+  @Field(() => Date, { nullable: true })
+  deletedAt?: Date;
 }
