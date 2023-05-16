@@ -7,6 +7,7 @@ import {
   IAdministersServiceCreate,
   IAdministersServiceFindOne,
   IAdministersServiceFindOneById,
+  IAdministersServiceSoftDelete,
 } from './interfaces/administers-service.interface';
 
 @Injectable()
@@ -36,7 +37,7 @@ export class AdministersService {
   }: IAdministersServiceCreate): Promise<Administer> {
     const { password, email, name, phone } = createAdministerInput;
 
-    // 1. 존재하는 이메일인지 확인`
+    // 1. 존재하는 이메일인지 확인
     const prevEmail = await this.findOneByEmail({ email });
     if (prevEmail) throw new ConflictException('이미 등록된 이메일입니다.');
     // 2. 새로운 이메일이라면 회원가입
@@ -57,5 +58,13 @@ export class AdministersService {
       ...user,
       ...updateLoginAdministerInput,
     });
+  }
+
+  // 회원 정보 삭제(탈퇴)
+  async softDelete({
+    adminId,
+  }: IAdministersServiceSoftDelete): Promise<boolean> {
+    const result = await this.administersRepository.softDelete({ id: adminId });
+    return result.affected ? true : false;
   }
 }
