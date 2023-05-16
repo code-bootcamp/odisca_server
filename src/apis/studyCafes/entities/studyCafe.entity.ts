@@ -41,19 +41,19 @@ export class StudyCafe {
   @Field(() => Float)
   lon: number;
 
-  @Column()
+  @Column({ unique: true })
   @Field(() => String)
   brn: string;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   seatCount: number;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   floorPlanX: number;
 
-  @Column()
+  @Column({ default: 0 })
   @Field(() => Int)
   floorPlanY: number;
 
