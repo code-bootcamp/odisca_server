@@ -11,3 +11,7 @@ export interface IAdministersServiceCreate {
 export interface IAdministersServiceFindOneById {
   adminId: string;
 }
+
+export interface IAdministersServiceSoftDelete {
+  adminId: string;
+}

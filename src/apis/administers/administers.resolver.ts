@@ -11,6 +11,7 @@ import { Administer } from './entities/administer.entity';
 export class AdministersResolver {
   constructor(private readonly administersService: AdministersService) {}
 
+  // 회원 가입
   @Mutation(() => Administer)
   createAdminister(
     @Args('createAdministerInput') createAdministerInput: CreateAdministerInput,
@@ -18,6 +19,7 @@ export class AdministersResolver {
     return this.administersService.create({ createAdministerInput });
   }
 
+  // 회원 정보 조회
   @UseGuards(GqlAuthGuard('access'))
   @Query(() => Administer)
   fetchLoginAdminister(@Context() context: IContext) {
@@ -25,6 +27,7 @@ export class AdministersResolver {
     return this.administersService.findOneById({ adminId });
   }
 
+  // 회원 정보 수정
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => Administer)
   updateLoginAdminister(
@@ -37,5 +40,13 @@ export class AdministersResolver {
       adminId,
       updateLoginAdministerInput,
     });
+  }
+
+  // 회원 탈퇴(정보 삭제)
+  @UseGuards(GqlAuthGuard('access'))
+  @Mutation(() => Boolean)
+  deleteLoginAdminister(@Context() context: IContext): Promise<boolean> {
+    const adminId = context.req.user.id;
+    return this.administersService.softDelete({ adminId });
   }
 }
