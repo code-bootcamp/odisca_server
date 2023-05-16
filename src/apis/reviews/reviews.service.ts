@@ -21,7 +21,7 @@ export class ReviewsService {
   ) {}
 
   findOneByVisitId({
-    visitId,
+    visit: visitId,
   }: IReviewsServiceFindOneByVisitId): Promise<Visit> {
     return this.visitRepository.findOne({
       relations: ['visit'],
@@ -29,60 +29,47 @@ export class ReviewsService {
     });
   }
 
-  async create({
+  async createReview({
     content, //
     user, //
-    visitId, //
+    visit: visitId, //
   }: IReviewsServiceCreate): Promise<Review> {
+    console.log(content, user, visitId);
     try {
-      const visit = await this.findOneByVisitId({
-        visitId,
+      const userId = user.id;
+
+      const result = await this.reviewsRepository.save({
+        content,
+        user: { id: userId },
+        visit: { id: visitId },
       });
 
-      // 방문기록이 존재하면 저장 진행
-      if (visit) {
-        const review = await this.reviewsRepository.create({
-          content,
-          user,
-        });
-
-        const result = await this.reviewsRepository.save(review);
-
-        return result;
-      } else {
-        // 방문기록이 존재하지 않으면 에러 던지기
-        throw new UnprocessableEntityException(
-          '방문기록이 없으므로 리뷰 작성이 불가능합니다.',
-        );
-      }
+      return result;
     } catch (error) {}
   }
 
   async update({
     content, //
     user, //
-    visitId, //
+    visit: visitId, //
     reviewId, //
   }: IReviewsServiceUpdate): Promise<boolean> {
     try {
       // 지금 로그인한 유저가 리뷰를 적은 유저가 맞는지 확인 (아니면 에러 맞으면 수정)
       const visit = this.findOneByVisitId({
-        visitId,
+        visit: visitId,
       });
 
-      let result;
+      // 리뷰 수정
+      const result = await this.reviewsRepository.update(
+        {
+          id: reviewId,
+        },
+        {
+          content,
+        },
+      );
 
-      if ((await visit).user === user) {
-        // 리뷰 수정
-        result = await this.reviewsRepository.update(
-          {
-            id: reviewId,
-          },
-          {
-            content,
-          },
-        );
-      }
       return result.affected ? true : false;
     } catch (error) {}
   }
