@@ -21,31 +21,12 @@ export class ReviewsResolver {
     @Context() context: IContext,
   ): Promise<Review> {
     const content = createReviewInput.content;
-    const visitId = createReviewInput.visitId;
+    const visit = createReviewInput.visitId;
     const user = context.req.user;
-    return this.reviewsService.create({
+    return this.reviewsService.createReview({
       content,
       user,
-      visitId,
-    });
-  }
-
-  @UseGuards(GqlAuthGuard('access'))
-  @Mutation(() => Review)
-  updateReview(
-    @Args('updateReviewInput')
-    updateReviewInput: UpdateReviewInput,
-    @Context() context: IContext,
-  ): Promise<boolean> {
-    const content = updateReviewInput.content;
-    const visitId = updateReviewInput.visitId;
-    const reviewId = updateReviewInput.reviewId;
-    const user = context.req.user;
-    return this.reviewsService.update({
-      content,
-      user,
-      visitId,
-      reviewId,
+      visit,
     });
   }
 }
