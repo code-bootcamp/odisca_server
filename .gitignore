@@ -5,6 +5,7 @@
 /node_modules
 .schema.gql
 
+
 # Logs
 logs
 *.log

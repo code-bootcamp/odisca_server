@@ -4,6 +4,7 @@ import { PointTransaction } from './entities/pointTransaction.entity';
 import { User } from '../users/entities/user.entity';
 import { PointTransactionsResolver } from './pointTransactions.resolver';
 import { PointTransactionsService } from './pointTransactions.service';
+import { IamportService } from '../iamport/iamport.service';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { PointTransactionsService } from './pointTransactions.service';
   providers: [
     PointTransactionsResolver, //
     PointTransactionsService, //
+    IamportService, //
   ],
 })
 export class PointTransactionsModule {}
