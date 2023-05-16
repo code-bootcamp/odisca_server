@@ -3,10 +3,10 @@ version: '3.7'
 # 컴퓨터들
 services:
   # 컴퓨터이름
-  wisc-backend: # express
+  wisc-backend:
     build:
-      context: . # 현위치에 같이 있어요
-      dockerfile: Dockerfile # 실행할 파일명
+      context: .
+      dockerfile: Dockerfile
     volumes:
       - ./src:/wisc/src
     ports:

@@ -1,5 +1,4 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { triggerAsyncId } from 'async_hooks';
 import {
   Column,
   DeleteDateColumn,
@@ -31,13 +30,13 @@ export class User {
 
   @Column({ default: 0 })
   @Field(() => Int)
-  point: number;
+  point?: number;
 
   @Column({ default: 'defaultImageUrl' })
   @Field(() => String, { defaultValue: 'defaultImageUrl' })
-  image: string;
+  image?: string;
 
   @DeleteDateColumn()
-  @Field(() => Date)
-  deletedAt: Date;
+  @Field(() => Date, { nullable: true })
+  deletedAt?: Date;
 }
