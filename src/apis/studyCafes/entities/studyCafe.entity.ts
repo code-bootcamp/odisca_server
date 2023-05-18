@@ -31,7 +31,11 @@ export class StudyCafe {
 
   @Column()
   @Field(() => String)
-  operatingTime: string;
+  openTime: string;
+
+  @Column()
+  @Field(() => String)
+  closeTime: string;
 
   @Column({ type: 'decimal', precision: 9, scale: 6 })
   @Field(() => Float)

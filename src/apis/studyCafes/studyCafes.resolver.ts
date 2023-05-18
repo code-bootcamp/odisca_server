@@ -30,7 +30,6 @@ export class StudyCafesResolver {
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => StudyCafe)
   createLoginCafeFloorPlan(
-    @Context() context: IContext,
     @Args('createCateFloorPlanInput')
     createCafeFloorPlanInput: CreateCafeFloorPlanInput,
   ): Promise<StudyCafe> {
@@ -40,20 +39,14 @@ export class StudyCafesResolver {
   }
 
   // 등록한 스터디 카페 전체 조회
-  @UseGuards(GqlAuthGuard('access'))
   @Query(() => [StudyCafe])
-  fetchLoginStudyCafes(@Context() context: IContext): Promise<StudyCafe[]> {
-    const adminId = context.req.user.id;
+  fetchLoginStudyCafes(@Args('adminId') adminId: string): Promise<StudyCafe[]> {
     return this.studyCafesService.fetchStudyCafesById({ adminId });
   }
 
   // 등록한 스터디 카페 하나 조회
-  @UseGuards(GqlAuthGuard('access'))
   @Query(() => StudyCafe)
-  fetchLoginStudyCafe(
-    @Context() context: IContext,
-    @Args('studyCafeId') studyCafeId: string,
-  ): Promise<StudyCafe> {
+  fetchStudyCafe(@Args('studyCafeId') studyCafeId: string): Promise<StudyCafe> {
     return this.studyCafesService.fetchStudyCafeById({ studyCafeId });
   }
 
@@ -66,7 +59,7 @@ export class StudyCafesResolver {
     updateStudyCafeInput: UpdateStudyCafeInput,
   ): Promise<StudyCafe> {
     const adminId = context.req.user.id;
-    return this.studyCafesService.update({
+    return this.studyCafesService.updateStudyCafe({
       updateStudyCafeInput,
       adminId,
     });

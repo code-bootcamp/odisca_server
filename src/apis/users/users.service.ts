@@ -7,6 +7,7 @@ import {
   IUsersServiceFindOneByEmail,
   IUsersServiceFindOneById,
   IUsersServiceSoftDelete,
+  IUsersServiceUpdate,
 } from './interfaces/users-service.interface';
 import * as bcrypt from 'bcrypt';
 
@@ -45,11 +46,17 @@ export class UsersService {
   }
 
   // 정보 수정
-  async update({ userId, updateLoginUserInput }) {
+  async update({
+    userId,
+    updateLoginUserInput,
+  }: IUsersServiceUpdate): Promise<User> {
+    const { password, phone } = updateLoginUserInput;
     const user = await this.findOneById({ userId });
+    const hashedPassword = await bcrypt.hash(password, 10);
     return this.usersRepository.save({
-      ...user,
-      ...updateLoginUserInput,
+      id: user.id,
+      password: hashedPassword,
+      phone,
     });
   }
 

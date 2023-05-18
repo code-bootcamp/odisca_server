@@ -1,4 +1,5 @@
 import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { CreateImageInput } from 'src/apis/images/dto/create-image.input';
 
 @InputType()
 export class CreateStudyCafeInput {
@@ -18,7 +19,10 @@ export class CreateStudyCafeInput {
   description: string;
 
   @Field(() => String)
-  operatingTime: string;
+  openTime: string;
+
+  @Field(() => String)
+  closeTime: string;
 
   @Field(() => Float)
   lat: number;
@@ -28,4 +32,7 @@ export class CreateStudyCafeInput {
 
   @Field(() => String)
   brn: string;
+
+  @Field(() => [CreateImageInput])
+  image: CreateImageInput[];
 }

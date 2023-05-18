@@ -1,34 +1,38 @@
 import { Field, Float, InputType, Int } from '@nestjs/graphql';
+import { CreateImageInput } from 'src/apis/images/dto/create-image.input';
 
 @InputType()
 export class UpdateStudyCafeInput {
-  @Field(() => String)
-  name: string;
+  @Field(() => String, { nullable: true })
+  name?: string;
 
-  @Field(() => String)
-  address: string;
+  @Field(() => String, { nullable: true })
+  address?: string;
 
-  @Field(() => String)
-  contact: string;
+  @Field(() => String, { nullable: true })
+  contact?: string;
 
-  @Field(() => Int)
-  timeFee: number;
+  @Field(() => Int, { nullable: true })
+  timeFee?: number;
 
-  @Field(() => String)
-  description: string;
+  @Field(() => String, { nullable: true })
+  description?: string;
 
-  @Field(() => String)
-  operatingTime: string;
+  @Field(() => String, { nullable: true })
+  openTime?: string;
 
-  @Field(() => Float)
-  lat: number;
+  @Field(() => String, { nullable: true })
+  closeTime?: string;
 
-  @Field(() => Float)
-  lon: number;
+  @Field(() => Float, { nullable: true })
+  lat?: number;
 
-  @Field(() => String)
-  brn: string;
+  @Field(() => Float, { nullable: true })
+  lon?: number;
 
-  @Field(() => String)
-  studyCafeId: string;
+  @Field(() => String, { nullable: true })
+  brn?: string;
+
+  @Field(() => [CreateImageInput], { nullable: true })
+  image?: CreateImageInput[];
 }
