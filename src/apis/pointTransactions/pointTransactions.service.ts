@@ -35,6 +35,14 @@ export class PointTransactionsService {
 
     private readonly iamportService: IamportService,
   ) {}
+  findByUserId({ userId }): Promise<PointTransaction[]> {
+    return this.pointTransactionsRepository.find({
+      where: { user: userId },
+      relations: ['user'],
+    });
+  }
+
+  ///////////////////////////////////////////////////////////////////////////////////////
 
   findOneByImpUid({
     impUid,
@@ -48,8 +56,6 @@ export class PointTransactionsService {
     const result = await this.findOneByImpUid({ impUid });
     if (result) throw new ConflictException('이미 등록된 결제 아이디입니다.');
   }
-
-  ///////////////////////////////////////////////////////////////////////////////////////
 
   // 포인트 결제 등록 API
   async create({

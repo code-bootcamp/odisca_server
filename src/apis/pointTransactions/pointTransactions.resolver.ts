@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { PointTransaction } from './entities/pointTransaction.entity';
 import {
   CancelPointTransactionInput,
@@ -14,6 +14,13 @@ export class PointTransactionsResolver {
   constructor(
     private readonly pointTransactionsService: PointTransactionsService,
   ) {}
+  @Query(() => [PointTransaction])
+  fetchLoginPointTransactions(
+    @Context() context: IContext,
+  ): Promise<PointTransaction[]> {
+    const userId = context.req.user;
+    return this.pointTransactionsService.findByUserId({ userId });
+  }
 
   // 포인트결제 생성
   @UseGuards(GqlAuthGuard('access'))
