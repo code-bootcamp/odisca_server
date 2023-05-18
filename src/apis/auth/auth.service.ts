@@ -98,7 +98,6 @@ export class AuthService {
 
   // 회원 소셜로그인 //
   async socialUserLogin({ req, res }) {
-    console.log(req.user);
     const user = await this.usersService.findOneByEmail({
       email: req.user.email,
     });
@@ -156,11 +155,13 @@ export class AuthService {
       { sub: user.id },
       { secret: process.env.JWT_REFRESH_KEY, expiresIn: '2w' },
     );
+    // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    const Origins = ['http://localhost:3000', 'https://odisca.store'];
     res.setHeader(
       'Set-Cookie',
       `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
     );
-    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Origin', Origins);
   }
 
   restoreAccessToken({ user }: IAuthServiceRestoreAccessToken): string {
@@ -182,14 +183,12 @@ export class AuthService {
       const decodedAcc = jwt.verify(accessToken, process.env.JWT_ACCESS_KEY, {
         complete: true,
       }) as jwt.JwtPayload;
-
       // refreshToken 검증
       const decodeRefresh = jwt.verify(
         refreshToken,
         process.env.JWT_REFRESH_KEY,
         { complete: true },
       ) as jwt.JwtPayload;
-
       // 남은 만료시간
       const remainedExpireAcc = Math.floor(
         decodedAcc.payload.exp - new Date().getTime() / 1000,
@@ -198,7 +197,6 @@ export class AuthService {
       const remainedExpireRefresh = Math.floor(
         decodeRefresh.payload.exp - new Date().getTime() / 1000,
       );
-
       // redis에 저장
       await this.cacheManager.set(`accessToken:${accessToken}`, accessToken, {
         ttl: remainedExpireAcc,

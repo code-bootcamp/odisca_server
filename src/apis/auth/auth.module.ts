@@ -10,6 +10,7 @@ import { JwtKakaoStrategy } from './strategies/jwt-social-kakao.strategy';
 import { JwtNaverStrategy } from './strategies/jwt-social-naver.strategy';
 import { AuthController } from './auth.controller';
 import { MailerModule } from '@nest-modules/mailer';
+import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { MailerModule } from '@nest-modules/mailer';
     AuthResolver,
     AuthService,
     JwtAccessStrategy,
+    JwtRefreshStrategy,
     JwtGoogleStrategy,
     JwtKakaoStrategy,
     JwtNaverStrategy,
