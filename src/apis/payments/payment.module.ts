@@ -12,16 +12,16 @@ import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
 @Module({
   imports: [
     TypeOrmModule.forFeature([
+      StudyCafe, //
       Payment, //
+      Seat, //
       User, //
       Visit, //
-      StudyCafe, //
     ]),
   ],
   providers: [
     PaymentsResolver, //
     PaymentsService, //
-    VisitService, //
   ],
 })
 export class PaymentsModule {}

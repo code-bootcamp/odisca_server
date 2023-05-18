@@ -9,4 +9,10 @@ export class CreatePaymentInput {
   @Min(0)
   @Field(() => Int)
   point: number;
+
+  @Field(() => Int)
+  time: number;
+
+  @Field(() => String)
+  seatId: string;
 }
