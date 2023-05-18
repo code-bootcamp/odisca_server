@@ -1,15 +1,10 @@
-import { Field, InputType, Int } from '@nestjs/graphql';
+import { Field, InputType } from '@nestjs/graphql';
+import { SeatInformationInput } from './create-seats-information.input';
 
 @InputType()
 export class CreateSeatsInput {
-  @Field(() => Int)
-  number: number;
-
-  @Field(() => String)
-  location: string;
-
-  @Field(() => Int)
-  seatCount: number;
+  @Field(() => [SeatInformationInput])
+  seatInformation: SeatInformationInput[];
 
   @Field(() => String)
   studyCafeId: string;
