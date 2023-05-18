@@ -19,8 +19,8 @@ export class Seat {
   location: string;
 
   @Column({ default: null })
-  @Field(() => Int, { nullable: true })
-  expiredTime?: number;
+  @Field(() => String, { nullable: true })
+  expiredTime?: string;
 
   @ManyToOne(() => StudyCafe)
   @Field(() => StudyCafe)
