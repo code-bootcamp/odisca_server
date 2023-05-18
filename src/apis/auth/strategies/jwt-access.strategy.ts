@@ -21,7 +21,6 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
     const blackListRedis = await this.cacheManager.get(
       `accessToken:${accessToken}`,
     );
-    console.log(payload);
     if (blackListRedis === accessToken) {
       throw new UnauthorizedException();
     } else {

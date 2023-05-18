@@ -10,4 +10,7 @@ export class CreateCafeFloorPlanInput {
 
   @Field(() => Int)
   floorPlanY: number;
+
+  @Field(() => Int)
+  seatCount: number;
 }

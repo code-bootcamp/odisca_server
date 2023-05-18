@@ -33,8 +33,8 @@ export class StudyCafesService {
     return result;
   }
 
-  // 스터디 카페 좌석배치도 등록
-  createCafeFloorPlan({
+  // 스터디 카페 좌석배치도 및 좌석 수 등록
+  createCafeFloorPlanAndSeats({
     createCafeFloorPlanInput,
   }: IStudyCafesServiceCreateCafeFloorPlan): Promise<StudyCafe> {
     return this.studyCafeRepository.save({
@@ -74,10 +74,5 @@ export class StudyCafesService {
     });
     await this.imageService.update({ image, result });
     return result;
-  }
-
-  // 좌석 수 등록
-  updateStudyCafeSeats({ studyCafeId, seatCount }) {
-    return this.studyCafeRepository.update({ id: studyCafeId }, { seatCount });
   }
 }
