@@ -2,6 +2,46 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Administer {
+  id: String!
+  name: String!
+  email: String!
+  password: String!
+  phone: String!
+  point: Int!
+  deletedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type StudyCafe {
+  id: String!
+  name: String!
+  address: String!
+  contact: String!
+  timeFee: Int!
+  description: String!
+  openTime: String!
+  closeTime: String!
+  lat: Float!
+  lon: Float!
+  brn: String!
+  seatCount: Int!
+  floorPlanX: Int!
+  floorPlanY: Int!
+  administer: Administer!
+}
+
+type Image {
+  id: String!
+  url: String!
+  isMain: Boolean!
+  studyCafe: StudyCafe!
+}
+
 type User {
   id: String!
   name: String!
@@ -11,11 +51,6 @@ type User {
   image: String!
   deletedAt: DateTime
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type PointTransaction {
   id: String!
@@ -29,33 +64,6 @@ type PointTransaction {
 enum POINT_TRANSACTION_STATUS_ENUM {
   PAYMENT
   CANCEL
-}
-
-type Administer {
-  id: String!
-  name: String!
-  email: String!
-  password: String!
-  phone: String!
-  point: Int!
-  deletedAt: DateTime!
-}
-
-type StudyCafe {
-  id: String!
-  name: String!
-  address: String!
-  contact: String!
-  timeFee: Int!
-  description: String!
-  operatingTime: String!
-  lat: Float!
-  lon: Float!
-  brn: String!
-  seatCount: Int!
-  floorPlanX: Int!
-  floorPlanY: Int!
-  administer: Administer!
 }
 
 type Visit {
@@ -86,7 +94,9 @@ type Seat {
 type Query {
   fetchLoginAdminister: Administer!
   fetchLoginUser: User!
-  fetchStudyCafes: String
+  fetchCafeMainImage(studyCafeId: String!): Image!
+  fetchLoginStudyCafes(adminId: String!): [StudyCafe!]!
+  fetchStudyCafe(studyCafeId: String!): StudyCafe!
 }
 
 type Mutation {
@@ -102,8 +112,13 @@ type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
   updateLoginUser(updateLoginUserInput: UpdateLoginUserInput!): User!
   deleteLoginUser: Boolean!
+  uploadLoginImageFile(images: [Upload!]!): [String!]!
   createLoginPointTransaction(createPointTransactionInput: CreatePointTransactionInput!): PointTransaction!
   cancelLoginPointTransaction(cancelPointTransactionInput: CancelPointTransactionInput!): PointTransaction!
+  createSeats(createSeatsInput: CreateSeatsInput!): Seat!
+  createLoginStudyCafe(createStudyCafeInput: CreateStudyCafeInput!): StudyCafe!
+  createLoginCafeFloorPlan(createCateFloorPlanInput: CreateCafeFloorPlanInput!): StudyCafe!
+  updateLoginStudyCafe(updateStudyCafeInput: UpdateStudyCafeInput!): StudyCafe!
   createReview(createReviewInput: CreateReviewInput!): Review!
 }
 
@@ -115,8 +130,6 @@ input CreateAdministerInput {
 }
 
 input UpdateLoginAdministerInput {
-  name: String!
-  email: String!
   password: String!
   phone: String!
 }
@@ -140,6 +153,9 @@ input UpdateLoginUserInput {
   phone: String!
 }
 
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
 input CreatePointTransactionInput {
   impUid: String!
   amount: Int!
@@ -147,6 +163,52 @@ input CreatePointTransactionInput {
 
 input CancelPointTransactionInput {
   impUid: String!
+}
+
+input CreateSeatsInput {
+  number: Int!
+  location: String!
+  seatCount: Int!
+  studyCafeId: String!
+}
+
+input CreateStudyCafeInput {
+  name: String!
+  address: String!
+  contact: String!
+  timeFee: Int!
+  description: String!
+  openTime: String!
+  closeTime: String!
+  lat: Float!
+  lon: Float!
+  brn: String!
+  image: [CreateImageInput!]!
+}
+
+input CreateImageInput {
+  url: String!
+  isMain: Boolean!
+}
+
+input CreateCafeFloorPlanInput {
+  id: String!
+  floorPlanX: Int!
+  floorPlanY: Int!
+}
+
+input UpdateStudyCafeInput {
+  name: String
+  address: String
+  contact: String
+  timeFee: Int
+  description: String
+  openTime: String
+  closeTime: String
+  lat: Float
+  lon: Float
+  brn: String
+  image: [CreateImageInput!]
 }
 
 input CreateReviewInput {

@@ -13,11 +13,17 @@ import { ConfigModule } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 import { MailerModule } from '@nest-modules/mailer';
 import { VisitModule } from './apis/visit/visit.module';
+import { ImagesModule } from './apis/images/images.module';
+import { FilesModule } from './apis/files/files.module';
+import { SeatsModule } from './apis/seats/seats.module';
 @Module({
   imports: [
     AdministersModule,
     AuthModule,
+    FilesModule,
+    ImagesModule,
     PointTransactionsModule,
+    SeatsModule,
     StudyCafesModule,
     UsersModule,
     ReviewsModule,
