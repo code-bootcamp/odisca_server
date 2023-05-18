@@ -22,7 +22,6 @@ export class Visit {
   @Field(() => Date)
   createdAt: Date;
 
-  @JoinColumn()
   @OneToOne(() => Review)
   @Field(() => Review)
   review: Review;
