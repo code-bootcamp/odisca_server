@@ -33,7 +33,7 @@ export class UsersResolver {
   updateLoginUser(
     @Context() context: IContext,
     @Args('updateLoginUserInput') updateLoginUserInput: UpdateLoginUserInput,
-  ) {
+  ): Promise<User> {
     const userId = context.req.user.id;
     return this.usersService.update({ userId, updateLoginUserInput });
   }

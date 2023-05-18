@@ -150,13 +150,17 @@ export class AuthService {
     );
   }
 
-  // refresh 토큰 발급 //
+  // refresh 토큰 발급
   setRefreshToken({ user, res }): void {
     const refreshToken = this.jwtService.sign(
       { sub: user.id },
       { secret: process.env.JWT_REFRESH_KEY, expiresIn: '2w' },
     );
-    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    res.setHeader(
+      'Set-Cookie',
+      `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
+    );
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
   }
 
   restoreAccessToken({ user }: IAuthServiceRestoreAccessToken): string {

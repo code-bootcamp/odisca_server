@@ -4,6 +4,7 @@ import { Repository } from 'typeorm';
 import { Administer } from './entities/administer.entity';
 import * as bcrypt from 'bcrypt';
 import {
+  IAdministerServiceUpdate,
   IAdministersServiceCreate,
   IAdministersServiceFindOne,
   IAdministersServiceFindOneById,
@@ -52,11 +53,17 @@ export class AdministersService {
   }
 
   // 정보 수정
-  async update({ adminId, updateLoginAdministerInput }) {
+  async update({
+    adminId,
+    updateLoginAdministerInput,
+  }: IAdministerServiceUpdate): Promise<Administer> {
+    const { password, phone } = updateLoginAdministerInput;
     const user = await this.findOneById({ adminId });
+    const hashedPassword = await bcrypt.hash(password, 10);
     return this.administersRepository.save({
-      ...user,
-      ...updateLoginAdministerInput,
+      id: user.id,
+      password: hashedPassword,
+      phone,
     });
   }
 
