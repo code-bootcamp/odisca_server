@@ -5,6 +5,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -28,6 +29,7 @@ export class Review {
   @Field(() => User)
   user: User;
 
+  @JoinColumn()
   @ManyToOne(() => Visit)
   @Field(() => Visit)
   visit: Visit;
