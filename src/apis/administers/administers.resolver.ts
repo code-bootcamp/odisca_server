@@ -34,7 +34,7 @@ export class AdministersResolver {
     @Context() context: IContext,
     @Args('updateLoginAdministerInput')
     updateLoginAdministerInput: UpdateLoginAdministerInput,
-  ) {
+  ): Promise<Administer> {
     const adminId = context.req.user.id;
     return this.administersService.update({
       adminId,
