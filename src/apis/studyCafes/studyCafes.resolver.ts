@@ -26,14 +26,14 @@ export class StudyCafesResolver {
     });
   }
 
-  // 스터디 카페 좌석배치도 등록
+  // 스터디 카페 좌석배치도 및 좌석 수 등록
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => StudyCafe)
-  createLoginCafeFloorPlan(
+  createLoginCafeFloorPlanAndSeats(
     @Args('createCateFloorPlanInput')
     createCafeFloorPlanInput: CreateCafeFloorPlanInput,
   ): Promise<StudyCafe> {
-    return this.studyCafesService.createCafeFloorPlan({
+    return this.studyCafesService.createCafeFloorPlanAndSeats({
       createCafeFloorPlanInput,
     });
   }
