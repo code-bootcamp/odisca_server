@@ -16,12 +16,14 @@ import { VisitModule } from './apis/visit/visit.module';
 import { ImagesModule } from './apis/images/images.module';
 import { FilesModule } from './apis/files/files.module';
 import { SeatsModule } from './apis/seats/seats.module';
+import { PaymentsModule } from './apis/payments/payment.module';
 @Module({
   imports: [
     AdministersModule,
     AuthModule,
     FilesModule,
     ImagesModule,
+    PaymentsModule,
     PointTransactionsModule,
     SeatsModule,
     StudyCafesModule,

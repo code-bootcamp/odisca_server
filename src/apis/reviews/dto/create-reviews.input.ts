@@ -20,3 +20,9 @@ export class UpdateReviewInput {
   @Field(() => String)
   visitId: string;
 }
+
+@InputType()
+export class CancelReviewInput {
+  @Field(() => String)
+  reviewId: string;
+}

@@ -6,7 +6,6 @@ import { User } from '../users/entities/user.entity';
 import { IPaymentsServiceCreate } from './interfaces/payment-service.interface';
 import { Visit } from '../visit/entities/visit.entity';
 import { VisitService } from '../visit/visit.service';
-import { Seat } from '../seats/entities/seat.entity';
 
 @Injectable()
 export class PaymentsService {
@@ -16,9 +15,6 @@ export class PaymentsService {
 
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
-
-    @InjectRepository(Seat)
-    private readonly seatsRepository: Repository<Seat>,
 
     @InjectRepository(Visit)
     private readonly visitService: VisitService,
@@ -53,11 +49,11 @@ export class PaymentsService {
       });
       await queryRunner.manager.save(updatedUser);
 
-      //  좌석 테이블 만들고 다시 하기 좌석테이블에서 스카Id를 받아와야함 릴레이션걸어서
-      //   this.visitService.create({
-      //     user: { id: _user.id },
-      //     studyCafe: { id: studyCafeId },
-      //   });
+      const createVisit = this.visitService.create({
+        user: _user.id,
+        studyCafe: studyCafeId,
+      });
+      await queryRunner.manager.save(createVisit);
 
       await queryRunner.commitTransaction();
 

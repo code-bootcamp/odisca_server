@@ -11,6 +11,15 @@ export class VisitService {
     private readonly visitRepository: Repository<Visit>,
   ) {}
 
+  async findByVisitId({
+    visitId, //
+  }): Promise<Visit> {
+    const visit = await this.visitRepository.findOne({
+      where: { id: visitId },
+    });
+    return visit;
+  }
+
   async create({
     user: userId, //
     studyCafe: studyCafeId,

@@ -7,7 +7,7 @@ export interface IReviewsServiceCreate {
 }
 
 export interface IReviewsServiceUpdate {
-  reviewId: string;
+  review: string;
   content: string;
   user: IAuthUser['user'];
   visit: string;
@@ -15,4 +15,13 @@ export interface IReviewsServiceUpdate {
 
 export interface IReviewsServiceFindOneByVisitId {
   visit: string;
+}
+
+export interface IReviewServiceFindByUserId {
+  user: string;
+}
+
+export interface IReviewsServiceCancel {
+  review: string;
+  user: IAuthUser['user'];
 }
