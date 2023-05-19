@@ -34,11 +34,40 @@ export class SeatsService {
     });
   }
 
-  // async updateSeatState() {
-  //   console.log('있다가..');
-  // }
-  // // 1분마다 좌석 상태 업데이트
-  // async updateSeatEveryMinute(){
-  //   await this.seatsRepository.find({where:{}})
-  // }
+  // 1분마다 좌석 잔여시간 및 이용여부 업데이트
+  async updateSeatEveryMinute() {
+    const result = await this.seatsRepository.find();
+    const now = new Date().setUTCHours(new Date().getUTCHours() + 9);
+    try {
+      for (let i = 0; i < result.length; i++) {
+        if (result[i].user !== null) {
+          if (result[i].remainTime <= 0) {
+            await this.seatsRepository.update(
+              { id: result[i].id },
+              { expiredTime: null },
+            );
+            await this.seatsRepository.update(
+              { id: result[i].id },
+              { remainTime: null },
+            );
+            await this.seatsRepository.update(
+              { id: result[i].id },
+              { user: null },
+            );
+          } else {
+            await this.seatsRepository.update(
+              { id: result[i].id },
+              {
+                remainTime:
+                  Number(new Date(result[i].expiredTime).getTime()) - now,
+              },
+            );
+          }
+        }
+      }
+    } catch {
+      return '업데이트 실패';
+    }
+    return '업데이트 완료';
+  }
 }
