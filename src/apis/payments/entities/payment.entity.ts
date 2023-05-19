@@ -20,6 +20,10 @@ export class Payment {
   @Field(() => Int)
   point: number;
 
+  @Column({ default: 0 })
+  @Field(() => Int)
+  time: number;
+
   @CreateDateColumn()
   @Field(() => Date)
   createdAt: Date;

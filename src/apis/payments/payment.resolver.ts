@@ -5,6 +5,7 @@ import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { CreatePaymentInput } from './dto/create-payment.input';
 import { IContext } from 'src/common/interfaces/context';
+import { create } from 'domain';
 
 @Resolver()
 export class PaymentsResolver {
@@ -21,10 +22,14 @@ export class PaymentsResolver {
     const user = context.req.user;
     const point = createPaymentInput.point;
     const studyCafeId = createPaymentInput.studyCafeId;
+    const seatId = createPaymentInput.seatId;
+    const time = createPaymentInput.time;
     return this.paymentsService.createLoginPayment({
       point,
+      time,
       user,
       studyCafeId,
+      seatId,
     });
   }
 }
