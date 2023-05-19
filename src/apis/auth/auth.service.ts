@@ -73,8 +73,7 @@ export class AuthService {
     if (!isAuth)
       throw new UnprocessableEntityException('비밀번호를 확인해주세요.');
     // 로그인 & refresh 토큰 발급
-    const res = context.res;
-    this.setRefreshToken({ user, res });
+    this.setRefreshToken({ user, res: context.res, req: context.req });
     // access 토큰 발급
     return this.getAccessToken({ user });
   }
@@ -90,8 +89,7 @@ export class AuthService {
     if (!isAuth)
       throw new UnprocessableEntityException('비밀번호를 확인해주세요.');
     // 로그인 & refresh 토큰 발급
-    const res = context.res;
-    this.setRefreshToken({ user, res });
+    this.setRefreshToken({ user, res: context.res, req: context.req });
     // access 토큰 발급
     return this.getAccessToken({ user });
   }
@@ -115,7 +113,7 @@ export class AuthService {
     }
 
     // 회원가입이 완료된 상태라면 로그인하기
-    this.setRefreshToken({ user, res });
+    this.setRefreshToken({ user, res, req });
     res.redirect('http://127.0.0.1:5501/frontend%20/login/index.html');
   }
 
@@ -137,7 +135,7 @@ export class AuthService {
       });
     }
     // 회원가입이 완료된 상태라면 로그인하기
-    this.setRefreshToken({ user, res });
+    this.setRefreshToken({ user, res, req });
     res.redirect('http://127.0.0.1:5501/frontend%20/login/index.html');
   }
 
@@ -150,18 +148,21 @@ export class AuthService {
   }
 
   // refresh 토큰 발급
-  setRefreshToken({ user, res }): void {
+  setRefreshToken({ user, res, req }): void {
     const refreshToken = this.jwtService.sign(
       { sub: user.id },
       { secret: process.env.JWT_REFRESH_KEY, expiresIn: '2w' },
     );
     // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
     const Origins = ['http://localhost:3000', 'https://odisca.store'];
-    res.setHeader(
-      'Set-Cookie',
-      `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
-    );
-    res.setHeader('Access-Control-Allow-Origin', Origins);
+    const origin = req.headers.origin;
+    if (Origins.includes(origin)) {
+      res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
+      );
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
   }
 
   restoreAccessToken({ user }: IAuthServiceRestoreAccessToken): string {
