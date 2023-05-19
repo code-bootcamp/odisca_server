@@ -7,6 +7,7 @@ import { IPaymentsServiceCreate } from './interfaces/payment-service.interface';
 import { Visit } from '../visit/entities/visit.entity';
 import { Seat } from '../seats/entities/seat.entity';
 import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
+import exp from 'constants';
 
 @Injectable()
 export class PaymentsService {
@@ -81,12 +82,20 @@ export class PaymentsService {
       await queryRunner.manager.save(createVisit);
 
       // expiredTime(종료시간) 구하기
-      const expiredTime = await this.getExpiredTime({ time });
+      const expiredTimeString = this.getExpiredTime({ time });
+
+      const expiredTime = String(
+        new Date().setUTCHours(new Date().getUTCHours() + 9 + time),
+      );
+
+      // remainTime남은 시간 구하기
+      const now = new Date().setUTCHours(new Date().getUTCHours() + 9);
+      const remainTime = Number(expiredTime) - now;
 
       // Seat테이블 업데이트 (user, expiredTime)
       seat.user = user;
-      seat.expiredTime = expiredTime;
-      console.log(expiredTime);
+      seat.expiredTime = expiredTimeString;
+      seat.remainTime = remainTime;
 
       await queryRunner.manager.save(seat);
 
