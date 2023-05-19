@@ -46,7 +46,6 @@ export class AuthResolver {
   @Mutation(() => String)
   restoreAccessToken(@Context() context: IContext): string {
     const user = context.req.user;
-    console.log(user);
     return this.authService.restoreAccessToken({ user });
   }
 
