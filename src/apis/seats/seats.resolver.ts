@@ -9,23 +9,22 @@ import { SeatsService } from './seats.service';
 export class SeatsResolver {
   constructor(private readonly seatsService: SeatsService) {}
 
+  // 좌석 등록
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => Seat)
   createSeats(@Args('createSeatsInput') createSeatsInput: CreateSeatsInput) {
     return this.seatsService.create({ createSeatsInput });
   }
 
+  // 해당 카페 좌석 조회
   @Query(() => [Seat])
   fetchAllSeatsByStudyCafeId(@Args('studyCafeId') studyCafeId: string) {
     return this.seatsService.fetchAllSeatsByStudyCafeId({ studyCafeId });
   }
 
-  // @Mutation(() => Boolean)
-  // updateSeatState() {
-  //   return this.seatsService.updateSeatState();
-  // }
-  // @Mutation()
-  // updateSeatEveryMinute() {
-  //   return this.seatsService.updateSeatEveryMinute();
-  // }
+  // 1분마다 좌석 잔여시간 및 이용여부 업데이트
+  @Mutation(() => String)
+  updateSeatEveryMinute() {
+    return this.seatsService.updateSeatEveryMinute();
+  }
 }

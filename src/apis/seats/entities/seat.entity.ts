@@ -22,6 +22,10 @@ export class Seat {
   @Field(() => String, { nullable: true })
   expiredTime?: string;
 
+  @Column({ default: null })
+  @Field(() => Int, { nullable: true })
+  remainTime?: number;
+
   @ManyToOne(() => StudyCafe)
   @Field(() => StudyCafe)
   studyCafe: StudyCafe;
