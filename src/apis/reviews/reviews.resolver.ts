@@ -17,7 +17,7 @@ export class ReviewsResolver {
   ) {}
 
   @Query(() => [Review])
-  async fetchReviewsByUserId(
+  async fetchLoginReviewsByUserId(
     @Context() context: IContext, //
   ): Promise<Review[]> {
     const user = context.req.user.id;
@@ -28,7 +28,7 @@ export class ReviewsResolver {
 
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => Review)
-  createReview(
+  createLoginReview(
     @Args('createReviewInput')
     createReviewInput: CreateReviewInput,
     @Context() context: IContext,
@@ -45,7 +45,7 @@ export class ReviewsResolver {
 
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => Boolean)
-  updateReview(
+  updateLoginReview(
     @Args('updateReviewInput')
     updateReviewInput: UpdateReviewInput,
     @Context() context: IContext,
@@ -64,7 +64,7 @@ export class ReviewsResolver {
 
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => Boolean)
-  deleteReview(
+  deleteLoginReview(
     @Args('cancelReviewInput')
     cancelReviewInput: CancelReviewInput,
     @Context() context: IContext,
