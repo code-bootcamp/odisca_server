@@ -5,7 +5,6 @@ import { User } from 'src/apis/users/entities/user.entity';
 import {
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -16,15 +15,15 @@ import {
 export class Visit {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
+  visit_id: string;
 
   @CreateDateColumn()
   @Field(() => Date)
-  createdAt: Date;
+  visit_createdAt: Date;
 
   @OneToOne(() => Review)
   @Field(() => Review)
-  review: Review;
+  visit_review: Review;
 
   @ManyToOne(() => User)
   @Field(() => User)

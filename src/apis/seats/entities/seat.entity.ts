@@ -8,23 +8,23 @@ import { User } from 'src/apis/users/entities/user.entity';
 export class Seat {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
+  seat_id: string;
 
   @Column()
   @Field(() => String)
-  number: string;
+  seat_number: string;
 
   @Column()
   @Field(() => String)
-  location: string;
+  seat_location: string;
 
   @Column({ default: null })
   @Field(() => String, { nullable: true })
-  expiredTime?: string;
+  seat_expiredTime?: string;
 
   @Column({ default: null })
   @Field(() => Int, { nullable: true })
-  remainTime?: number;
+  seat_remainTime?: number;
 
   @ManyToOne(() => StudyCafe)
   @Field(() => StudyCafe)

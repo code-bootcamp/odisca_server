@@ -6,5 +6,5 @@ export class SeatInformationInput {
   seat: [number][];
 
   @Field(() => String)
-  number: string;
+  seat_number: string;
 }

@@ -1,17 +1,5 @@
 import { User } from 'src/apis/users/entities/user.entity';
-import { IContext, IAuthUser } from 'src/common/interfaces/context';
-import { LoginInput } from '../dto/login.input';
-
-export interface IAuthServiceLogin {
-  loginInput: LoginInput;
-  context: IContext;
-}
-
-export interface IAuthServiceLogin {
-  email: string;
-  password: string;
-  context: IContext;
-}
+import { IAuthUser } from 'src/common/interfaces/context';
 
 export interface IOAuthUser {
   user: Omit<User, 'id'>;

@@ -26,15 +26,18 @@ export class IamportService {
     }
   }
 
-  async checkPaid({ impUid, amount }: IIamportServiceCheckPaid): Promise<void> {
+  async checkPaid({
+    pointTransaction_impUid,
+    pointTransaction_amount,
+  }: IIamportServiceCheckPaid): Promise<void> {
     try {
       const token = await this.getToken();
       const result = await axios.get(
-        `https://api.iamport.kr/payments/${impUid}`,
+        `https://api.iamport.kr/payments/${pointTransaction_impUid}`,
         { headers: { Authorization: token } },
       );
 
-      if (amount !== result.data.response.amount) {
+      if (pointTransaction_amount !== result.data.response.amount) {
         throw new UnprocessableEntityException(
           '유효하지 않은 결제 금액입니다.',
         );
@@ -52,7 +55,9 @@ export class IamportService {
     }
   }
 
-  async cancel({ impUid }: IIamportServiceCancel): Promise<void> {
+  async cancel({
+    pointTransaction_impUid,
+  }: IIamportServiceCancel): Promise<void> {
     try {
       const mytoken = await this.getToken();
 
@@ -64,7 +69,7 @@ export class IamportService {
           Authorization: `Bearer ${mytoken}`, // 포트원 서버로부터 발급받은 엑세스 토큰
         },
         data: {
-          imp_uid: impUid, // imp_uid를 환불 `unique key`로 입력
+          imp_uid: pointTransaction_impUid, // imp_uid를 환불 `unique key`로 입력
         },
       });
       return;

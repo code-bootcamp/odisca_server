@@ -18,8 +18,8 @@ export class SeatsResolver {
 
   // 해당 카페 좌석 조회
   @Query(() => [Seat])
-  fetchAllSeatsByStudyCafeId(@Args('studyCafeId') studyCafeId: string) {
-    return this.seatsService.fetchAllSeatsByStudyCafeId({ studyCafeId });
+  fetchAllSeatsByStudyCafeId(@Args('studyCafe_id') studyCafe_id: string) {
+    return this.seatsService.fetchAllSeatsByStudyCafeId({ studyCafe_id });
   }
 
   // 1분마다 좌석 잔여시간 및 이용여부 업데이트

@@ -18,7 +18,7 @@ export class VisitService {
     visitId, //
   }): Promise<Visit> {
     const visit = await this.visitRepository.findOne({
-      where: { id: visitId },
+      where: { visit_id: visitId },
     });
     return visit;
   }
@@ -27,7 +27,7 @@ export class VisitService {
     userId, //
   }): Promise<Visit[]> {
     const user = await this.usersRepository.find({
-      where: { id: userId },
+      where: { user_id: userId },
     });
 
     const visit = await this.visitRepository.find({

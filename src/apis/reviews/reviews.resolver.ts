@@ -33,13 +33,13 @@ export class ReviewsResolver {
     createReviewInput: CreateReviewInput,
     @Context() context: IContext,
   ): Promise<Review> {
-    const content = createReviewInput.content;
-    const visit = createReviewInput.visitId;
+    const review_content = createReviewInput.review_content;
+    const visit_id = createReviewInput.visit_id;
     const user = context.req.user;
     return this.reviewsService.createReview({
-      content,
+      review_content,
       user,
-      visit,
+      visit_id,
     });
   }
 
@@ -50,15 +50,13 @@ export class ReviewsResolver {
     updateReviewInput: UpdateReviewInput,
     @Context() context: IContext,
   ): Promise<boolean> {
-    const content = updateReviewInput.content;
-    const visit = updateReviewInput.visitId;
-    const review = updateReviewInput.reviewId;
+    const review_content = updateReviewInput.review_content;
+    const review_id = updateReviewInput.review_id;
     const user = context.req.user;
     return this.reviewsService.updateReview({
-      content,
+      review_content,
       user,
-      visit,
-      review,
+      review_id,
     });
   }
 
@@ -69,11 +67,11 @@ export class ReviewsResolver {
     cancelReviewInput: CancelReviewInput,
     @Context() context: IContext,
   ): Promise<boolean> {
-    const review = cancelReviewInput.reviewId;
+    const review_id = cancelReviewInput.review_id;
     const user = context.req.user;
     return this.reviewsService.deleteReview({
       user,
-      review,
+      review_id,
     });
   }
 }

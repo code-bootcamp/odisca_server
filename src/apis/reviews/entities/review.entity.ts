@@ -15,15 +15,15 @@ import {
 export class Review {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
+  review_id: string;
 
   @Column()
   @Field(() => String)
-  content: string;
+  review_content: string;
 
   @CreateDateColumn()
   @Field(() => Date)
-  createdAt: Date;
+  review_createdAt: Date;
 
   @ManyToOne(() => User)
   @Field(() => User)

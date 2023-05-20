@@ -13,13 +13,13 @@ export class SeatsService {
 
   // 좌석 등록
   async create({ createSeatsInput }: ISeatsServiceCreate) {
-    const { studyCafeId, seatInformation } = createSeatsInput;
+    const { studyCafe_id, seatInformation } = createSeatsInput;
     for (let i = 0; i < seatInformation.length; i++) {
       await this.seatsRepository.save({
-        location: JSON.stringify(seatInformation[i].seat),
-        number: seatInformation[i].number,
+        seat_location: JSON.stringify(seatInformation[i].seat),
+        seat_number: seatInformation[i].seat_number,
         studyCafe: {
-          id: studyCafeId,
+          studyCafe_id,
         },
       });
     }
@@ -27,9 +27,9 @@ export class SeatsService {
   }
 
   // 해당 카페 좌석 조회
-  fetchAllSeatsByStudyCafeId({ studyCafeId }) {
+  fetchAllSeatsByStudyCafeId({ studyCafe_id }) {
     return this.seatsRepository.find({
-      where: { studyCafe: { id: studyCafeId } },
+      where: { studyCafe: { studyCafe_id } },
       relations: ['studyCafe', 'user'],
     });
   }
@@ -41,25 +41,25 @@ export class SeatsService {
     try {
       for (let i = 0; i < result.length; i++) {
         if (result[i].user !== null) {
-          if (result[i].remainTime <= 0) {
+          if (result[i].seat_remainTime <= 0) {
             await this.seatsRepository.update(
-              { id: result[i].id },
-              { expiredTime: null },
+              { seat_id: result[i].seat_id },
+              { seat_expiredTime: null },
             );
             await this.seatsRepository.update(
-              { id: result[i].id },
-              { remainTime: null },
+              { seat_id: result[i].seat_id },
+              { seat_remainTime: null },
             );
             await this.seatsRepository.update(
-              { id: result[i].id },
+              { seat_id: result[i].seat_id },
               { user: null },
             );
           } else {
             await this.seatsRepository.update(
-              { id: result[i].id },
+              { seat_id: result[i].seat_id },
               {
-                remainTime:
-                  Number(new Date(result[i].expiredTime).getTime()) - now,
+                seat_remainTime:
+                  Number(new Date(result[i].seat_expiredTime).getTime()) - now,
               },
             );
           }

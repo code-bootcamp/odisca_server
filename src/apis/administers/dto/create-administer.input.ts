@@ -3,14 +3,14 @@ import { Field, InputType } from '@nestjs/graphql';
 @InputType()
 export class CreateAdministerInput {
   @Field(() => String)
-  name: string;
+  administer_name: string;
 
   @Field(() => String)
-  email: string;
+  administer_email: string;
 
   @Field(() => String)
-  password: string;
+  administer_password: string;
 
   @Field(() => String)
-  phone: string;
+  administer_phone: string;
 }

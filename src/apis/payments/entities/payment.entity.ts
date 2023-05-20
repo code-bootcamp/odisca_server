@@ -14,19 +14,19 @@ import {
 export class Payment {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
+  payment_id: string;
 
   @Column()
   @Field(() => Int)
-  point: number;
+  payment_point: number;
 
   @Column({ default: 0 })
   @Field(() => Int)
-  time: number;
+  payment_time: number;
 
   @CreateDateColumn()
   @Field(() => Date)
-  createdAt: Date;
+  payment_createdAt: Date;
 
   @ManyToOne(() => User)
   @Field(() => User)

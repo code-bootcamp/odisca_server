@@ -50,13 +50,13 @@ export class ReviewsService {
   }
 
   async createReview({
-    content, //
+    review_content, //
     user, //
-    visit: visitId, //
+    visit_id, //
   }: IReviewsServiceCreate): Promise<Review> {
     try {
       const checkVisit = await this.reviewsRepository.find({
-        where: { visit: { id: visitId } },
+        where: { visit: { visit_id } },
         relations: ['visit'],
       });
 
@@ -69,9 +69,9 @@ export class ReviewsService {
       const userId = user.id;
 
       const result = await this.reviewsRepository.save({
-        content,
-        user: { id: userId },
-        visit: { id: visitId },
+        review_content,
+        user: { user_id: userId },
+        visit: { visit_id: visit_id },
       });
 
       return result;
@@ -83,16 +83,15 @@ export class ReviewsService {
   }
 
   async updateReview({
-    content, //
+    review_content, //
     user, //
-    visit: visitId, //
-    review: reviewId, //
+    review_id, //
   }: IReviewsServiceUpdate): Promise<boolean> {
     try {
-      const userId = user.id;
+      const user_id = user.id;
       // 지금 로그인한 유저가 리뷰를 적은 유저가 맞는지 확인 (아니면 에러 맞으면 수정)
       const checkUser = await this.reviewsRepository.find({
-        where: { user: { id: userId } },
+        where: { user: { user_id } },
         relations: ['user'],
       });
       if (checkUser.length > 0) {
@@ -103,10 +102,10 @@ export class ReviewsService {
       // 리뷰 수정
       const result = await this.reviewsRepository.update(
         {
-          id: reviewId,
+          review_id,
         },
         {
-          content,
+          review_content,
         },
       );
 
@@ -120,13 +119,13 @@ export class ReviewsService {
 
   async deleteReview({
     user, //
-    review: reviewId, //
+    review_id, //
   }: IReviewsServiceCancel): Promise<boolean> {
     try {
-      const userId = user.id;
+      const user_id = user.id;
       // 지금 로그인한 유저가 리뷰를 적은 유저가 맞는지 확인 (아니면 에러 맞으면 삭제)
       const checkUser = await this.reviewsRepository.find({
-        where: { user: { id: userId } },
+        where: { user: { user_id } },
         relations: ['user'],
       });
       console.log(111111, checkUser);
@@ -135,7 +134,7 @@ export class ReviewsService {
       }
 
       // 리뷰 삭제
-      const result = await this.reviewsRepository.delete({ id: reviewId });
+      const result = await this.reviewsRepository.delete({ review_id });
 
       // return 값이 false면 그 리뷰를 쓴 유저가 지금 로그인한 유저가 아님
       return result.affected ? true : false;
