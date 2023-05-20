@@ -51,7 +51,7 @@ export class ReviewsService {
 
   async createReview({
     review_content, //
-    user, //
+    user_id, //
     visit_id, //
   }: IReviewsServiceCreate): Promise<Review> {
     try {
@@ -66,11 +66,9 @@ export class ReviewsService {
         );
       }
 
-      const userId = user.id;
-
       const result = await this.reviewsRepository.save({
         review_content,
-        user: { user_id: userId },
+        user: { user_id },
         visit: { visit_id: visit_id },
       });
 
@@ -84,11 +82,10 @@ export class ReviewsService {
 
   async updateReview({
     review_content, //
-    user, //
+    user_id, //
     review_id, //
   }: IReviewsServiceUpdate): Promise<boolean> {
     try {
-      const user_id = user.id;
       // 지금 로그인한 유저가 리뷰를 적은 유저가 맞는지 확인 (아니면 에러 맞으면 수정)
       const checkUser = await this.reviewsRepository.find({
         where: { user: { user_id } },
@@ -118,11 +115,10 @@ export class ReviewsService {
   }
 
   async deleteReview({
-    user, //
+    user_id, //
     review_id, //
   }: IReviewsServiceCancel): Promise<boolean> {
     try {
-      const user_id = user.id;
       // 지금 로그인한 유저가 리뷰를 적은 유저가 맞는지 확인 (아니면 에러 맞으면 삭제)
       const checkUser = await this.reviewsRepository.find({
         where: { user: { user_id } },

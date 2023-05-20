@@ -17,6 +17,7 @@ export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
   }
 
   async validate(req, payload) {
+    console.log(req.headers.authorization, payload);
     const accessToken = req.headers.authorization.replace('Bearer ', '');
     const blackListRedis = await this.cacheManager.get(
       `accessToken:${accessToken}`,

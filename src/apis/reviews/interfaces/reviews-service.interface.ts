@@ -1,15 +1,13 @@
-import { IAuthUser } from '../../../common/interfaces/context';
-
 export interface IReviewsServiceCreate {
   review_content: string;
-  user: IAuthUser['user'];
+  user_id: string;
   visit_id: string;
 }
 
 export interface IReviewsServiceUpdate {
   review_id: string;
   review_content: string;
-  user: IAuthUser['user'];
+  user_id: string;
 }
 
 export interface IReviewsServiceFindOneByVisitId {
@@ -22,5 +20,5 @@ export interface IReviewServiceFindByUserId {
 
 export interface IReviewsServiceCancel {
   review_id: string;
-  user: IAuthUser['user'];
+  user_id: string;
 }

@@ -24,10 +24,10 @@ export class VisitService {
   }
 
   async findAllByUserId({
-    userId, //
+    user_id, //
   }): Promise<Visit[]> {
     const user = await this.usersRepository.find({
-      where: { user_id: userId },
+      where: { user_id },
     });
 
     const visit = await this.visitRepository.find({
