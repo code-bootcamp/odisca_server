@@ -23,8 +23,8 @@ export class AdministersResolver {
   @UseGuards(GqlAuthGuard('access'))
   @Query(() => Administer)
   fetchLoginAdminister(@Context() context: IContext) {
-    const adminId = context.req.user.id;
-    return this.administersService.findOneById({ adminId });
+    const administer_id = context.req.user.id;
+    return this.administersService.findOneById({ administer_id });
   }
 
   // 회원 정보 수정
@@ -35,9 +35,9 @@ export class AdministersResolver {
     @Args('updateLoginAdministerInput')
     updateLoginAdministerInput: UpdateLoginAdministerInput,
   ): Promise<Administer> {
-    const adminId = context.req.user.id;
+    const administer_id = context.req.user.id;
     return this.administersService.update({
-      adminId,
+      administer_id,
       updateLoginAdministerInput,
     });
   }
@@ -46,7 +46,7 @@ export class AdministersResolver {
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => Boolean)
   deleteLoginAdminister(@Context() context: IContext): Promise<boolean> {
-    const adminId = context.req.user.id;
-    return this.administersService.softDelete({ adminId });
+    const administer_id = context.req.user.id;
+    return this.administersService.softDelete({ administer_id });
   }
 }

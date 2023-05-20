@@ -7,7 +7,6 @@ import { IPaymentsServiceCreate } from './interfaces/payment-service.interface';
 import { Visit } from '../visit/entities/visit.entity';
 import { Seat } from '../seats/entities/seat.entity';
 import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
-import exp from 'constants';
 
 @Injectable()
 export class PaymentsService {
@@ -21,10 +20,10 @@ export class PaymentsService {
     private readonly dataSource: DataSource,
   ) {}
 
-  getExpiredTime({ time }) {
+  getExpiredTime({ payment_time }) {
     const expiredTime = new Date();
 
-    expiredTime.setUTCHours(expiredTime.getUTCHours() + 9 + time);
+    expiredTime.setUTCHours(expiredTime.getUTCHours() + 9 + payment_time);
 
     // const ms = expiredTime.getTime();
 
@@ -32,11 +31,11 @@ export class PaymentsService {
   }
 
   async createLoginPayment({
-    point, //
-    time, //
-    user: _user, //
-    studyCafeId, //
-    seatId, //
+    payment_point, //
+    payment_time, //
+    user_id, //
+    studyCafe_id, //
+    seat_id, //
   }: IPaymentsServiceCreate): Promise<any> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -45,32 +44,32 @@ export class PaymentsService {
     try {
       // Seat 테이블 seatId로 조회
       const seat = await queryRunner.manager.findOne(Seat, {
-        where: { id: seatId },
+        where: { seat_id },
         lock: { mode: 'pessimistic_write' },
       });
 
       // Payment 테이블 저장 (point, user)
       const payment = await this.paymentsRepository.create({
-        point,
-        time,
-        user: _user,
+        payment_point,
+        payment_time,
+        user: { user_id },
         seat,
       });
       await queryRunner.manager.save(payment);
 
       // User테이블 _user.id로 조회
       const user = await queryRunner.manager.findOne(User, {
-        where: { id: _user.id },
+        where: { user_id },
         lock: { mode: 'pessimistic_write' },
       });
 
       // User테이블 업데이트 (user포인트 차감)
-      user.point -= point;
+      user.user_point -= payment_point;
       await queryRunner.manager.save(user);
 
       // StudyCafe 테이블 studyCafeId로 조회
       const studyCafe = await queryRunner.manager.findOne(StudyCafe, {
-        where: { id: studyCafeId },
+        where: { studyCafe_id },
         lock: { mode: 'pessimistic_write' },
       });
 
@@ -82,10 +81,10 @@ export class PaymentsService {
       await queryRunner.manager.save(createVisit);
 
       // expiredTime(종료시간) 구하기
-      const expiredTimeString = this.getExpiredTime({ time });
+      const expiredTimeString = this.getExpiredTime({ payment_time });
 
       const expiredTime = String(
-        new Date().setUTCHours(new Date().getUTCHours() + 9 + time),
+        new Date().setUTCHours(new Date().getUTCHours() + 9 + payment_time),
       );
 
       // remainTime남은 시간 구하기
@@ -94,8 +93,8 @@ export class PaymentsService {
 
       // Seat테이블 업데이트 (user, expiredTime)
       seat.user = user;
-      seat.expiredTime = expiredTimeString;
-      seat.remainTime = remainTime;
+      seat.seat_expiredTime = expiredTimeString;
+      seat.seat_remainTime = remainTime;
 
       await queryRunner.manager.save(seat);
 

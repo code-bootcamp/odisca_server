@@ -64,12 +64,12 @@ export class AuthService {
 
   // 유저 로그인 //
   async loginUser({ loginInput, context }): Promise<string> {
-    const { email, password } = loginInput;
+    const { user_email, user_password } = loginInput;
     // 이메일이 존재하는지 확인
-    const user = await this.usersService.findOneByEmail({ email });
+    const user = await this.usersService.findOneByEmail({ user_email });
     if (!user)
       throw new UnprocessableEntityException('이메일이 존재하지 않습니다.');
-    const isAuth = await bcrypt.compare(password, user.password);
+    const isAuth = await bcrypt.compare(user_password, user.user_password);
     if (!isAuth)
       throw new UnprocessableEntityException('비밀번호를 확인해주세요.');
     // 로그인 & refresh 토큰 발급
@@ -80,12 +80,17 @@ export class AuthService {
 
   // 관리자 로그인 //
   async loginAdminister({ loginInput, context }): Promise<string> {
-    const { email, password } = loginInput;
+    const { administer_email, administer_password } = loginInput;
     // 이메일이 존재하는지 확인
-    const user = await this.administersService.findOneByEmail({ email });
+    const user = await this.administersService.findOneByEmail({
+      administer_email,
+    });
     if (!user)
       throw new UnprocessableEntityException('이메일이 존재하지 않습니다.');
-    const isAuth = await bcrypt.compare(password, user.password);
+    const isAuth = await bcrypt.compare(
+      administer_password,
+      user.administer_password,
+    );
     if (!isAuth)
       throw new UnprocessableEntityException('비밀번호를 확인해주세요.');
     // 로그인 & refresh 토큰 발급
@@ -97,15 +102,15 @@ export class AuthService {
   // 회원 소셜로그인 //
   async socialUserLogin({ req, res }) {
     const user = await this.usersService.findOneByEmail({
-      email: req.user.email,
+      user_email: req.user.email,
     });
     // 기존 가입 회원 아닌 경우 회원가입
     if (!user) {
       const createUserInput = {
-        name: req.user.name,
-        email: req.user.email,
-        phone: req.user.phone,
-        password: req.user.password,
+        user_name: req.user.name,
+        user_email: req.user.email,
+        user_phone: req.user.phone,
+        user_password: req.user.password,
       };
       return this.usersService.create({
         createUserInput,
@@ -120,15 +125,15 @@ export class AuthService {
   // 관리자 소셜로그인 //
   async socialAdministerLogin({ req, res }) {
     const user = await this.administersService.findOneByEmail({
-      email: req.user.email,
+      administer_email: req.user.email,
     });
     // 기존 가입 회원 아닌 경우 회원가입
     if (!user) {
       const createAdministerInput = {
-        name: req.user.name,
-        email: req.user.email,
-        phone: req.user.phone,
-        password: req.user.password,
+        administer_name: req.user.name,
+        administer_email: req.user.email,
+        administer_phone: req.user.phone,
+        administer_password: req.user.password,
       };
       return this.administersService.create({
         createAdministerInput,

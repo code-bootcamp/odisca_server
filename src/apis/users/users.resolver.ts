@@ -23,8 +23,8 @@ export class UsersResolver {
   @UseGuards(GqlAuthGuard('access'))
   @Query(() => User)
   fetchLoginUser(@Context() context: IContext) {
-    const userId = context.req.user.id;
-    return this.usersService.findOneById({ userId });
+    const user_id = context.req.user.id;
+    return this.usersService.findOneById({ user_id });
   }
 
   // 회원 정보 수정
@@ -34,15 +34,15 @@ export class UsersResolver {
     @Context() context: IContext,
     @Args('updateLoginUserInput') updateLoginUserInput: UpdateLoginUserInput,
   ): Promise<User> {
-    const userId = context.req.user.id;
-    return this.usersService.update({ userId, updateLoginUserInput });
+    const user_id = context.req.user.id;
+    return this.usersService.update({ user_id, updateLoginUserInput });
   }
 
   // 회원 탈퇴(정보 삭제)
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => Boolean)
   deleteLoginUser(@Context() context: IContext): Promise<boolean> {
-    const userId = context.req.user.id;
-    return this.usersService.softDelete({ userId });
+    const user_id = context.req.user.id;
+    return this.usersService.softDelete({ user_id });
   }
 }

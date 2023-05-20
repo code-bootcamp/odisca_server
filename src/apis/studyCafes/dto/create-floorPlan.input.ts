@@ -3,14 +3,14 @@ import { Field, InputType, Int } from '@nestjs/graphql';
 @InputType()
 export class CreateCafeFloorPlanInput {
   @Field(() => String)
-  id: string;
+  studyCafe_id: string;
 
   @Field(() => Int)
-  floorPlanX: number;
+  studyCafe_floorPlanX: number;
 
   @Field(() => Int)
-  floorPlanY: number;
+  studyCafe_floorPlanY: number;
 
   @Field(() => Int)
-  seatCount: number;
+  studyCafe_seatCount: number;
 }

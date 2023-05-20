@@ -7,5 +7,5 @@ export class CreateSeatsInput {
   seatInformation: SeatInformationInput[];
 
   @Field(() => String)
-  studyCafeId: string;
+  studyCafe_id: string;
 }

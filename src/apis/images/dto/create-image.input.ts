@@ -4,6 +4,6 @@ import { Image } from '../entities/image.entity';
 @InputType()
 export class CreateImageInput extends OmitType(
   Image,
-  ['id', 'studyCafe'],
+  ['image_id', 'studyCafe'],
   InputType,
 ) {}

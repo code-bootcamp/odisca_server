@@ -1,10 +1,10 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
-export class UpdateLoginAdministerInput {
+export class FetchAllStudyCafesInput {
   @Field(() => String)
-  administer_password: string;
+  studyCafe_city: string;
 
   @Field(() => String)
-  administer_phone: string;
+  studyCafe_district: string;
 }

@@ -4,15 +4,15 @@ import { Min } from 'class-validator';
 @InputType()
 export class CreatePaymentInput {
   @Field(() => String)
-  studyCafeId: string;
+  studyCafe_id: string;
 
   @Min(0)
   @Field(() => Int)
-  point: number;
+  payment_point: number;
 
   @Field(() => Int)
-  time: number;
+  payment_time: number;
 
   @Field(() => String)
-  seatId: string;
+  seat_id: string;
 }

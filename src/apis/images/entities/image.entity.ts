@@ -7,17 +7,17 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 export class Image {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
+  image_id: string;
 
   @Column()
   @Field(() => String)
-  url: string;
+  image_url: string;
 
   @Column()
   @Field(() => Boolean)
-  isMain: boolean;
+  image_isMain: boolean;
 
-  @ManyToOne(() => StudyCafe)
+  @ManyToOne(() => StudyCafe, (studyCafe) => studyCafe.images)
   @Field(() => StudyCafe)
   studyCafe: StudyCafe;
 }

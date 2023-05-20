@@ -30,14 +30,15 @@ export class PointTransactionsResolver {
     createPointTransactionInput: CreatePointTransactionInput,
     @Context() context: IContext,
   ): Promise<PointTransaction> {
-    const user = context.req.user;
-    const impUid = createPointTransactionInput.impUid;
-    const amount = createPointTransactionInput.amount;
-    console.log(user);
+    const user_id = context.req.user.id;
+    const pointTransaction_impUid =
+      createPointTransactionInput.pointTransaction_impUid;
+    const pointTransaction_amount =
+      createPointTransactionInput.pointTransaction_amount;
     return this.pointTransactionsService.create({
-      impUid,
-      amount,
-      user,
+      pointTransaction_impUid,
+      pointTransaction_amount,
+      user_id,
     });
   }
 
@@ -49,8 +50,12 @@ export class PointTransactionsResolver {
     cancelPointTransactionInput: CancelPointTransactionInput,
     @Context() context: IContext,
   ): Promise<PointTransaction> {
-    const user = context.req.user;
-    const impUid = cancelPointTransactionInput.impUid;
-    return this.pointTransactionsService.cancel({ impUid, user });
+    const user_id = context.req.user.id;
+    const pointTransaction_impUid =
+      cancelPointTransactionInput.pointTransaction_impUid;
+    return this.pointTransactionsService.cancel({
+      pointTransaction_impUid,
+      user_id,
+    });
   }
 }

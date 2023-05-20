@@ -8,7 +8,7 @@ export class ImagesResolver {
 
   // 선택한 카페 메인 이미지 조회
   @Query(() => Image)
-  fetchCafeMainImage(@Args('studyCafeId') studyCafeId: string) {
-    return this.imagesService.findOneByStudyCafe({ studyCafeId });
+  fetchCafeMainImage(@Args('studyCafe_id') studyCafe_id: string) {
+    return this.imagesService.findOneByStudyCafe({ studyCafe_id });
   }
 }

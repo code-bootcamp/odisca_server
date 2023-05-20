@@ -4,34 +4,43 @@ import { CreateImageInput } from 'src/apis/images/dto/create-image.input';
 @InputType()
 export class CreateStudyCafeInput {
   @Field(() => String)
-  name: string;
+  studyCafe_name: string;
 
   @Field(() => String)
-  address: string;
+  studyCafe_address: string;
 
   @Field(() => String)
-  contact: string;
+  studyCafe_addressDetail: string;
+
+  @Field(() => String)
+  studyCafe_city: string;
+
+  @Field(() => String)
+  studyCafe_district: string;
+
+  @Field(() => String)
+  studyCafe_contact: string;
 
   @Field(() => Int)
-  timeFee: number;
+  studyCafe_timeFee: number;
 
   @Field(() => String)
-  description: string;
+  studyCafe_description: string;
 
   @Field(() => String)
-  openTime: string;
+  studyCafe_openTime: string;
 
   @Field(() => String)
-  closeTime: string;
+  studyCafe_closeTime: string;
 
   @Field(() => Float)
-  lat: number;
+  studyCafe_lat: number;
 
   @Field(() => Float)
-  lon: number;
+  studyCafe_lon: number;
 
   @Field(() => String)
-  brn: string;
+  studyCafe_brn: string;
 
   @Field(() => [CreateImageInput])
   image: CreateImageInput[];

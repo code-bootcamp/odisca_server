@@ -1,67 +1,90 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Administer } from 'src/apis/administers/entities/administer.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Image } from 'src/apis/images/entities/image.entity';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 
 @Entity()
 @ObjectType()
 export class StudyCafe {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
+  studyCafe_id: string;
 
   @Column()
   @Field(() => String)
-  name: string;
+  studyCafe_name: string;
 
   @Column()
   @Field(() => String)
-  address: string;
+  studyCafe_address: string;
 
   @Column()
   @Field(() => String)
-  contact: string;
+  studyCafe_addressDetail: string;
+
+  @Column()
+  @Field(() => String)
+  studyCafe_city: string;
+
+  @Column()
+  @Field(() => String)
+  studyCafe_district: string;
+
+  @Column()
+  @Field(() => String)
+  studyCafe_contact: string;
 
   @Column()
   @Field(() => Int)
-  timeFee: number;
+  studyCafe_timeFee: number;
 
   @Column()
   @Field(() => String)
-  description: string;
+  studyCafe_description: string;
 
   @Column()
   @Field(() => String)
-  openTime: string;
+  studyCafe_openTime: string;
 
   @Column()
   @Field(() => String)
-  closeTime: string;
+  studyCafe_closeTime: string;
 
   @Column({ type: 'decimal', precision: 9, scale: 6 })
   @Field(() => Float)
-  lat: number;
+  studyCafe_lat: number;
 
   @Column({ type: 'decimal', precision: 9, scale: 6 })
   @Field(() => Float)
-  lon: number;
+  studyCafe_lon: number;
 
   @Column({ unique: true })
   @Field(() => String)
-  brn: string;
+  studyCafe_brn: string;
 
   @Column({ default: 0 })
   @Field(() => Int)
-  seatCount: number;
+  studyCafe_seatCount: number;
 
   @Column({ default: 0 })
   @Field(() => Int)
-  floorPlanX: number;
+  studyCafe_floorPlanX: number;
 
   @Column({ default: 0 })
   @Field(() => Int)
-  floorPlanY: number;
+  studyCafe_floorPlanY: number;
 
   @ManyToOne(() => Administer)
   @Field(() => Administer)
   administer: Administer;
+
+  @OneToMany(() => Image, (image) => image.studyCafe)
+  @Field(() => Image)
+  images: Image;
 }

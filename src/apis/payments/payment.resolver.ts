@@ -19,17 +19,17 @@ export class PaymentsResolver {
     @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
     @Context() context: IContext,
   ): Promise<Payment> {
-    const user = context.req.user;
-    const point = createPaymentInput.point;
-    const studyCafeId = createPaymentInput.studyCafeId;
-    const seatId = createPaymentInput.seatId;
-    const time = createPaymentInput.time;
+    const user_id = context.req.user.id;
+    const payment_point = createPaymentInput.payment_point;
+    const studyCafe_id = createPaymentInput.studyCafe_id;
+    const seat_id = createPaymentInput.seat_id;
+    const payment_time = createPaymentInput.payment_time;
     return this.paymentsService.createLoginPayment({
-      point,
-      time,
-      user,
-      studyCafeId,
-      seatId,
+      payment_point,
+      payment_time,
+      user_id,
+      studyCafe_id,
+      seat_id,
     });
   }
 }
