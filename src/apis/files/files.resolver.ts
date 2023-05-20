@@ -10,9 +10,8 @@ export class FilesResolver {
     private readonly filesService: FilesService, //
   ) {}
 
-  @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => [String])
-  uploadLoginImageFile(
+  uploadImageFile(
     @Args({ name: 'images', type: () => [GraphQLUpload] }) images: FileUpload[],
   ): Promise<string[]> {
     return this.filesService.upload({ images });

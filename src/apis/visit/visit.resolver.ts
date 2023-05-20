@@ -16,9 +16,9 @@ export class VisitResolver {
   async fetchAllLoginVisitByUserId(
     @Context() context: IContext, //
   ): Promise<Visit[]> {
-    const userId = context.req.user.id;
+    const user_id = context.req.user.id;
     return await this.visitService.findAllByUserId({
-      userId,
+      user_id,
     });
   }
 }

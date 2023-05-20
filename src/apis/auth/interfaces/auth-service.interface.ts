@@ -2,7 +2,7 @@ import { User } from 'src/apis/users/entities/user.entity';
 import { IAuthUser } from 'src/common/interfaces/context';
 
 export interface IOAuthUser {
-  user: Omit<User, 'id'>;
+  user: Omit<User, 'user_id'>;
 }
 
 export interface IAuthServiceLoginOAuth {

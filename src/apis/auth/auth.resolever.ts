@@ -27,27 +27,35 @@ export class AuthResolver {
   // 유저 로그인
   @Mutation(() => String)
   LoginUser(
-    @Args('loginInput') loginInput: LoginUserInput,
+    @Args('loginUserInput') loginUserInput: LoginUserInput,
     @Context() context: IContext,
   ): Promise<string> {
-    return this.authService.loginUser({ loginInput, context });
+    return this.authService.loginUser({ loginUserInput, context });
   }
 
-  // 유저 로그인
+  // 관리자 로그인
   @Mutation(() => String)
   LoginAdminister(
-    @Args('loginInput') loginInput: LoginAdministerInput,
+    @Args('loginAdministerInput') loginAdministerInput: LoginAdministerInput,
     @Context() context: IContext,
   ): Promise<string> {
-    return this.authService.loginAdminister({ loginInput, context });
+    return this.authService.loginAdminister({ loginAdministerInput, context });
   }
 
-  // access토큰 재발급
+  // 유저 access토큰 재발급
   @UseGuards(GqlAuthGuard('refresh'))
   @Mutation(() => String)
-  restoreAccessToken(@Context() context: IContext): string {
+  restoreAccessTokenForUser(@Context() context: IContext): string {
     const user = context.req.user;
-    return this.authService.restoreAccessToken({ user });
+    return this.authService.restoreAccessTokenForUser({ user });
+  }
+
+  // 관리자 access토큰 재발급
+  @UseGuards(GqlAuthGuard('refresh'))
+  @Mutation(() => String)
+  restoreAccessTokenForAdminister(@Context() context: IContext): string {
+    const administer = context.req.user;
+    return this.authService.restoreAccessTokenForAdminister({ administer });
   }
 
   // 로그아웃

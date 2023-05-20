@@ -21,6 +21,7 @@ export class StudyCafesResolver {
     @Context() context: IContext,
     @Args('createStudyCafeInput') createStudyCafeInput: CreateStudyCafeInput,
   ): Promise<StudyCafe> {
+    console.log(context.req);
     const administer_id = context.req.user.id;
     return this.studyCafesService.createStudyCafe({
       createStudyCafeInput,

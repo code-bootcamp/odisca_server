@@ -27,6 +27,7 @@ export class StudyCafesService {
     createStudyCafeInput,
     administer_id,
   }: IStudyCafesServiceCreate): Promise<StudyCafe> {
+    console.log('!!!', administer_id);
     const { image, ...StudyCafe } = createStudyCafeInput;
     const result = await this.studyCafeRepository.save({
       ...StudyCafe,
