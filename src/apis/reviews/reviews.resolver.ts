@@ -19,7 +19,7 @@ export class ReviewsResolver {
   ) {}
 
   // 리뷰 페이지 들어오면 보여지는 이미지 불러오기
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Query(() => [Image])
   async fetchLoginImageByVisitId(
     @Args('fetchImageByVisitIdInput')
@@ -32,7 +32,7 @@ export class ReviewsResolver {
   }
 
   // Review테이블에 UserId로 모든 리뷰 조회
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Query(() => [Review])
   async fetchLoginReviewsByUserId(
     @Context() context: IContext, //
@@ -44,7 +44,7 @@ export class ReviewsResolver {
   }
 
   // Login한 유저의 방문기록으로 리뷰 작성
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Mutation(() => Review)
   createLoginReview(
     @Args('createReviewInput')
@@ -62,7 +62,7 @@ export class ReviewsResolver {
   }
 
   // Login한 유저의 방문기록으로 리뷰 수정
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Mutation(() => Boolean)
   updateLoginReview(
     @Args('updateReviewInput')
@@ -80,7 +80,7 @@ export class ReviewsResolver {
   }
 
   // Login한 유저의 방문기록으로 리뷰 삭제
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Mutation(() => Boolean)
   deleteLoginReview(
     @Args('cancelReviewInput')

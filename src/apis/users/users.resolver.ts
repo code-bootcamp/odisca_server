@@ -20,7 +20,7 @@ export class UsersResolver {
   }
 
   // 회원 정보 조회
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Query(() => User)
   fetchLoginUser(@Context() context: IContext): Promise<User> {
     const user_id = context.req.user.id;
@@ -28,7 +28,7 @@ export class UsersResolver {
   }
 
   // 회원 정보 수정
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Mutation(() => User)
   updateLoginUser(
     @Context() context: IContext,
@@ -39,7 +39,7 @@ export class UsersResolver {
   }
 
   // 회원 탈퇴(정보 삭제)
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Mutation(() => Boolean)
   deleteLoginUser(@Context() context: IContext): Promise<boolean> {
     const user_id = context.req.user.id;

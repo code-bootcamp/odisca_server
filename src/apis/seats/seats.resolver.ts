@@ -10,7 +10,7 @@ export class SeatsResolver {
   constructor(private readonly seatsService: SeatsService) {}
 
   // 좌석 등록
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => Seat)
   createSeats(@Args('createSeatsInput') createSeatsInput: CreateSeatsInput) {
     return this.seatsService.create({ createSeatsInput });

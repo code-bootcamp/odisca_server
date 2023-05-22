@@ -12,7 +12,7 @@ export class VisitResolver {
   ) {}
 
   // UserId로 모든 Visit 기록 조회
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Query(() => [Visit])
   async fetchAllLoginVisitByUserId(
     @Context() context: IContext, //

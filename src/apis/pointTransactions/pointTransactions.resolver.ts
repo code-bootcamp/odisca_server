@@ -25,7 +25,7 @@ export class PointTransactionsResolver {
   }
 
   // 포인트결제 생성
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Mutation(() => PointTransaction)
   createLoginPointTransaction(
     @Args('createPointTransactionInput')
@@ -45,7 +45,7 @@ export class PointTransactionsResolver {
   }
 
   // 포인트 결제 취소
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Mutation(() => PointTransaction)
   cancelLoginPointTransaction(
     @Args('cancelPointTransactionInput')
