@@ -32,7 +32,7 @@ export class ReviewsService {
     });
 
     const image = await this.imagesService.findImagesByStudyCafeIds({
-      result: checkVisit.studyCafe,
+      studyCafe_id: checkVisit.studyCafe.studyCafe_id,
     });
     // console.log(image);
     return image;
@@ -46,8 +46,6 @@ export class ReviewsService {
       where: { user: { user_id } },
       relations: ['user'],
     });
-
-    // console.log(11111111, checkUser);
 
     return checkUser;
   }
@@ -108,7 +106,6 @@ export class ReviewsService {
       if (checkUser[0].user.user_id !== user_id) {
         throw new UnprocessableEntityException('내가 쓴 리뷰가 아닙니다!');
       }
-      // console.log(111, checkUser);
 
       // 리뷰 수정
       const result = await this.reviewsRepository.update(
