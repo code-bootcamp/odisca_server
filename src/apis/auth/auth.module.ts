@@ -4,13 +4,15 @@ import { JwtModule } from '@nestjs/jwt';
 import { Module } from '@nestjs/common';
 import { UsersModule } from '../users/users.module';
 import { AdministersModule } from '../administers/administers.module';
-import { JwtAccessStrategy } from './strategies/jwt-access.strategy';
+import { JwtUserAccessStrategy } from './strategies/jwt-user-access.strategy';
 import { JwtGoogleStrategy } from './strategies/jwt-social-google.strategy';
 import { JwtKakaoStrategy } from './strategies/jwt-social-kakao.strategy';
 import { JwtNaverStrategy } from './strategies/jwt-social-naver.strategy';
 import { AuthController } from './auth.controller';
 import { MailerModule } from '@nest-modules/mailer';
-import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
+import { JwtUserRefreshStrategy } from './strategies/jwt-user-refresh.strategy';
+import { JwtAdministerAccessStrategy } from './strategies/jwt-administer-access.strategy';
+import { JwtAdministerRefreshStrategy } from './strategies/jwt-administer-refresh.strategy';
 
 @Module({
   imports: [
@@ -32,8 +34,10 @@ import { JwtRefreshStrategy } from './strategies/jwt-refresh.strategy';
   providers: [
     AuthResolver,
     AuthService,
-    JwtAccessStrategy,
-    JwtRefreshStrategy,
+    JwtUserAccessStrategy,
+    JwtUserRefreshStrategy,
+    JwtAdministerAccessStrategy,
+    JwtAdministerRefreshStrategy,
     JwtGoogleStrategy,
     JwtKakaoStrategy,
     JwtNaverStrategy,

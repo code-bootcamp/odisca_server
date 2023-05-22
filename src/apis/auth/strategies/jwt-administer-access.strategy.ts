@@ -4,14 +4,17 @@ import { Cache } from 'cache-manager';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 
-export class JwtAccessStrategy extends PassportStrategy(Strategy, 'access') {
+export class JwtAdministerAccessStrategy extends PassportStrategy(
+  Strategy,
+  'administer-access',
+) {
   constructor(
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-      secretOrKey: process.env.JWT_ACCESS_KEY,
+      secretOrKey: process.env.JWT_ACCESS_KEY_ADMINISTER,
       passReqToCallback: true,
     });
   }

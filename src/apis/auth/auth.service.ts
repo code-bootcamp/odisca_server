@@ -152,7 +152,7 @@ export class AuthService {
   getAccessTokenForUser({ user }): string {
     return this.jwtService.sign(
       { sub: user.user_id },
-      { secret: process.env.JWT_ACCESS_KEY, expiresIn: '1h' },
+      { secret: process.env.JWT_ACCESS_KEY_USER, expiresIn: '1h' },
     );
   }
 
@@ -160,10 +160,15 @@ export class AuthService {
   setRefreshTokenForUser({ user, res, req }): void {
     const refreshToken = this.jwtService.sign(
       { sub: user.user_id },
-      { secret: process.env.JWT_REFRESH_KEY, expiresIn: '2w' },
+      { secret: process.env.JWT_REFRESH_KEY_USER, expiresIn: '2w' },
     );
     // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
-    const Origins = ['http://localhost:3000', 'https://odisca.store'];
+    const Origins = [
+      'http://localhost:3000',
+      'https://odisca.store',
+      'http://127.0.0.1:3000',
+      'https://34.64.94.142:3000',
+    ];
     const origin = req.headers.origin;
     if (Origins.includes(origin)) {
       res.setHeader(
@@ -183,7 +188,7 @@ export class AuthService {
   getAccessTokenForAdminister({ administer }): string {
     return this.jwtService.sign(
       { sub: administer.administer_id },
-      { secret: process.env.JWT_ACCESS_KEY, expiresIn: '1h' },
+      { secret: process.env.JWT_ACCESS_KEY_ADMINISTER, expiresIn: '1h' },
     );
   }
 
@@ -191,7 +196,7 @@ export class AuthService {
   setRefreshTokenForAdminister({ administer, res, req }): void {
     const refreshToken = this.jwtService.sign(
       { sub: administer.administer_id },
-      { secret: process.env.JWT_REFRESH_KEY, expiresIn: '2w' },
+      { secret: process.env.JWT_REFRESH_KEY_ADMINISTER, expiresIn: '2w' },
     );
     // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
     const Origins = ['http://localhost:3000', 'https://odisca.store'];
@@ -210,8 +215,8 @@ export class AuthService {
     return this.getAccessTokenForAdminister({ administer });
   }
 
-  // 로그아웃시 토큰 redis 저장
-  async blackList({ context }) {
+  // 유저 로그아웃
+  async blackListUser({ context }) {
     const accessToken = context.req.headers.authorization.replace(
       'Bearer ',
       '',
@@ -222,13 +227,67 @@ export class AuthService {
     );
     try {
       // accessToken 검증
-      const decodedAcc = jwt.verify(accessToken, process.env.JWT_ACCESS_KEY, {
-        complete: true,
-      }) as jwt.JwtPayload;
+      const decodedAcc = jwt.verify(
+        accessToken,
+        process.env.JWT_ACCESS_KEY_USER,
+        {
+          complete: true,
+        },
+      ) as jwt.JwtPayload;
       // refreshToken 검증
       const decodeRefresh = jwt.verify(
         refreshToken,
-        process.env.JWT_REFRESH_KEY,
+        process.env.JWT_REFRESH_KEY_USER,
+        { complete: true },
+      ) as jwt.JwtPayload;
+      // 남은 만료시간
+      const remainedExpireAcc = Math.floor(
+        decodedAcc.payload.exp - new Date().getTime() / 1000,
+      );
+
+      const remainedExpireRefresh = Math.floor(
+        decodeRefresh.payload.exp - new Date().getTime() / 1000,
+      );
+      // redis에 저장
+      await this.cacheManager.set(`accessToken:${accessToken}`, accessToken, {
+        ttl: remainedExpireAcc,
+      });
+      await this.cacheManager.set(
+        `refreshToken:${refreshToken}`,
+        refreshToken,
+        {
+          ttl: remainedExpireRefresh,
+        },
+      );
+      return '로그아웃에 성공했습니다.';
+    } catch (error) {
+      throw new UnauthorizedException();
+    }
+  }
+
+  // 관리자 로그아웃
+  async blackListAdminister({ context }) {
+    const accessToken = context.req.headers.authorization.replace(
+      'Bearer ',
+      '',
+    );
+    const refreshToken = context.req.headers.cookie.replace(
+      'refreshToken=',
+      '',
+    );
+    try {
+      // accessToken 검증
+      const decodedAcc = jwt.verify(
+        accessToken,
+        process.env.JWT_ACCESS_KEY_ADMINISTER,
+        {
+          complete: true,
+        },
+      ) as jwt.JwtPayload;
+      // refreshToken 검증
+      const decodeRefresh = jwt.verify(
+        refreshToken,
+        process.env.JWT_REFRESH_KEY_ADMINISTER,
         { complete: true },
       ) as jwt.JwtPayload;
       // 남은 만료시간
