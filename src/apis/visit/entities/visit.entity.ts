@@ -25,7 +25,7 @@ export class Visit {
   @Field(() => Review)
   visit_review: Review;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.visits)
   @Field(() => User)
   user: User;
 
