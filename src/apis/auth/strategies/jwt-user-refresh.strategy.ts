@@ -14,7 +14,6 @@ export class JwtUserRefreshStrategy extends PassportStrategy(
   ) {
     super({
       jwtFromRequest: (req) => {
-        console.log(req);
         const cookie = req.headers.cookie;
         const refreshToken = cookie.replace('refreshToken=', '');
         return refreshToken;
@@ -25,6 +24,7 @@ export class JwtUserRefreshStrategy extends PassportStrategy(
   }
 
   async validate(req, payload) {
+    console.log(payload);
     const refreshToken = req.headers.cookie.replace('refreshToken=', '');
     const blackListRedis = await this.cacheManager.get(
       `refreshToken:${refreshToken}`,
