@@ -13,7 +13,7 @@ export class PaymentsResolver {
   ) {}
 
   // 좌석 결제내역 추가
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('user-access'))
   @Mutation(() => Payment)
   createLoginPayment(
     @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
