@@ -11,10 +11,10 @@ export interface IReviewsServiceUpdate {
 }
 
 export interface IReviewsServiceFindOneByVisitId {
-  visit: string;
+  visit_id: string;
 }
 
-export interface IReviewServiceFindByUserId {
+export interface IReviewsServiceFindByUserId {
   user: string;
 }
 

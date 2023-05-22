@@ -14,6 +14,8 @@ export class PointTransactionsResolver {
   constructor(
     private readonly pointTransactionsService: PointTransactionsService,
   ) {}
+
+  // userId로 모든 포인트 결제내역 찾기
   @Query(() => [PointTransaction])
   fetchLoginPointTransactions(
     @Context() context: IContext,

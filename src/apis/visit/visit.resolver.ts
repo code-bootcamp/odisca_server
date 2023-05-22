@@ -11,6 +11,7 @@ export class VisitResolver {
     private readonly visitService: VisitService, //
   ) {}
 
+  // UserId로 모든 Visit 기록 조회
   @UseGuards(GqlAuthGuard('access'))
   @Query(() => [Visit])
   async fetchAllLoginVisitByUserId(

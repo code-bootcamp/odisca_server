@@ -15,10 +15,11 @@ export class VisitService {
   ) {}
 
   async findByVisitId({
-    visitId, //
+    visit_id, //
   }): Promise<Visit> {
     const visit = await this.visitRepository.findOne({
-      where: { visit_id: visitId },
+      where: { visit_id: visit_id },
+      relations: ['user', 'studyCafe'],
     });
     return visit;
   }

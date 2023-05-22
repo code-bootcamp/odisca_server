@@ -5,8 +5,9 @@ import { User } from '../users/entities/user.entity';
 import { Visit } from '../visit/entities/visit.entity';
 import { ReviewsResolver } from './reviews.resolver';
 import { ReviewsService } from './reviews.service';
-import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
 import { VisitService } from '../visit/visit.service';
+import { ImagesService } from '../images/images.service';
+import { Image } from '../images/entities/image.entity';
 
 @Module({
   imports: [
@@ -14,12 +15,14 @@ import { VisitService } from '../visit/visit.service';
       Review, //
       User, //
       Visit, //
+      Image, //
     ]),
   ],
   providers: [
     ReviewsResolver, //
     ReviewsService, //
     VisitService, //
+    ImagesService, //
   ],
 })
 export class ReviewsModule {}
