@@ -18,8 +18,11 @@ export class UsersService {
     private readonly usersRepository: Repository<User>,
   ) {}
   // 로그인 상태 유저 조회
-  findOneById({ user_id }: IUsersServiceFindOneById): Promise<User> {
-    return this.usersRepository.findOne({ where: { user_id } });
+  async findOneById({ user_id }: IUsersServiceFindOneById): Promise<User> {
+    return this.usersRepository.findOne({
+      where: { user_id },
+      relations: ['visits'],
+    });
   }
 
   // 이메일 중복 존재 검증
@@ -52,7 +55,7 @@ export class UsersService {
     updateLoginUserInput,
   }: IUsersServiceUpdate): Promise<User> {
     const { user_password, user_phone } = updateLoginUserInput;
-    const user = await this.findOneById({ user_id });
+    const user = await this.usersRepository.findOne({ where: { user_id } });
     const hashedPassword = await bcrypt.hash(user_password, 10);
     return this.usersRepository.save({
       id: user.user_id,

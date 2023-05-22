@@ -22,7 +22,7 @@ export class UsersResolver {
   // 회원 정보 조회
   @UseGuards(GqlAuthGuard('access'))
   @Query(() => User)
-  fetchLoginUser(@Context() context: IContext) {
+  fetchLoginUser(@Context() context: IContext): Promise<User> {
     const user_id = context.req.user.id;
     return this.usersService.findOneById({ user_id });
   }
