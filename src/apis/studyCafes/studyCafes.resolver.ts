@@ -16,7 +16,7 @@ export class StudyCafesResolver {
   constructor(private readonly studyCafesService: StudyCafesService) {}
 
   // 스터디 카페 등록
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => StudyCafe)
   createLoginStudyCafe(
     @Context() context: IContext,
@@ -30,7 +30,7 @@ export class StudyCafesResolver {
   }
 
   // 스터디 카페 좌석배치도 및 좌석 수 등록
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => StudyCafe)
   createLoginCafeFloorPlanAndSeats(
     @Args('createCafeFloorPlanInput')
@@ -69,7 +69,7 @@ export class StudyCafesResolver {
   }
 
   // 스터디 카페 수정
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => StudyCafe)
   updateLoginStudyCafe(
     @Context() context: IContext,

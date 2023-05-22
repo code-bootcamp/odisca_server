@@ -43,7 +43,7 @@ export class AuthResolver {
   }
 
   // 유저 access토큰 재발급
-  @UseGuards(GqlAuthGuard('refresh'))
+  @UseGuards(GqlAuthGuard('user-refresh'))
   @Mutation(() => String)
   restoreAccessTokenForUser(@Context() context: IContext): string {
     const user = context.req.user;
@@ -51,16 +51,22 @@ export class AuthResolver {
   }
 
   // 관리자 access토큰 재발급
-  @UseGuards(GqlAuthGuard('refresh'))
+  @UseGuards(GqlAuthGuard('administer-refresh'))
   @Mutation(() => String)
   restoreAccessTokenForAdminister(@Context() context: IContext): string {
     const administer = context.req.user;
     return this.authService.restoreAccessTokenForAdminister({ administer });
   }
 
-  // 로그아웃
+  // 로그아웃 유저
   @Mutation(() => String)
-  logout(@Context() context: IContext) {
-    return this.authService.blackList({ context });
+  logoutUser(@Context() context: IContext) {
+    return this.authService.blackListUser({ context });
+  }
+
+  // 로그아웃 관리자
+  @Mutation(() => String)
+  logoutAdminister(@Context() context: IContext) {
+    return this.authService.blackListAdminister({ context });
   }
 }
