@@ -40,6 +40,7 @@ export class PointTransactionsService {
 
   ///////////////////////////////////////////////////////////////////////////////////////
 
+  // PointTransaction 테이블에 pointTransaction_impUid(결제 아이디)가 있는지 확인
   findOneByImpUid({
     pointTransaction_impUid,
   }: IPointTransactionsServiceFindOneByImpUid): Promise<PointTransaction> {
@@ -48,6 +49,7 @@ export class PointTransactionsService {
     });
   }
 
+  // 이미 pointTransaction_impUid(결제 아이디)가 등록되어 있으면 에러
   async checkDuplication({
     pointTransaction_impUid,
   }: IPointTransactionsServiceCheckDuplication): Promise<void> {
@@ -66,29 +68,29 @@ export class PointTransactionsService {
     await queryRunner.startTransaction('SERIALIZABLE');
 
     try {
+      // 결제 금액과 포인트 결제 금액이 같은지 확인
       await this.iamportService.checkPaid({
         pointTransaction_impUid,
         pointTransaction_amount,
       });
       await this.checkDuplication({ pointTransaction_impUid });
 
-      // PointTransaction 테이블에 거래기록 1줄 생성
+      // PointTransaction 테이블에 결제내역 저장
       const pointTransaction = this.pointTransactionsRepository.create({
         pointTransaction_impUid,
         pointTransaction_amount,
         user: { user_id },
         pointTransaction_status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT, // 'PAYMENT'
       });
-
       await queryRunner.manager.save(pointTransaction);
 
-      // 유저 포인트 조회
+      // user_id로 유저 조회
       const user = await queryRunner.manager.findOne(User, {
         where: { user_id },
         lock: { mode: 'pessimistic_write' },
       });
 
-      // 유저 포인트 업데이트
+      // 유저 포인트에 결제 포인트 추가
       const updatedUser = this.usersRepository.create({
         ...user,
         user_point: user.user_point + pointTransaction_amount,
@@ -119,6 +121,7 @@ export class PointTransactionsService {
     await queryRunner.startTransaction('SERIALIZABLE');
 
     try {
+      // 이미 취소된 내역이 있는지 확인
       const pointTransactionCancel = await queryRunner.manager.findOne(
         PointTransaction,
         {
@@ -129,7 +132,12 @@ export class PointTransactionsService {
           lock: { mode: 'pessimistic_write' },
         },
       );
+      // 취소된 내역이 있으면 에러
+      if (pointTransactionCancel) {
+        throw new UnprocessableEntityException('이미 취소된 내역입니다.');
+      }
 
+      // 실제로 결제한 내역이 있는지 확인
       const pointTransaction = await queryRunner.manager.findOne(
         PointTransaction,
         {
@@ -138,40 +146,44 @@ export class PointTransactionsService {
         },
       );
 
-      if (pointTransactionCancel) {
-        throw new UnprocessableEntityException('이미 취소된 내역입니다.');
-      } else {
-        await this.iamportService.cancel({ pointTransaction_impUid });
-
-        // 유저 포인트 조회
-        const user = await queryRunner.manager.findOne(User, {
-          where: { user_id },
-          lock: { mode: 'pessimistic_write' },
-        });
-
-        // 유저 포인트 업데이트
-        const updatedUser = this.usersRepository.create({
-          ...user,
-          user_point:
-            user.user_point - pointTransaction.pointTransaction_amount,
-        });
-        await queryRunner.manager.save(updatedUser);
-
-        const cancelPointTransaction = this.pointTransactionsRepository.create({
-          pointTransaction_impUid,
-          pointTransaction_amount: -pointTransaction.pointTransaction_amount,
-          user: { user_id },
-          pointTransaction_status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
-        });
-
-        await queryRunner.manager.save(cancelPointTransaction);
-
-        await queryRunner.commitTransaction();
-
-        return cancelPointTransaction;
+      // 실제로 결제한 내역이 없으면 에러
+      if (!pointTransaction) {
+        throw new UnprocessableEntityException(
+          '결제한 내역이 존재하지 않습니다!',
+        );
       }
+
+      // 결제 취소
+      await this.iamportService.cancel({ pointTransaction_impUid });
+
+      // 유저 포인트 조회
+      const user = await queryRunner.manager.findOne(User, {
+        where: { user_id },
+        lock: { mode: 'pessimistic_write' },
+      });
+
+      // 유저 포인트 업데이트
+      const updatedUser = this.usersRepository.create({
+        ...user,
+        user_point: user.user_point - pointTransaction.pointTransaction_amount,
+      });
+      await queryRunner.manager.save(updatedUser);
+
+      // PointTransaction 테이블에 취소내역 저장
+      const cancelPointTransaction = this.pointTransactionsRepository.create({
+        pointTransaction_impUid,
+        pointTransaction_amount: -pointTransaction.pointTransaction_amount,
+        user: { user_id },
+        pointTransaction_status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
+      });
+      await queryRunner.manager.save(cancelPointTransaction);
+
+      await queryRunner.commitTransaction();
+
+      return cancelPointTransaction;
     } catch (error) {
       await queryRunner.rollbackTransaction();
+      throw new Error(error);
     } finally {
       await queryRunner.release();
     }
