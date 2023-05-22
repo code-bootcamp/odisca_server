@@ -12,6 +12,7 @@ export class PaymentsResolver {
     private readonly paymentsService: PaymentsService, //
   ) {}
 
+  // 좌석 결제내역 추가
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => Payment)
   createLoginPayment(

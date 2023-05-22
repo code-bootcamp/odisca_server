@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Payment } from './entities/payment.entity';
 import { DataSource, Repository } from 'typeorm';
@@ -20,16 +20,18 @@ export class PaymentsService {
     private readonly dataSource: DataSource,
   ) {}
 
+  // 종료시간 구하기
   getExpiredTime({ payment_time }) {
     const expiredTime = new Date();
 
     expiredTime.setUTCHours(expiredTime.getUTCHours() + 9 + payment_time);
 
-    // const ms = expiredTime.getTime();
+    const expiredTimeMs = expiredTime.getTime();
 
-    return String(expiredTime);
+    return String(expiredTimeMs);
   }
 
+  // 좌석 결제내역 저장
   async createLoginPayment({
     payment_point, //
     payment_time, //
@@ -48,20 +50,15 @@ export class PaymentsService {
         lock: { mode: 'pessimistic_write' },
       });
 
-      // Payment 테이블 저장 (point, user)
-      const payment = await this.paymentsRepository.create({
-        payment_point,
-        payment_time,
-        user: { user_id },
-        seat,
-      });
-      await queryRunner.manager.save(payment);
-
       // User테이블 _user.id로 조회
       const user = await queryRunner.manager.findOne(User, {
         where: { user_id },
         lock: { mode: 'pessimistic_write' },
       });
+
+      if (user.user_point < payment_point) {
+        throw new UnprocessableEntityException('포인트가 부족합니다!');
+      }
 
       // User테이블 업데이트 (user포인트 차감)
       user.user_point -= payment_point;
@@ -73,6 +70,15 @@ export class PaymentsService {
         lock: { mode: 'pessimistic_write' },
       });
 
+      // Payment 테이블 저장 (point, user)
+      const payment = await this.paymentsRepository.create({
+        payment_point,
+        payment_time,
+        user: user,
+        seat: seat,
+      });
+      await queryRunner.manager.save(payment);
+
       // Visit테이블 저장 (user, studyCafe)
       const createVisit = await this.visitRepository.create({
         user: user,
@@ -81,15 +87,13 @@ export class PaymentsService {
       await queryRunner.manager.save(createVisit);
 
       // expiredTime(종료시간) 구하기
-      const expiredTimeString = this.getExpiredTime({ payment_time });
+      const expiredTimeMs = await this.getExpiredTime({ payment_time });
 
-      const expiredTime = String(
-        new Date().setUTCHours(new Date().getUTCHours() + 9 + payment_time),
-      );
+      const expiredTimeString = String(new Date(Number(expiredTimeMs)));
 
       // remainTime남은 시간 구하기
       const now = new Date().setUTCHours(new Date().getUTCHours() + 9);
-      const remainTime = Number(expiredTime) - now;
+      const remainTime = Number(expiredTimeMs) - now;
 
       // Seat테이블 업데이트 (user, expiredTime)
       seat.user = user;
@@ -104,6 +108,7 @@ export class PaymentsService {
     } catch (error) {
       // 결제 전 상태로 돌아가기
       await queryRunner.rollbackTransaction();
+      throw new Error(error);
     } finally {
       // 쿼리러너 연결 해제
       await queryRunner.release();
