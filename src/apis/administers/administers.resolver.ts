@@ -20,15 +20,16 @@ export class AdministersResolver {
   }
 
   // 회원 정보 조회
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Query(() => Administer)
   fetchLoginAdminister(@Context() context: IContext) {
     const administer_id = context.req.user.id;
+    console.log(context.req.user);
     return this.administersService.findOneById({ administer_id });
   }
 
   // 회원 정보 수정
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => Administer)
   updateLoginAdminister(
     @Context() context: IContext,
@@ -43,7 +44,7 @@ export class AdministersResolver {
   }
 
   // 회원 탈퇴(정보 삭제)
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => Boolean)
   deleteLoginAdminister(@Context() context: IContext): Promise<boolean> {
     const administer_id = context.req.user.id;

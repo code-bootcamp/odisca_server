@@ -73,9 +73,13 @@ export class AuthService {
     if (!isAuth)
       throw new UnprocessableEntityException('비밀번호를 확인해주세요.');
     // 로그인 & refresh 토큰 발급
-    this.setRefreshTokenForUser({ user, res: context.res, req: context.req });
+    this.setRefreshTokenForUser({
+      user: user.user_id,
+      res: context.res,
+      req: context.req,
+    });
     // access 토큰 발급
-    return this.getAccessTokenForUser({ user });
+    return this.getAccessTokenForUser({ user: user.user_id });
   }
 
   // 관리자 로그인 //
@@ -95,12 +99,14 @@ export class AuthService {
       throw new UnprocessableEntityException('비밀번호를 확인해주세요.');
     // 로그인 & refresh 토큰 발급
     this.setRefreshTokenForAdminister({
-      administer,
+      administer: administer.administer_id,
       res: context.res,
       req: context.req,
     });
     // access 토큰 발급
-    return this.getAccessTokenForAdminister({ administer });
+    return this.getAccessTokenForAdminister({
+      administer: administer.administer_id,
+    });
   }
 
   // 회원 소셜로그인 //
@@ -150,69 +156,78 @@ export class AuthService {
 
   // 유저 access 토큰 발급 //
   getAccessTokenForUser({ user }): string {
+    console.log('ACC', user);
     return this.jwtService.sign(
-      { sub: user.user_id },
+      { sub: user },
       { secret: process.env.JWT_ACCESS_KEY_USER, expiresIn: '1h' },
     );
   }
 
   // 유저 refresh 토큰 발급
   setRefreshTokenForUser({ user, res, req }): void {
+    console.log('REF', user);
     const refreshToken = this.jwtService.sign(
-      { sub: user.user_id },
+      { sub: user },
       { secret: process.env.JWT_REFRESH_KEY_USER, expiresIn: '2w' },
     );
-    // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
-    const Origins = [
-      'http://localhost:3000',
-      'https://odisca.store',
-      'http://127.0.0.1:3000',
-      'https://34.64.94.142:3000',
-    ];
-    const origin = req.headers.origin;
-    if (Origins.includes(origin)) {
-      res.setHeader(
-        'Set-Cookie',
-        `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
-      );
-      res.setHeader('Access-Control-Allow-Origin', origin);
-    }
+    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    // const Origins = [
+    //   'http://localhost:3000',
+    //   'https://odisca.store',
+    //   'http://127.0.0.1:3000',
+    //   'https://34.64.94.142:3000',
+    // ];
+    // const origin = req.headers.origin;
+    // if (Origins.includes(origin)) {
+    //   res.setHeader(
+    //     'Set-Cookie',
+    //     `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
+    //   );
+    //   res.setHeader('Access-Control-Allow-Origin', origin);
+    // }
   }
 
   // 유저 restore
   restoreAccessTokenForUser({ user }: IAuthServiceRestoreAccessToken): string {
-    return this.getAccessTokenForUser({ user });
+    return this.getAccessTokenForUser({ user: user.id });
   }
 
   // 관리자 access 토큰 발급 //
   getAccessTokenForAdminister({ administer }): string {
+    console.log('ACC', administer);
     return this.jwtService.sign(
-      { sub: administer.administer_id },
+      { sub: administer },
       { secret: process.env.JWT_ACCESS_KEY_ADMINISTER, expiresIn: '1h' },
     );
   }
 
   // 관리자 refresh 토큰 발급
   setRefreshTokenForAdminister({ administer, res, req }): void {
+    console.log('REF', administer.administer_id);
     const refreshToken = this.jwtService.sign(
-      { sub: administer.administer_id },
+      { sub: administer },
       { secret: process.env.JWT_REFRESH_KEY_ADMINISTER, expiresIn: '2w' },
     );
-    // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
-    const Origins = ['http://localhost:3000', 'https://odisca.store'];
-    const origin = req.headers.origin;
-    if (Origins.includes(origin)) {
-      res.setHeader(
-        'Set-Cookie',
-        `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
-      );
-      res.setHeader('Access-Control-Allow-Origin', origin);
-    }
+    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    // const Origins = [
+    //   'http://localhost:3000',
+    //   'https://odisca.store',
+    //   'http://127.0.0.1:3000',
+    //   'https://34.64.94.142:3000',
+    // ];
+    // const origin = req.headers.origin;
+    // if (Origins.includes(origin)) {
+    //   res.setHeader(
+    //     'Set-Cookie',
+    //     `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
+    //   );
+    //   res.setHeader('Access-Control-Allow-Origin', origin);
+    // }
   }
 
   // 관리자 restore
   restoreAccessTokenForAdminister({ administer }): string {
-    return this.getAccessTokenForAdminister({ administer });
+    return this.getAccessTokenForAdminister({ administer: administer.id });
   }
 
   // 유저 로그아웃
