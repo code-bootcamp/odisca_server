@@ -3,12 +3,15 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
 import { Repository } from 'typeorm';
 import {
-  IReviewServiceFindByUserId,
+  IReviewsServiceFindByUserId,
   IReviewsServiceCancel,
   IReviewsServiceCreate,
   IReviewsServiceUpdate,
+  IReviewsServiceFindOneByVisitId,
 } from './interfaces/reviews-service.interface';
 import { VisitService } from '../visit/visit.service';
+import { ImagesService } from '../images/images.service';
+import { Image } from '../images/entities/image.entity';
 
 @Injectable()
 export class ReviewsService {
@@ -17,69 +20,80 @@ export class ReviewsService {
     private readonly reviewsRepository: Repository<Review>,
 
     private readonly visitService: VisitService,
+
+    private readonly imagesService: ImagesService,
   ) {}
 
-  // findOneByVisitId({
-  //   visit: visitId,
-  // }: IReviewsServiceFindOneByVisitId): Promise<Visit> {
-  //   return this.visitRepository.findOne({
-  //     relations: ['visit'],
-  //     where: { id: visitId },
-  //   });
-  // }
+  async findImageByVisitId({
+    visit_id, //
+  }: IReviewsServiceFindOneByVisitId): Promise<Image[]> {
+    const checkVisit = await this.visitService.findByVisitId({
+      visit_id, //
+    });
 
-  async findByUserId({
-    user, //
-  }: IReviewServiceFindByUserId): Promise<Review[]> {
-    console.log(user);
-    // const checkShop = await this.visitService.findByUserId({ userId });
-    // if (!checkShop) {
-    //   throw new UnprocessableEntityException('유효하지 않은 가게ID 입니다');
-    // }
-    // const result = await this.reviewsRepository.find({
-    //   where: { shop: { id: shopId } },
-    //   skip: (page - 1) * count,
-    //   take: count,
-    //   order: {
-    //     createdAt: 'ASC',
-    //   },
-    //   relations: ['shop', 'reservation'],
-    // });
-
-    return;
+    const image = await this.imagesService.findImagesByStudyCafeIds({
+      result: checkVisit.studyCafe,
+    });
+    // console.log(image);
+    return image;
   }
 
+  async findByUserId({
+    user: user_id, //
+  }: IReviewsServiceFindByUserId): Promise<Review[]> {
+    // Review테이블에 user_id 조회하기
+    const checkUser = await this.reviewsRepository.find({
+      where: { user: { user_id } },
+      relations: ['user'],
+    });
+
+    // console.log(11111111, checkUser);
+
+    return checkUser;
+  }
+
+  // 리뷰 추가
   async createReview({
     review_content, //
     user_id, //
     visit_id, //
   }: IReviewsServiceCreate): Promise<Review> {
     try {
-      const checkVisit = await this.reviewsRepository.find({
+      // Visit테이블에 visit_id로 조회하기
+      const checkVisit = await this.visitService.findByVisitId({ visit_id });
+
+      // checkVisit에 user_id가 현재 로그인한 유저와 같은지 확인
+      if (checkVisit.user.user_id !== user_id) {
+        throw new UnprocessableEntityException('내가 작성한 리뷰가 아닙니다!');
+      }
+
+      // Review테이블에 visit_id로 조회하기
+      const checkReview = await this.reviewsRepository.find({
         where: { visit: { visit_id } },
-        relations: ['visit'],
+        relations: ['visit', 'user'],
       });
 
-      if (checkVisit.length > 0) {
+      // checkReview에 값이 있다면 에러
+      if (checkReview.length > 0) {
         throw new UnprocessableEntityException(
           '이미 스터디카페의 리뷰를 작성했습니다!',
         );
       }
 
+      // Review 테이블에 저장
       const result = await this.reviewsRepository.save({
         review_content,
         user: { user_id },
-        visit: { visit_id: visit_id },
+        visit: { visit_id },
       });
 
       return result;
     } catch (error) {
-      throw new UnprocessableEntityException(
-        '이미 스터디카페의 리뷰를 작성했습니다!',
-      );
+      throw new Error(error);
     }
   }
 
+  // 리뷰 수정
   async updateReview({
     review_content, //
     user_id, //
@@ -91,10 +105,10 @@ export class ReviewsService {
         where: { user: { user_id } },
         relations: ['user'],
       });
-      if (checkUser.length > 0) {
+      if (checkUser[0].user.user_id !== user_id) {
         throw new UnprocessableEntityException('내가 쓴 리뷰가 아닙니다!');
       }
-      console.log(111, checkUser);
+      // console.log(111, checkUser);
 
       // 리뷰 수정
       const result = await this.reviewsRepository.update(
@@ -106,14 +120,15 @@ export class ReviewsService {
         },
       );
 
-      console.log(222, result);
+      // console.log(222, result);
 
       return result.affected ? true : false;
     } catch (error) {
-      throw new UnprocessableEntityException('내가 쓴 리뷰가 아닙니다!');
+      throw new Error(error);
     }
   }
 
+  // 리뷰 삭제
   async deleteReview({
     user_id, //
     review_id, //
@@ -125,7 +140,7 @@ export class ReviewsService {
         relations: ['user'],
       });
       console.log(111111, checkUser);
-      if (checkUser.length > 0) {
+      if (checkUser[0].user.user_id !== user_id) {
         throw new UnprocessableEntityException('내가 쓴 리뷰가 아닙니다!');
       }
 
@@ -135,7 +150,7 @@ export class ReviewsService {
       // return 값이 false면 그 리뷰를 쓴 유저가 지금 로그인한 유저가 아님
       return result.affected ? true : false;
     } catch (error) {
-      throw new UnprocessableEntityException('내가 쓴 리뷰가 아닙니다!');
+      throw new Error(error);
     }
   }
 }
