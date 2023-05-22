@@ -23,7 +23,7 @@ export class SeatsService {
         },
       });
     }
-    return;
+    return '좌석 등록 성공';
   }
 
   // 해당 카페 좌석 조회

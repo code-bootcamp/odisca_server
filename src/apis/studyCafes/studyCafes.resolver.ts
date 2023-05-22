@@ -2,6 +2,7 @@ import { UseGuards } from '@nestjs/common';
 import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/common/interfaces/context';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
+import { Image } from '../images/entities/image.entity';
 import { CreateCafeFloorPlanInput } from './dto/create-floorPlan.input';
 import { CreateStudyCafeInput } from './dto/create-studyCafe.input';
 import { FetchAllStudyCafesInput } from './dto/fetch-all-studyCafes.input';
@@ -21,7 +22,6 @@ export class StudyCafesResolver {
     @Context() context: IContext,
     @Args('createStudyCafeInput') createStudyCafeInput: CreateStudyCafeInput,
   ): Promise<StudyCafe> {
-    console.log(context.req);
     const administer_id = context.req.user.id;
     return this.studyCafesService.createStudyCafe({
       createStudyCafeInput,
@@ -33,7 +33,7 @@ export class StudyCafesResolver {
   @UseGuards(GqlAuthGuard('access'))
   @Mutation(() => StudyCafe)
   createLoginCafeFloorPlanAndSeats(
-    @Args('createCateFloorPlanInput')
+    @Args('createCafeFloorPlanInput')
     createCafeFloorPlanInput: CreateCafeFloorPlanInput,
   ): Promise<StudyCafe> {
     return this.studyCafesService.createCafeFloorPlanAndSeats({
@@ -46,7 +46,7 @@ export class StudyCafesResolver {
   fetchAllStudyCafes(
     @Args('fetchAllStudyCafesInput')
     fetchAllStudyCafesInput: FetchAllStudyCafesInput,
-  ): Promise<StudyCafe[]> {
+  ): Promise<StudyCafesWithImages[]> {
     return this.studyCafesService.fetchAllStudyCafes({
       fetchAllStudyCafesInput,
     });

@@ -12,8 +12,10 @@ export class ImagesService {
   ) {}
 
   // 스터디 카페 ID 별로 이미지 조회
-  findImagesByStudyCafeIds({ result }) {
-    return this.imagesRepository.find({ where: { studyCafe: result } });
+  async findImagesByStudyCafeIds({ studyCafe_id }) {
+    return this.imagesRepository.find({
+      where: { studyCafe: { studyCafe_id } },
+    });
   }
 
   // 해당 카페 전체 이미지 조회
@@ -43,12 +45,13 @@ export class ImagesService {
       urls.push(el.image_url);
       isMain.push(el.image_isMain);
     });
-
+    console.log(urls, isMain);
     for (let i = 0; i < urls.length; i++) {
       await this.imagesRepository.save({
-        url: urls[i],
-        isMain: isMain[i],
-        studyCafe: result,
+        image_url: urls[i],
+        image_isMain: isMain[i],
+        studyCafe: { studyCafe_id: result.studyCafe_id },
+        // result,
       });
     }
     return;

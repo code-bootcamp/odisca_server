@@ -85,6 +85,6 @@ export class StudyCafe {
   administer: Administer;
 
   @OneToMany(() => Image, (image) => image.studyCafe)
-  @Field(() => Image)
-  images: Image;
+  @Field(() => [Image])
+  images: Image[];
 }

@@ -1,14 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Image } from '../images/entities/image.entity';
 import { ImagesService } from '../images/images.service';
-import { StudyCafesWithImages } from './dto/fetch-all-studyCafes.object';
 import { StudyCafe } from './entities/studyCafe.entity';
 import {
   IStudyCafesServiceCreate,
   IStudyCafesServiceCreateCafeFloorPlan,
-  IStudyCafesServiceFetchAllStudyCafes,
   IStudyCafesServiceFetchStudyCafeById,
   IStudyCafesServiceFetchStudyCafesById,
   IStudyCafesServiceUpdate,
@@ -27,7 +24,6 @@ export class StudyCafesService {
     createStudyCafeInput,
     administer_id,
   }: IStudyCafesServiceCreate): Promise<StudyCafe> {
-    console.log('!!!', administer_id);
     const { image, ...StudyCafe } = createStudyCafeInput;
     const result = await this.studyCafeRepository.save({
       ...StudyCafe,
@@ -46,35 +42,26 @@ export class StudyCafesService {
     });
   }
 
+  // 전체 카페 조회 (in 메인 페이지)
   async fetchAllStudyCafes({ fetchAllStudyCafesInput }) {
-    const { city, district } = fetchAllStudyCafesInput;
+    const { studyCafe_city, studyCafe_district, page } =
+      fetchAllStudyCafesInput;
+    const pageSize = 10;
     const result = await this.studyCafeRepository
       .createQueryBuilder('studyCafe')
-      .innerJoinAndSelect('studyCafe.images', 'image')
-      // .addSelect('image.url')
+      .innerJoin('studyCafe.images', 'image')
       .select('*')
-      .where('studyCafe.city = :city', { city })
-      .andWhere('studyCafe.district = :district', { district })
+      .where('studyCafe.studyCafe_city = :studyCafe_city', { studyCafe_city })
+      .andWhere('studyCafe.studyCafe_district = :studyCafe_district', {
+        studyCafe_district,
+      })
+      .andWhere('image.image_isMain = :image_isMain', { image_isMain: 1 })
+      .orderBy('studyCafe.studyCafe_name', 'ASC')
+      .limit(pageSize)
+      .offset(pageSize * (page - 1))
       .getRawMany();
-    console.log(result);
     return result;
   }
-  // // 전체 카페 조회 (in 메인 페이지) // 이미지 query builder로 추가하기
-  // async fetchAllStudyCafes({
-  //   fetchAllStudyCafesInput,
-  // }: IStudyCafesServiceFetchAllStudyCafes): Promise<StudyCafe[]> {
-  //   const { city, district } = fetchAllStudyCafesInput;
-  //   const studyCafes = await this.studyCafeRepository.find({
-  //     where: { city } && { district },
-  //   });
-  //   console.log(studyCafes);
-  //   const images = [];
-  //   for (let i = 0; i < studyCafes.length; i++) {
-  //     const result = studyCafes[i];
-  //     images.push(await this.imageService.findImagesByStudyCafeIds({ result }));
-  //   }
-  //   return studyCafes;
-  // }
 
   // 등록한 스터디 카페 전체 조회
   fetchStudyCafesById({
@@ -87,13 +74,14 @@ export class StudyCafesService {
   }
 
   // 등록한 스터디 카페 하나 조회
-  fetchStudyCafeById({
-    studyCafe_id,
-  }: IStudyCafesServiceFetchStudyCafeById): Promise<StudyCafe> {
-    return this.studyCafeRepository.findOne({
+  async fetchStudyCafeById(
+    { studyCafe_id }: IStudyCafesServiceFetchStudyCafeById, // : Promise<StudyCafe>
+  ): Promise<StudyCafe> {
+    const studyCafe = await this.studyCafeRepository.findOne({
       where: { studyCafe_id },
-      relations: ['administer'],
+      relations: ['images'],
     });
+    return studyCafe;
   }
 
   // 스터디 카페 수정
