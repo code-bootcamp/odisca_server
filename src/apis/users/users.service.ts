@@ -11,7 +11,6 @@ import {
 } from './interfaces/users-service.interface';
 import * as bcrypt from 'bcrypt';
 import { VisitService } from '../visit/visit.service';
-import { StudyCafesService } from '../studyCafes/studyCafes.service';
 import { ImagesService } from '../images/images.service';
 import { FetchUser } from './dto/fetch-user.object';
 
@@ -21,7 +20,6 @@ export class UsersService {
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
     private readonly visitService: VisitService,
-    private readonly studyCafeService: StudyCafesService,
     private readonly imagesService: ImagesService,
   ) {}
   // 로그인 상태 유저 조회
