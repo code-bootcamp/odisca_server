@@ -8,7 +8,8 @@ import { ReviewsService } from './reviews.service';
 import { VisitService } from '../visit/visit.service';
 import { ImagesService } from '../images/images.service';
 import { Image } from '../images/entities/image.entity';
-import { UsersService } from '../users/users.service';
+import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
+import { StudyCafesService } from '../studyCafes/studyCafes.service';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { UsersService } from '../users/users.service';
       User, //
       Visit, //
       Image, //
+      StudyCafe, //
     ]),
   ],
   providers: [
@@ -24,7 +26,7 @@ import { UsersService } from '../users/users.service';
     ReviewsService, //
     VisitService, //
     ImagesService, //
-    // UsersService,
+    StudyCafesService, //
   ],
   exports: [ReviewsService],
 })
