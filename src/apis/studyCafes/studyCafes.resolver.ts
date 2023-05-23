@@ -1,13 +1,10 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/common/interfaces/context';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
-import { Image } from '../images/entities/image.entity';
 import { CreateCafeFloorPlanInput } from './dto/create-floorPlan.input';
 import { CreateStudyCafeInput } from './dto/create-studyCafe.input';
 import { FetchAllStudyCafesInput } from './dto/fetch-all-studyCafes.input';
-import { StudyCafesWithImages } from './dto/fetch-all-studyCafes.object';
-import { FetchOneStudyCafe } from './dto/fetch-one-studyCafe.object';
 import { UpdateStudyCafeInput } from './dto/update-studyCafe.input';
 import { StudyCafe } from './entities/studyCafe.entity';
 import { StudyCafesService } from './studyCafes.service';
@@ -43,11 +40,11 @@ export class StudyCafesResolver {
   }
 
   // 전체 카페 조회 (in 메인 페이지)
-  @Query(() => [StudyCafesWithImages])
+  @Query(() => [StudyCafe])
   fetchAllStudyCafes(
     @Args('fetchAllStudyCafesInput')
     fetchAllStudyCafesInput: FetchAllStudyCafesInput,
-  ): Promise<StudyCafesWithImages[]> {
+  ): Promise<StudyCafe[]> {
     return this.studyCafesService.fetchAllStudyCafes({
       fetchAllStudyCafesInput,
     });
@@ -61,7 +58,7 @@ export class StudyCafesResolver {
     return this.studyCafesService.fetchStudyCafesById({ administer_id });
   }
 
-  // 등록한 스터디 카페 하나 조회(유저용)
+  // 등록한 스터디 카페 하나 조회(유저용 - 상세페이지)
   @Query(() => StudyCafe)
   fetchOneStudyCafeForUser(
     @Args('studyCafe_id') studyCafe_id: string,
@@ -69,7 +66,7 @@ export class StudyCafesResolver {
     return this.studyCafesService.fetchStudyCafeByIdForUser({ studyCafe_id });
   }
 
-  // 등록한 스터디 카페 하나 조회(관리자용)
+  // 등록한 스터디 카페 하나 조회(관리자용 - 상세페이지)
   @UseGuards(GqlAuthGuard('administer-access'))
   @Query(() => StudyCafe)
   fetchOneStudyCafeForAdminister(

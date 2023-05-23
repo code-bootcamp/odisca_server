@@ -48,20 +48,13 @@ export class StudyCafesService {
     const { studyCafe_city, studyCafe_district, page } =
       fetchAllStudyCafesInput;
     const pageSize = 10;
-    const result = await this.studyCafeRepository
-      .createQueryBuilder('studyCafe')
-      .innerJoin('studyCafe.images', 'image')
-      .select('*')
-      .where('studyCafe.studyCafe_city = :studyCafe_city', { studyCafe_city })
-      .andWhere('studyCafe.studyCafe_district = :studyCafe_district', {
-        studyCafe_district,
-      })
-      .andWhere('image.image_isMain = :image_isMain', { image_isMain: 1 })
-      .orderBy('studyCafe.studyCafe_name', 'ASC')
-      .limit(pageSize)
-      .offset(pageSize * (page - 1))
-      .getRawMany();
-    return result;
+    return this.studyCafeRepository.find({
+      where: { studyCafe_city } && { studyCafe_district },
+      relations: ['images'],
+      order: { studyCafe_name: 'ASC' },
+      take: pageSize,
+      skip: pageSize * (page - 1),
+    });
   }
 
   // 등록한 스터디 카페 전체 조회 (메인 이미지만 조회)
@@ -74,13 +67,13 @@ export class StudyCafesService {
     });
   }
 
-  // 스터디 카페 하나 조회(유저용)
+  // 스터디 카페 하나 조회(유저용 - 상세페이지)
   async fetchStudyCafeByIdForUser({
     studyCafe_id,
   }: IStudyCafesServiceFetchStudyCafeById): Promise<StudyCafe> {
     const result = await this.studyCafeRepository.findOne({
       where: { studyCafe_id },
-      relations: ['images', 'review'],
+      relations: ['images', 'review', 'review.user', 'seats'],
       order: { review: { review_createdAt: 'DESC' } },
     });
     return result;

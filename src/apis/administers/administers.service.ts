@@ -11,7 +11,6 @@ import {
   IAdministersServiceSoftDelete,
 } from './interfaces/administers-service.interface';
 import { StudyCafesService } from '../studyCafes/studyCafes.service';
-import { FetchAdministerWithStudyCafes } from './dto/fetch-administer.object';
 
 @Injectable()
 export class AdministersService {
@@ -63,17 +62,11 @@ export class AdministersService {
   }
 
   // 관리자 id로 관리자 정보 찾기
-  async findAdminWithStudyCafes({
-    administer_id,
-  }): Promise<FetchAdministerWithStudyCafes> {
-    const studyCafes = await this.studyCafesService.fetchStudyCafesById({
-      administer_id,
-    });
-    const administer = await this.administersRepository.findOne({
+  findAdminWithStudyCafes({ administer_id }): Promise<Administer> {
+    return this.administersRepository.findOne({
       where: { administer_id },
+      relations: ['studyCafes', 'studyCafes.images'],
     });
-    const result = { administer, studyCafes };
-    return result;
   }
 
   // 정보 수정

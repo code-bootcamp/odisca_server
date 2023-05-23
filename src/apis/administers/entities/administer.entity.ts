@@ -1,8 +1,10 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
+import { StudyCafe } from 'src/apis/studyCafes/entities/studyCafe.entity';
 import {
   Column,
   DeleteDateColumn,
   Entity,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -36,4 +38,8 @@ export class Administer {
   @DeleteDateColumn()
   @Field(() => Date)
   administer_deletedAt: Date;
+
+  @OneToMany(() => StudyCafe, (studyCafe) => studyCafe.administer)
+  @Field(() => [StudyCafe])
+  studyCafes: StudyCafe[];
 }
