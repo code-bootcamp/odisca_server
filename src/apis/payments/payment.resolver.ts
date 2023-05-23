@@ -1,6 +1,5 @@
 import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
 import { PaymentsService } from './payment.service';
-import { Payment } from './entities/payment.entity';
 import { UseGuards } from '@nestjs/common';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { CreatePaymentInput } from './dto/create-payment.input';
