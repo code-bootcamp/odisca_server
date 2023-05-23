@@ -61,12 +61,21 @@ export class StudyCafesResolver {
     return this.studyCafesService.fetchStudyCafesById({ administer_id });
   }
 
-  // 등록한 스터디 카페 하나 조회
+  // 등록한 스터디 카페 하나 조회(유저용)
   @Query(() => StudyCafe)
-  fetchOneStudyCafe(
+  fetchOneStudyCafeForUser(
     @Args('studyCafe_id') studyCafe_id: string,
   ): Promise<StudyCafe> {
-    return this.studyCafesService.fetchStudyCafeById({ studyCafe_id });
+    return this.studyCafesService.fetchStudyCafeByIdForUser({ studyCafe_id });
+  }
+
+  // 등록한 스터디 카페 하나 조회(관리자용)
+  @UseGuards(GqlAuthGuard('administer-access'))
+  @Query(() => StudyCafe)
+  fetchOneStudyCafeForAdminister(
+    @Args('studyCafe_id') studyCafe_id: string,
+  ): Promise<StudyCafe> {
+    return this.studyCafesService.fetchStudyCafeByIdForAdmin({ studyCafe_id });
   }
 
   // 스터디 카페 수정

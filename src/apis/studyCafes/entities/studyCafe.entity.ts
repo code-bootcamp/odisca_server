@@ -98,4 +98,8 @@ export class StudyCafe {
   @OneToMany(() => Review, (review) => review.studyCafe)
   @Field(() => [Review])
   review: Review[];
+
+  @OneToMany(() => Seat, (seat) => seat.studyCafe)
+  @Field(() => [Seat])
+  seats: Seat[];
 }
