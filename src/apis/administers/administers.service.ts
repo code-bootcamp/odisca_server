@@ -10,12 +10,15 @@ import {
   IAdministersServiceFindOneById,
   IAdministersServiceSoftDelete,
 } from './interfaces/administers-service.interface';
+import { StudyCafesService } from '../studyCafes/studyCafes.service';
+import { FetchAdministerWithStudyCafes } from './dto/fetch-administer.object';
 
 @Injectable()
 export class AdministersService {
   constructor(
     @InjectRepository(Administer)
     private readonly administersRepository: Repository<Administer>,
+    private readonly studyCafesService: StudyCafesService,
   ) {}
 
   // 로그인 상태 유저 조회
@@ -57,6 +60,20 @@ export class AdministersService {
       administer_email,
       administer_phone,
     });
+  }
+
+  // 관리자 id로 관리자 정보 찾기
+  async findAdminWithStudyCafes({
+    administer_id,
+  }): Promise<FetchAdministerWithStudyCafes> {
+    const studyCafes = await this.studyCafesService.fetchStudyCafesById({
+      administer_id,
+    });
+    const administer = await this.administersRepository.findOne({
+      where: { administer_id },
+    });
+    const result = { administer, studyCafes };
+    return result;
   }
 
   // 정보 수정

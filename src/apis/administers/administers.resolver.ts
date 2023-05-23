@@ -4,6 +4,7 @@ import { IContext } from 'src/common/interfaces/context';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { AdministersService } from './administers.service';
 import { CreateAdministerInput } from './dto/create-administer.input';
+import { FetchAdministerWithStudyCafes } from './dto/fetch-administer.object';
 import { UpdateLoginAdministerInput } from './dto/update-login-administer.input';
 import { Administer } from './entities/administer.entity';
 
@@ -21,11 +22,12 @@ export class AdministersResolver {
 
   // 회원 정보 조회
   @UseGuards(GqlAuthGuard('administer-access'))
-  @Query(() => Administer)
-  fetchLoginAdminister(@Context() context: IContext) {
+  @Query(() => FetchAdministerWithStudyCafes)
+  fetchLoginAdminister(
+    @Context() context: IContext,
+  ): Promise<FetchAdministerWithStudyCafes> {
     const administer_id = context.req.user.id;
-    console.log(context.req.user);
-    return this.administersService.findOneById({ administer_id });
+    return this.administersService.findAdminWithStudyCafes({ administer_id });
   }
 
   // 회원 정보 수정

@@ -1,11 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { visit } from 'graphql';
 import { Repository } from 'typeorm';
 import { ImagesService } from '../images/images.service';
-import { ReviewsService } from '../reviews/reviews.service';
-import { VisitService } from '../visit/visit.service';
-import { FetchOneStudyCafe } from './dto/fetch-one-studyCafe.object';
 import { StudyCafe } from './entities/studyCafe.entity';
 import {
   IStudyCafesServiceCreate,
@@ -21,8 +17,6 @@ export class StudyCafesService {
     @InjectRepository(StudyCafe)
     private readonly studyCafeRepository: Repository<StudyCafe>,
     private readonly imageService: ImagesService,
-    private readonly visitService: VisitService,
-    private readonly reviewsService: ReviewsService,
   ) {}
 
   // 스터디 카페 등록
@@ -70,26 +64,34 @@ export class StudyCafesService {
     return result;
   }
 
-  // 등록한 스터디 카페 전체 조회
+  // 등록한 스터디 카페 전체 조회 (메인 이미지만 조회)
   fetchStudyCafesById({
     administer_id,
   }: IStudyCafesServiceFetchStudyCafesById): Promise<StudyCafe[]> {
     return this.studyCafeRepository.find({
-      where: { administer: { administer_id } },
-      relations: ['administer'],
+      where: { administer: { administer_id }, images: { image_isMain: true } },
+      relations: ['administer', 'images'],
     });
   }
 
-  // 등록한 스터디 카페 하나 조회
-  async fetchStudyCafeById(
-    { studyCafe_id }: IStudyCafesServiceFetchStudyCafeById, // : Promise<StudyCafe>
-  ): Promise<StudyCafe> {
+  // 스터디 카페 하나 조회(유저용)
+  async fetchStudyCafeByIdForUser({
+    studyCafe_id,
+  }: IStudyCafesServiceFetchStudyCafeById): Promise<StudyCafe> {
     const result = await this.studyCafeRepository.findOne({
       where: { studyCafe_id },
       relations: ['images', 'review'],
       order: { review: { review_createdAt: 'DESC' } },
     });
     return result;
+  }
+
+  // 등록한 스터디 카페 하나 조회(관리자용)
+  async fetchStudyCafeByIdForAdmin({ studyCafe_id }): Promise<StudyCafe> {
+    return this.studyCafeRepository.findOne({
+      where: { studyCafe_id },
+      relations: ['images', 'seats'],
+    });
   }
 
   // 스터디 카페 수정
