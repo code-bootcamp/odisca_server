@@ -3,15 +3,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Payment } from './entities/payment.entity';
 import { PaymentsService } from './payment.service';
 import { PaymentsResolver } from './payment.resolver';
-import { UsersModule } from '../users/users.module';
-import { VisitModule } from '../visit/visit.module';
+import { User } from '../users/entities/user.entity';
+import { VisitService } from '../visit/visit.service';
+import { Visit } from '../visit/entities/visit.entity';
+import { Seat } from '../seats/entities/seat.entity';
+import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
 
 @Module({
   imports: [
-    UsersModule,
-    VisitModule,
     TypeOrmModule.forFeature([
+      StudyCafe, //
       Payment, //
+      Seat, //
+      User, //
+      Visit, //
     ]),
   ],
   providers: [
