@@ -1,7 +1,14 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { StudyCafe } from 'src/apis/studyCafes/entities/studyCafe.entity';
 import { User } from 'src/apis/users/entities/user.entity';
+import { Payment } from 'src/apis/payments/entities/payment.entity';
 
 @Entity()
 @ObjectType()
@@ -33,4 +40,8 @@ export class Seat {
   @ManyToOne(() => User)
   @Field(() => User, { nullable: true })
   user: User;
+
+  @OneToMany(() => Payment, (payment) => payment.seat)
+  @Field(() => [Payment])
+  payment: Payment[];
 }

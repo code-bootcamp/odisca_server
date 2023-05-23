@@ -2,16 +2,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Visit } from './entities/visit.entity';
 import { Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
-import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class VisitService {
   constructor(
     @InjectRepository(Visit)
     private readonly visitRepository: Repository<Visit>,
-
-    @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
   ) {}
 
   async findByVisitId({
@@ -30,13 +26,16 @@ export class VisitService {
     user_id, //
   }): Promise<Visit[]> {
     const pageSize = 10;
-    const user = await this.usersRepository.find({
-      where: { user_id },
-    });
 
     const visit = await this.visitRepository.find({
-      where: { user: user },
-      relations: ['studyCafe'],
+      where: { user: { user_id } },
+      relations: [
+        'studyCafe',
+        'user',
+        'studyCafe.images',
+        'studyCafe.seats',
+        'studyCafe.seats.payment',
+      ],
       order: {
         visit_createdAt: 'DESC',
       },

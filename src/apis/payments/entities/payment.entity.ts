@@ -32,7 +32,7 @@ export class Payment {
   @Field(() => User)
   user: User;
 
-  @ManyToOne(() => Seat)
+  @ManyToOne(() => Seat, (seat) => seat.payment)
   @Field(() => Seat)
   seat: Seat;
 }

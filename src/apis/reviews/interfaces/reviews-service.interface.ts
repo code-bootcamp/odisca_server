@@ -11,7 +11,7 @@ export interface IReviewsServiceUpdate {
 }
 
 export interface IReviewsServiceFindOneByVisitId {
-  visit_id: string;
+  review_id: string;
 }
 
 export interface IReviewsServiceFindByUserId {

@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnprocessableEntityException,
-  forwardRef,
-} from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
 import { Repository } from 'typeorm';
@@ -14,10 +10,7 @@ import {
   IReviewsServiceFindOneByVisitId,
 } from './interfaces/reviews-service.interface';
 import { VisitService } from '../visit/visit.service';
-import { ImagesService } from '../images/images.service';
 import { StudyCafesService } from '../studyCafes/studyCafes.service';
-import { FetchReviewPageObject } from './dto/fetch-review-page.object';
-import { SeatsService } from '../seats/seats.service';
 
 @Injectable()
 export class ReviewsService {
@@ -27,36 +20,8 @@ export class ReviewsService {
 
     private readonly visitService: VisitService,
 
-    private readonly seatsService: SeatsService,
-
-    private readonly imagesService: ImagesService,
-
     private readonly studyCafesService: StudyCafesService,
   ) {}
-
-  async findReviewPage({
-    visit_id, //
-  }: IReviewsServiceFindOneByVisitId): Promise<FetchReviewPageObject> {
-    const visit = await this.visitService.findByVisitId({
-      visit_id, //
-    });
-
-    const image = await this.imagesService.findImagesByStudyCafeIds({
-      studyCafe_id: visit.studyCafe.studyCafe_id,
-    });
-
-    const studyCafe = await this.studyCafesService.fetchStudyCafeByIdForUser({
-      studyCafe_id: visit.studyCafe.studyCafe_id,
-    });
-
-    const seat = await this.seatsService.fetchOneSeatByStudyCafeId({
-      studyCafe_id: visit.studyCafe.studyCafe_id,
-    });
-
-    console.log(1111111111, image, seat, studyCafe);
-
-    return;
-  }
 
   async findByUserId({
     user: user_id, //
@@ -79,9 +44,10 @@ export class ReviewsService {
     try {
       // Visit테이블에 visit_id로 조회하기
       const checkVisit = await this.visitService.findByVisitId({ visit_id });
+      console.log(checkVisit);
 
       // checkVisit에 user_id가 현재 로그인한 유저와 같은지 확인
-      if (checkVisit.user.user_id !== user_id) {
+      if (!checkVisit) {
         throw new UnprocessableEntityException(
           '내가 방문한 방문기록이 아닙니다!',
         );
