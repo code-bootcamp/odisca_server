@@ -1,4 +1,4 @@
-import { Context, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Query, Resolver } from '@nestjs/graphql';
 import { VisitService } from './visit.service';
 import { Visit } from './entities/visit.entity';
 import { IContext } from 'src/common/interfaces/context';
@@ -16,10 +16,12 @@ export class VisitResolver {
   @Query(() => [Visit])
   async fetchAllLoginVisitByUserId(
     @Context() context: IContext, //
+    @Args({ name: 'page', type: () => Int }) page: number,
   ): Promise<Visit[]> {
     const user_id = context.req.user.id;
     return await this.visitService.findAllByUserId({
       user_id,
+      page,
     });
   }
 }

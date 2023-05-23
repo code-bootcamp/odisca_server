@@ -4,6 +4,7 @@ import { Visit } from './entities/visit.entity';
 import { VisitService } from './visit.service';
 import { VisitResolver } from './visit.resolver';
 import { User } from '../users/entities/user.entity';
+import { UsersService } from '../users/users.service';
 
 @Module({
   imports: [
@@ -14,6 +15,11 @@ import { User } from '../users/entities/user.entity';
   ],
   providers: [
     VisitResolver, //
+    VisitService, //
+    UsersService, //
+  ],
+  exports: [
+    // exports 설정
     VisitService, //
   ],
 })
