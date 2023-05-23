@@ -1,5 +1,5 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/common/interfaces/context';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { Image } from '../images/entities/image.entity';
@@ -7,6 +7,7 @@ import { CreateCafeFloorPlanInput } from './dto/create-floorPlan.input';
 import { CreateStudyCafeInput } from './dto/create-studyCafe.input';
 import { FetchAllStudyCafesInput } from './dto/fetch-all-studyCafes.input';
 import { StudyCafesWithImages } from './dto/fetch-all-studyCafes.object';
+import { FetchOneStudyCafe } from './dto/fetch-one-studyCafe.object';
 import { UpdateStudyCafeInput } from './dto/update-studyCafe.input';
 import { StudyCafe } from './entities/studyCafe.entity';
 import { StudyCafesService } from './studyCafes.service';
@@ -31,11 +32,11 @@ export class StudyCafesResolver {
 
   // 스터디 카페 좌석배치도 및 좌석 수 등록
   @UseGuards(GqlAuthGuard('administer-access'))
-  @Mutation(() => StudyCafe)
+  @Mutation(() => Boolean)
   createLoginCafeFloorPlanAndSeats(
     @Args('createCafeFloorPlanInput')
     createCafeFloorPlanInput: CreateCafeFloorPlanInput,
-  ): Promise<StudyCafe> {
+  ): Promise<boolean> {
     return this.studyCafesService.createCafeFloorPlanAndSeats({
       createCafeFloorPlanInput,
     });
