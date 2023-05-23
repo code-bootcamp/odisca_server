@@ -24,16 +24,36 @@ export class VisitService {
     return visit;
   }
 
+  // 유저 ID로 전체 방문 기록 조회
   async findAllByUserId({
+    page,
     user_id, //
   }): Promise<Visit[]> {
+    const pageSize = 10;
     const user = await this.usersRepository.find({
       where: { user_id },
     });
 
     const visit = await this.visitRepository.find({
       where: { user: user },
+      relations: ['studyCafe'],
+      order: {
+        visit_createdAt: 'DESC',
+      },
+      take: pageSize,
+      skip: pageSize * (page - 1),
     });
     return visit;
+  }
+
+  async create({
+    user, //
+    studyCafe, //
+  }): Promise<Visit> {
+    const visit = await this.visitRepository.create({
+      user,
+      studyCafe,
+    });
+    return await this.visitRepository.save({ ...visit });
   }
 }
