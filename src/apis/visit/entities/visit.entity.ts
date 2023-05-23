@@ -23,13 +23,13 @@ export class Visit {
 
   @OneToOne(() => Review)
   @Field(() => Review)
-  visit_review: Review;
+  review: Review;
 
   @ManyToOne(() => User, (user) => user.visits)
   @Field(() => User)
   user: User;
 
-  @ManyToOne(() => StudyCafe)
+  @ManyToOne(() => StudyCafe, (studyCafe) => studyCafe.visit)
   @Field(() => StudyCafe)
   studyCafe: StudyCafe;
 }
