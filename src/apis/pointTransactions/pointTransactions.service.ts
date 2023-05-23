@@ -38,8 +38,6 @@ export class PointTransactionsService {
     });
   }
 
-  ///////////////////////////////////////////////////////////////////////////////////////
-
   // PointTransaction 테이블에 pointTransaction_impUid(결제 아이디)가 있는지 확인
   findOneByImpUid({
     pointTransaction_impUid,
@@ -80,7 +78,7 @@ export class PointTransactionsService {
         pointTransaction_impUid,
         pointTransaction_amount,
         user: { user_id },
-        pointTransaction_status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT, // 'PAYMENT'
+        pointTransaction_status: POINT_TRANSACTION_STATUS_ENUM.PAYMENT,
       });
       await queryRunner.manager.save(pointTransaction);
 
@@ -109,13 +107,11 @@ export class PointTransactionsService {
     }
   }
 
-  ////////////////////////////////////////////////////////////////////////////////
-
   // 포인트 결제 취소 API
   async cancel({
     pointTransaction_impUid,
     user_id,
-  }: IPointTransactionsServiceCancel): Promise<PointTransaction> {
+  }: IPointTransactionsServiceCancel): Promise<boolean> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
@@ -154,7 +150,9 @@ export class PointTransactionsService {
       }
 
       // 결제 취소
-      await this.iamportService.cancel({ pointTransaction_impUid });
+      await this.iamportService.cancel({
+        pointTransaction_impUid,
+      });
 
       // 유저 포인트 조회
       const user = await queryRunner.manager.findOne(User, {
@@ -176,11 +174,11 @@ export class PointTransactionsService {
         user: { user_id },
         pointTransaction_status: POINT_TRANSACTION_STATUS_ENUM.CANCEL,
       });
-      await queryRunner.manager.save(cancelPointTransaction);
+      const result = await queryRunner.manager.save(cancelPointTransaction);
 
       await queryRunner.commitTransaction();
 
-      return cancelPointTransaction;
+      return result ? true : false;
     } catch (error) {
       await queryRunner.rollbackTransaction();
       throw new Error(error);
