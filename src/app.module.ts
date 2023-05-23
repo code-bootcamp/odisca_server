@@ -17,6 +17,7 @@ import { ImagesModule } from './apis/images/images.module';
 import { FilesModule } from './apis/files/files.module';
 import { SeatsModule } from './apis/seats/seats.module';
 import { PaymentsModule } from './apis/payments/payment.module';
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     AdministersModule,
@@ -31,6 +32,7 @@ import { PaymentsModule } from './apis/payments/payment.module';
     ReviewsModule,
     MailerModule,
     VisitModule,
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,

@@ -13,6 +13,7 @@ import * as bcrypt from 'bcrypt';
 import { VisitService } from '../visit/visit.service';
 import { ImagesService } from '../images/images.service';
 import { FetchUser } from './dto/fetch-user.object';
+import { visit } from 'graphql';
 
 @Injectable()
 export class UsersService {
@@ -39,6 +40,7 @@ export class UsersService {
       images.push(image);
     }
     const result = { user, visits, images };
+    console.log(result);
     return result;
   }
 

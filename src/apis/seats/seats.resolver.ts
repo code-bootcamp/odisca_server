@@ -11,8 +11,10 @@ export class SeatsResolver {
 
   // 좌석 등록
   @UseGuards(GqlAuthGuard('administer-access'))
-  @Mutation(() => Seat)
-  createSeats(@Args('createSeatsInput') createSeatsInput: CreateSeatsInput) {
+  @Mutation(() => Boolean)
+  createSeats(
+    @Args('createSeatsInput') createSeatsInput: CreateSeatsInput,
+  ): Promise<boolean> {
     return this.seatsService.create({ createSeatsInput });
   }
 
