@@ -34,6 +34,7 @@ export class ImagesService {
     return result;
   }
 
+  // 마이페이지 이미지 조회
   async findImageForMyPage({ studyCafe_id }) {
     return this.imagesRepository.findOne({
       where: { studyCafe: { studyCafeId: studyCafe_id } } && {
@@ -41,7 +42,8 @@ export class ImagesService {
       },
     });
   }
-  // 이미지 저장
+
+  // 카페 이미지 저장
   async createCafeImage({ image, result }: IImagesServiceCreate) {
     const urls = [];
     const isMain = [];
@@ -61,7 +63,7 @@ export class ImagesService {
     return;
   }
 
-  // 이미지 업데이트
+  // 카페 이미지 업데이트
   async update({ image, result }) {
     const images = await this.findByStudyCafe({ result });
     for (let i = 0; i < images.length; i++) {
