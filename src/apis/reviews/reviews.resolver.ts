@@ -7,29 +7,14 @@ import { IContext } from 'src/common/interfaces/context';
 import {
   CancelReviewInput,
   CreateReviewInput,
-  FetchImageByVisitIdInput,
   UpdateReviewInput,
 } from './dto/create-reviews.input';
-import { FetchReviewPageObject } from './dto/fetch-review-page.object';
 
 @Resolver()
 export class ReviewsResolver {
   constructor(
     private readonly reviewsService: ReviewsService, //
   ) {}
-
-  // 리뷰 페이지 들어오면 보여지는 이미지 / 좌석 / 스터디카페 불러오기
-  @UseGuards(GqlAuthGuard('user-access'))
-  @Query(() => FetchReviewPageObject)
-  async fetchLoginReviewPage(
-    @Args('fetchImageByVisitIdInput')
-    fetchImageByVisitIdInput: FetchImageByVisitIdInput, //
-  ): Promise<FetchReviewPageObject> {
-    const visit_id = fetchImageByVisitIdInput.visit_id;
-    return await this.reviewsService.findReviewPage({
-      visit_id,
-    });
-  }
 
   // Review테이블에 UserId로 모든 리뷰 조회
   @UseGuards(GqlAuthGuard('user-access'))
