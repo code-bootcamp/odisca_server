@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Seat } from './entities/seat.entity';
@@ -12,18 +13,22 @@ export class SeatsService {
   ) {}
 
   // 좌석 등록
-  async create({ createSeatsInput }: ISeatsServiceCreate) {
+  async create({ createSeatsInput }: ISeatsServiceCreate): Promise<boolean> {
     const { studyCafe_id, seatInformation } = createSeatsInput;
-    for (let i = 0; i < seatInformation.length; i++) {
-      await this.seatsRepository.save({
-        seat_location: JSON.stringify(seatInformation[i].seat),
-        seat_number: seatInformation[i].seat_number,
-        studyCafe: {
-          studyCafe_id,
-        },
-      });
+    try {
+      for (let i = 0; i < seatInformation.length; i++) {
+        await this.seatsRepository.save({
+          seat_location: JSON.stringify(seatInformation[i].seat),
+          seat_number: seatInformation[i].seat_number,
+          studyCafe: {
+            studyCafe_id,
+          },
+        });
+        return true;
+      }
+    } catch {
+      return false;
     }
-    return '좌석 등록 성공';
   }
 
   // 해당 카페 좌석 조회
@@ -43,6 +48,7 @@ export class SeatsService {
   }
 
   // 1분마다 좌석 잔여시간 및 이용여부 업데이트
+  @Cron('* * * * *')
   async updateSeatEveryMinute() {
     const result = await this.seatsRepository.find();
     const now = new Date().setUTCHours(new Date().getUTCHours() + 9);
