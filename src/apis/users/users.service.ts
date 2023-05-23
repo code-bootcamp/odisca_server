@@ -12,8 +12,6 @@ import {
 import * as bcrypt from 'bcrypt';
 import { VisitService } from '../visit/visit.service';
 import { ImagesService } from '../images/images.service';
-import { FetchUser } from './dto/fetch-user.object';
-import { visit } from 'graphql';
 
 @Injectable()
 export class UsersService {
@@ -24,24 +22,18 @@ export class UsersService {
     private readonly imagesService: ImagesService,
   ) {}
   // 로그인 상태 유저 조회
-  async findOneById({
-    user_id,
-    page,
-  }: IUsersServiceFindOneById): Promise<FetchUser> {
+  async findOneById({ user_id }: IUsersServiceFindOneById): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: { user_id },
+      relations: [
+        'visits',
+        'visits.studyCafe',
+        'visits.studyCafe.images',
+        'seat',
+      ],
+      order: { visits: { visit_createdAt: 'desc' } },
     });
-    const visits = await this.visitService.findAllByUserId({ user_id, page });
-    const images = [];
-    for (let i = 0; i < visits.length; i++) {
-      const image = await this.imagesService.findImageForMyPage({
-        studyCafe_id: visits[i].studyCafe.studyCafe_id,
-      });
-      images.push(image);
-    }
-    const result = { user, visits, images };
-    console.log(result);
-    return result;
+    return user;
   }
 
   // 이메일 중복 존재 검증
