@@ -7,4 +7,7 @@ export class UpdateLoginUserInput {
 
   @Field(() => String)
   user_phone: string;
+
+  @Field(() => String)
+  user_image: string;
 }

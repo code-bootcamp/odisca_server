@@ -3,6 +3,7 @@ import { UpdateLoginUserInput } from '../dto/update-login-user.input';
 
 export interface IUsersServiceFindOneById {
   user_id: string;
+  page: number;
 }
 export interface IUsersServiceCreate {
   createUserInput: CreateUserInput;

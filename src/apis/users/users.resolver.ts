@@ -1,8 +1,9 @@
 import { UseGuards } from '@nestjs/common';
-import { Args, Context, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Context, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { IContext } from 'src/common/interfaces/context';
 import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 import { CreateUserInput } from './dto/create-user.input';
+import { FetchUser } from './dto/fetch-user.object';
 import { UpdateLoginUserInput } from './dto/update-login-user.input';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
@@ -21,19 +22,22 @@ export class UsersResolver {
 
   // 회원 정보 조회
   @UseGuards(GqlAuthGuard('user-access'))
-  @Query(() => User)
-  fetchLoginUser(@Context() context: IContext): Promise<User> {
+  @Query(() => FetchUser)
+  fetchLoginUser(
+    @Context() context: IContext,
+    @Args({ name: 'page', type: () => Int }) page: number,
+  ) {
     const user_id = context.req.user.id;
-    return this.usersService.findOneById({ user_id });
+    return this.usersService.findOneById({ user_id, page });
   }
 
   // 회원 정보 수정
   @UseGuards(GqlAuthGuard('user-access'))
-  @Mutation(() => User)
+  @Mutation(() => Boolean)
   updateLoginUser(
     @Context() context: IContext,
     @Args('updateLoginUserInput') updateLoginUserInput: UpdateLoginUserInput,
-  ): Promise<User> {
+  ): Promise<boolean> {
     const user_id = context.req.user.id;
     return this.usersService.update({ user_id, updateLoginUserInput });
   }
