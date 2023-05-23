@@ -10,7 +10,7 @@ import {
   FetchImageByVisitIdInput,
   UpdateReviewInput,
 } from './dto/create-reviews.input';
-import { Image } from '../images/entities/image.entity';
+import { FetchReviewPageObject } from './dto/fetch-review-page.object';
 
 @Resolver()
 export class ReviewsResolver {
@@ -18,15 +18,15 @@ export class ReviewsResolver {
     private readonly reviewsService: ReviewsService, //
   ) {}
 
-  // 리뷰 페이지 들어오면 보여지는 이미지 불러오기
+  // 리뷰 페이지 들어오면 보여지는 이미지 / 좌석 / 스터디카페 불러오기
   @UseGuards(GqlAuthGuard('user-access'))
-  @Query(() => [Image])
-  async fetchLoginImageByVisitId(
+  @Query(() => FetchReviewPageObject)
+  async fetchLoginReviewPage(
     @Args('fetchImageByVisitIdInput')
     fetchImageByVisitIdInput: FetchImageByVisitIdInput, //
-  ): Promise<Image[]> {
+  ): Promise<FetchReviewPageObject> {
     const visit_id = fetchImageByVisitIdInput.visit_id;
-    return await this.reviewsService.findImageByVisitId({
+    return await this.reviewsService.findReviewPage({
       visit_id,
     });
   }

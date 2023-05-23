@@ -1,4 +1,8 @@
-import { Injectable, UnprocessableEntityException } from '@nestjs/common';
+import {
+  Injectable,
+  UnprocessableEntityException,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Review } from './entities/review.entity';
 import { Repository } from 'typeorm';
@@ -11,8 +15,9 @@ import {
 } from './interfaces/reviews-service.interface';
 import { VisitService } from '../visit/visit.service';
 import { ImagesService } from '../images/images.service';
-import { Image } from '../images/entities/image.entity';
 import { StudyCafesService } from '../studyCafes/studyCafes.service';
+import { FetchReviewPageObject } from './dto/fetch-review-page.object';
+import { SeatsService } from '../seats/seats.service';
 
 @Injectable()
 export class ReviewsService {
@@ -22,23 +27,35 @@ export class ReviewsService {
 
     private readonly visitService: VisitService,
 
+    private readonly seatsService: SeatsService,
+
     private readonly imagesService: ImagesService,
 
     private readonly studyCafesService: StudyCafesService,
   ) {}
 
-  async findImageByVisitId({
+  async findReviewPage({
     visit_id, //
-  }: IReviewsServiceFindOneByVisitId): Promise<Image[]> {
-    const checkVisit = await this.visitService.findByVisitId({
+  }: IReviewsServiceFindOneByVisitId): Promise<FetchReviewPageObject> {
+    const visit = await this.visitService.findByVisitId({
       visit_id, //
     });
 
     const image = await this.imagesService.findImagesByStudyCafeIds({
-      studyCafe_id: checkVisit.studyCafe.studyCafe_id,
+      studyCafe_id: visit.studyCafe.studyCafe_id,
     });
 
-    return image;
+    const studyCafe = await this.studyCafesService.fetchStudyCafeByIdForUser({
+      studyCafe_id: visit.studyCafe.studyCafe_id,
+    });
+
+    const seat = await this.seatsService.fetchOneSeatByStudyCafeId({
+      studyCafe_id: visit.studyCafe.studyCafe_id,
+    });
+
+    console.log(1111111111, image, seat, studyCafe);
+
+    return;
   }
 
   async findByUserId({
