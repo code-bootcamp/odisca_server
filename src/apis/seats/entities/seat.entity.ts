@@ -26,7 +26,7 @@ export class Seat {
   @Field(() => Int, { nullable: true })
   seat_remainTime?: number;
 
-  @ManyToOne(() => StudyCafe)
+  @ManyToOne(() => StudyCafe, (studyCafe) => studyCafe.seats)
   @Field(() => StudyCafe)
   studyCafe: StudyCafe;
 
