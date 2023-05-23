@@ -10,19 +10,38 @@ import {
   IUsersServiceUpdate,
 } from './interfaces/users-service.interface';
 import * as bcrypt from 'bcrypt';
+import { VisitService } from '../visit/visit.service';
+import { StudyCafesService } from '../studyCafes/studyCafes.service';
+import { ImagesService } from '../images/images.service';
+import { FetchUser } from './dto/fetch-user.object';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
     private readonly usersRepository: Repository<User>,
+    private readonly visitService: VisitService,
+    private readonly studyCafeService: StudyCafesService,
+    private readonly imagesService: ImagesService,
   ) {}
   // 로그인 상태 유저 조회
-  async findOneById({ user_id }: IUsersServiceFindOneById): Promise<User> {
-    return this.usersRepository.findOne({
+  async findOneById({
+    user_id,
+    page,
+  }: IUsersServiceFindOneById): Promise<FetchUser> {
+    const user = await this.usersRepository.findOne({
       where: { user_id },
-      relations: ['visits'],
     });
+    const visits = await this.visitService.findAllByUserId({ user_id, page });
+    const images = [];
+    for (let i = 0; i < visits.length; i++) {
+      const image = await this.imagesService.findImageForMyPage({
+        studyCafe_id: visits[i].studyCafe.studyCafe_id,
+      });
+      images.push(image);
+    }
+    const result = { user, visits, images };
+    return result;
   }
 
   // 이메일 중복 존재 검증
@@ -53,15 +72,21 @@ export class UsersService {
   async update({
     user_id,
     updateLoginUserInput,
-  }: IUsersServiceUpdate): Promise<User> {
-    const { user_password, user_phone } = updateLoginUserInput;
+  }: IUsersServiceUpdate): Promise<boolean> {
+    const { user_password, user_phone, user_image } = updateLoginUserInput;
     const user = await this.usersRepository.findOne({ where: { user_id } });
     const hashedPassword = await bcrypt.hash(user_password, 10);
-    return this.usersRepository.save({
-      id: user.user_id,
-      user_password: hashedPassword,
-      user_phone,
-    });
+    const result = await this.usersRepository.update(
+      {
+        user_id: user.user_id,
+      },
+      {
+        user_password: hashedPassword,
+        user_phone,
+        user_image,
+      },
+    );
+    return result.affected ? true : false;
   }
 
   // 회원 정보 삭제(탈퇴)

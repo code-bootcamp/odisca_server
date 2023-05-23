@@ -29,15 +29,21 @@ export class ImagesService {
       .createQueryBuilder('image')
       .innerJoinAndSelect('image.studyCafe', 'studyCafe')
       .where('image.studyCafeId = :studyCafeId', { studyCafe_id })
+      .andWhere('image.image_isMain = :image_isMain', { image_isMain: true })
       .getOne();
-    // query builder 실험을 위해 잠시 주석
-    // return this.imagesRepository.findOne({
-    //   where: { studyCafe: { id: studyCafeId } } && { isMain: true },
-    // });
     return result;
   }
 
-  // 이미지 저장
+  // 마이페이지 이미지 조회
+  async findImageForMyPage({ studyCafe_id }) {
+    return this.imagesRepository.findOne({
+      where: { studyCafe: { studyCafeId: studyCafe_id } } && {
+        image_isMain: true,
+      },
+    });
+  }
+
+  // 카페 이미지 저장
   async createCafeImage({ image, result }: IImagesServiceCreate) {
     const urls = [];
     const isMain = [];
@@ -57,7 +63,7 @@ export class ImagesService {
     return;
   }
 
-  // 이미지 업데이트
+  // 카페 이미지 업데이트
   async update({ image, result }) {
     const images = await this.findByStudyCafe({ result });
     for (let i = 0; i < images.length; i++) {

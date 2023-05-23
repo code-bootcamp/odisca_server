@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { visit } from 'graphql';
 import { Repository } from 'typeorm';
 import { ImagesService } from '../images/images.service';
+import { ReviewsService } from '../reviews/reviews.service';
+import { VisitService } from '../visit/visit.service';
+import { FetchOneStudyCafe } from './dto/fetch-one-studyCafe.object';
 import { StudyCafe } from './entities/studyCafe.entity';
 import {
   IStudyCafesServiceCreate,
@@ -17,6 +21,8 @@ export class StudyCafesService {
     @InjectRepository(StudyCafe)
     private readonly studyCafeRepository: Repository<StudyCafe>,
     private readonly imageService: ImagesService,
+    private readonly visitService: VisitService,
+    private readonly reviewsService: ReviewsService,
   ) {}
 
   // 스터디 카페 등록
@@ -34,12 +40,13 @@ export class StudyCafesService {
   }
 
   // 스터디 카페 좌석배치도 및 좌석 수 등록
-  createCafeFloorPlanAndSeats({
+  async createCafeFloorPlanAndSeats({
     createCafeFloorPlanInput,
-  }: IStudyCafesServiceCreateCafeFloorPlan): Promise<StudyCafe> {
-    return this.studyCafeRepository.save({
+  }: IStudyCafesServiceCreateCafeFloorPlan): Promise<boolean> {
+    const result = await this.studyCafeRepository.save({
       ...createCafeFloorPlanInput,
     });
+    return result ? true : false;
   }
 
   // 전체 카페 조회 (in 메인 페이지)
@@ -77,11 +84,12 @@ export class StudyCafesService {
   async fetchStudyCafeById(
     { studyCafe_id }: IStudyCafesServiceFetchStudyCafeById, // : Promise<StudyCafe>
   ): Promise<StudyCafe> {
-    const studyCafe = await this.studyCafeRepository.findOne({
+    const result = await this.studyCafeRepository.findOne({
       where: { studyCafe_id },
-      relations: ['images'],
+      relations: ['images', 'review'],
+      order: { review: { review_createdAt: 'DESC' } },
     });
-    return studyCafe;
+    return result;
   }
 
   // 스터디 카페 수정

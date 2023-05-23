@@ -1,6 +1,9 @@
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { Administer } from 'src/apis/administers/entities/administer.entity';
 import { Image } from 'src/apis/images/entities/image.entity';
+import { Review } from 'src/apis/reviews/entities/review.entity';
+import { Seat } from 'src/apis/seats/entities/seat.entity';
+import { Visit } from 'src/apis/visit/entities/visit.entity';
 import {
   Column,
   Entity,
@@ -87,4 +90,12 @@ export class StudyCafe {
   @OneToMany(() => Image, (image) => image.studyCafe)
   @Field(() => [Image])
   images: Image[];
+
+  @OneToMany(() => Visit, (visit) => visit.studyCafe)
+  @Field(() => Visit)
+  visit: Visit;
+
+  @OneToMany(() => Review, (review) => review.studyCafe)
+  @Field(() => [Review])
+  review: Review[];
 }
