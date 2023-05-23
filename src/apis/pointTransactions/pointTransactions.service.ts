@@ -60,7 +60,7 @@ export class PointTransactionsService {
     pointTransaction_impUid,
     pointTransaction_amount,
     user_id,
-  }: IPointTransactionsServiceCreate): Promise<any> {
+  }: IPointTransactionsServiceCreate): Promise<boolean> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
@@ -97,7 +97,7 @@ export class PointTransactionsService {
 
       await queryRunner.commitTransaction();
 
-      return pointTransaction;
+      return pointTransaction ? true : false;
     } catch (error) {
       // 결제 전 상태로 돌아가기
       await queryRunner.rollbackTransaction();

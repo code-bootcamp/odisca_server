@@ -26,12 +26,12 @@ export class PointTransactionsResolver {
 
   // 포인트결제 생성
   @UseGuards(GqlAuthGuard('user-access'))
-  @Mutation(() => PointTransaction)
+  @Mutation(() => Boolean)
   createLoginPointTransaction(
     @Args('createPointTransactionInput')
     createPointTransactionInput: CreatePointTransactionInput,
     @Context() context: IContext,
-  ): Promise<PointTransaction> {
+  ): Promise<boolean> {
     const user_id = context.req.user.id;
     const pointTransaction_impUid =
       createPointTransactionInput.pointTransaction_impUid;
