@@ -10,6 +10,9 @@ import { ImagesService } from '../images/images.service';
 import { Image } from '../images/entities/image.entity';
 import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
 import { StudyCafesService } from '../studyCafes/studyCafes.service';
+import { SeatsService } from '../seats/seats.service';
+import { Seat } from '../seats/entities/seat.entity';
+import { UsersService } from '../users/users.service';
 
 @Module({
   imports: [
@@ -19,6 +22,7 @@ import { StudyCafesService } from '../studyCafes/studyCafes.service';
       Visit, //
       Image, //
       StudyCafe, //
+      Seat, //
     ]),
   ],
   providers: [
@@ -27,6 +31,8 @@ import { StudyCafesService } from '../studyCafes/studyCafes.service';
     VisitService, //
     ImagesService, //
     StudyCafesService, //
+    SeatsService, //
+    UsersService, //
   ],
   exports: [ReviewsService],
 })

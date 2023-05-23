@@ -11,9 +11,13 @@ import { VisitService } from '../visit/visit.service';
 import { StudyCafe } from './entities/studyCafe.entity';
 import { StudyCafesResolver } from './studyCafes.resolver';
 import { StudyCafesService } from './studyCafes.service';
+import { SeatsService } from '../seats/seats.service';
+import { Seat } from '../seats/entities/seat.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([StudyCafe, Image, Visit, User, Review])],
+  imports: [
+    TypeOrmModule.forFeature([StudyCafe, Image, Visit, User, Review, Seat]),
+  ],
   // controllers: [],
   providers: [
     StudyCafesResolver,
@@ -22,6 +26,7 @@ import { StudyCafesService } from './studyCafes.service';
     VisitService,
     UsersService,
     ReviewsService,
+    SeatsService,
   ],
   exports: [StudyCafesService],
 })

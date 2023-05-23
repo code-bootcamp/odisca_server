@@ -47,6 +47,14 @@ export class SeatsService {
     });
   }
 
+  // studyCafe_id로 좌석 정보 불러오기
+  fetchOneSeatByStudyCafeId({ studyCafe_id }) {
+    return this.seatsRepository.findOne({
+      where: { studyCafe: { studyCafe_id } },
+      relations: ['studyCafe'],
+    });
+  }
+
   // 1분마다 좌석 잔여시간 및 이용여부 업데이트
   @Cron('* * * * *')
   async updateSeatEveryMinute() {

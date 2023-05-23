@@ -170,21 +170,21 @@ export class AuthService {
       { sub: user },
       { secret: process.env.JWT_REFRESH_KEY_USER, expiresIn: '2w' },
     );
-    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
-    // const Origins = [
-    //   'http://localhost:3000',
-    //   'https://odisca.store',
-    //   'http://127.0.0.1:3000',
-    //   'https://34.64.94.142:3000',
-    // ];
-    // const origin = req.headers.origin;
-    // if (Origins.includes(origin)) {
-    //   res.setHeader(
-    //     'Set-Cookie',
-    //     `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
-    //   );
-    //   res.setHeader('Access-Control-Allow-Origin', origin);
-    // }
+    // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    const Origins = [
+      'http://localhost:3000',
+      'https://odisca.store',
+      'http://127.0.0.1:3000',
+      'https://34.64.94.142:3000',
+    ];
+    const origin = req.headers.origin;
+    if (Origins.includes(origin)) {
+      res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
+      );
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
   }
 
   // 유저 restore
@@ -208,21 +208,21 @@ export class AuthService {
       { sub: administer },
       { secret: process.env.JWT_REFRESH_KEY_ADMINISTER, expiresIn: '2w' },
     );
-    res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
-    // const Origins = [
-    //   'http://localhost:3000',
-    //   'https://odisca.store',
-    //   'http://127.0.0.1:3000',
-    //   'https://34.64.94.142:3000',
-    // ];
-    // const origin = req.headers.origin;
-    // if (Origins.includes(origin)) {
-    //   res.setHeader(
-    //     'Set-Cookie',
-    //     `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
-    //   );
-    //   res.setHeader('Access-Control-Allow-Origin', origin);
-    // }
+    // res.setHeader('Set-Cookie', `refreshToken=${refreshToken}; path=/;`);
+    const Origins = [
+      'http://localhost:3000',
+      'https://odisca.store',
+      'http://127.0.0.1:3000',
+      'https://34.64.94.142:3000',
+    ];
+    const origin = req.headers.origin;
+    if (Origins.includes(origin)) {
+      res.setHeader(
+        'Set-Cookie',
+        `refreshToken=${refreshToken}; path=/; domain=.odisca.store; SameSite=None; Secure; httpOnly;`,
+      );
+      res.setHeader('Access-Control-Allow-Origin', origin);
+    }
   }
 
   // 관리자 restore
