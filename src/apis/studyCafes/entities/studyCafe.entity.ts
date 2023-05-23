@@ -83,7 +83,7 @@ export class StudyCafe {
   @Field(() => Int)
   studyCafe_floorPlanY: number;
 
-  @ManyToOne(() => Administer)
+  @ManyToOne(() => Administer, (administer) => administer.studyCafes)
   @Field(() => Administer)
   administer: Administer;
 
