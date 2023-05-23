@@ -45,12 +45,12 @@ export class ReviewsResolver {
 
   // Login한 유저의 방문기록으로 리뷰 작성
   @UseGuards(GqlAuthGuard('user-access'))
-  @Mutation(() => Review)
+  @Mutation(() => Boolean)
   createLoginReview(
     @Args('createReviewInput')
     createReviewInput: CreateReviewInput,
     @Context() context: IContext,
-  ): Promise<Review> {
+  ): Promise<boolean> {
     const review_content = createReviewInput.review_content;
     const visit_id = createReviewInput.visit_id;
     const user_id = context.req.user.id;

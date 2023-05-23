@@ -46,12 +46,12 @@ export class PointTransactionsResolver {
 
   // 포인트 결제 취소
   @UseGuards(GqlAuthGuard('user-access'))
-  @Mutation(() => PointTransaction)
+  @Mutation(() => Boolean)
   cancelLoginPointTransaction(
     @Args('cancelPointTransactionInput')
     cancelPointTransactionInput: CancelPointTransactionInput,
     @Context() context: IContext,
-  ): Promise<PointTransaction> {
+  ): Promise<boolean> {
     const user_id = context.req.user.id;
     const pointTransaction_impUid =
       cancelPointTransactionInput.pointTransaction_impUid;
