@@ -31,6 +31,6 @@ export class Seat {
   studyCafe: StudyCafe;
 
   @ManyToOne(() => User)
-  @Field(() => User)
+  @Field(() => User, { nullable: true })
   user: User;
 }

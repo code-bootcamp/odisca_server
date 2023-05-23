@@ -34,6 +34,14 @@ export class SeatsService {
     });
   }
 
+  // 선택 좌석 조회
+  fetchOneSeatBySeatId({ seat_id }) {
+    return this.seatsRepository.findOne({
+      where: { seat_id },
+      relations: ['studyCafe', 'user'],
+    });
+  }
+
   // 1분마다 좌석 잔여시간 및 이용여부 업데이트
   async updateSeatEveryMinute() {
     const result = await this.seatsRepository.find();

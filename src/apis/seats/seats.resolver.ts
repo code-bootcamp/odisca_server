@@ -22,6 +22,12 @@ export class SeatsResolver {
     return this.seatsService.fetchAllSeatsByStudyCafeId({ studyCafe_id });
   }
 
+  // 선택 좌석 정보 조회
+  @Query(() => Seat)
+  fetchOneSeatsBySeatId(@Args('seat_id') seat_id: string) {
+    return this.seatsService.fetchOneSeatBySeatId({ seat_id });
+  }
+
   // 1분마다 좌석 잔여시간 및 이용여부 업데이트
   @Mutation(() => String)
   updateSeatEveryMinute() {
