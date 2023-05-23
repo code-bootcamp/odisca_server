@@ -4,9 +4,10 @@ import { Payment } from './entities/payment.entity';
 import { DataSource, Repository } from 'typeorm';
 import { User } from '../users/entities/user.entity';
 import { IPaymentsServiceCreate } from './interfaces/payment-service.interface';
-import { Visit } from '../visit/entities/visit.entity';
 import { Seat } from '../seats/entities/seat.entity';
 import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
+import { CreatePaymentReturn } from './dto/create-payment.return';
+import { VisitService } from '../visit/visit.service';
 
 @Injectable()
 export class PaymentsService {
@@ -14,8 +15,7 @@ export class PaymentsService {
     @InjectRepository(Payment)
     private readonly paymentsRepository: Repository<Payment>,
 
-    @InjectRepository(Visit)
-    private readonly visitRepository: Repository<Visit>,
+    private readonly visitService: VisitService,
 
     private readonly dataSource: DataSource,
   ) {}
@@ -38,7 +38,7 @@ export class PaymentsService {
     user_id, //
     studyCafe_id, //
     seat_id, //
-  }: IPaymentsServiceCreate): Promise<any> {
+  }: IPaymentsServiceCreate): Promise<CreatePaymentReturn> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
@@ -80,11 +80,10 @@ export class PaymentsService {
       await queryRunner.manager.save(payment);
 
       // Visit테이블 저장 (user, studyCafe)
-      const createVisit = await this.visitRepository.create({
+      await this.visitService.create({
         user: user,
         studyCafe: studyCafe,
       });
-      await queryRunner.manager.save(createVisit);
 
       // expiredTime(종료시간) 구하기
       const expiredTimeMs = await this.getExpiredTime({ payment_time });
@@ -100,11 +99,13 @@ export class PaymentsService {
       seat.seat_expiredTime = expiredTimeString;
       seat.seat_remainTime = remainTime;
 
+      const result = { payment, studyCafe, seat };
+
       await queryRunner.manager.save(seat);
 
       await queryRunner.commitTransaction();
 
-      return payment;
+      return result;
     } catch (error) {
       // 결제 전 상태로 돌아가기
       await queryRunner.rollbackTransaction();
