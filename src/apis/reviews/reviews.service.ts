@@ -84,9 +84,10 @@ export class ReviewsService {
       }
 
       // StudyCafe테이블에 visit테이블에 있는 studyCafe_id로 조회하기
-      const checkStudyCafe = await this.studyCafesService.fetchStudyCafeById({
-        studyCafe_id: checkVisit.studyCafe.studyCafe_id,
-      });
+      const checkStudyCafe =
+        await this.studyCafesService.fetchStudyCafeByIdForUser({
+          studyCafe_id: checkVisit.studyCafe.studyCafe_id,
+        });
 
       // Review 테이블에 저장
       const result = await this.reviewsRepository.save({
