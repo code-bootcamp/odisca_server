@@ -8,6 +8,7 @@ import { Visit } from '../visit/entities/visit.entity';
 import { Seat } from '../seats/entities/seat.entity';
 import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
 import { CreatePaymentObject } from './dto/create-payment.object';
+import { Administer } from '../administers/entities/administer.entity';
 
 @Injectable()
 export class PaymentsService {
@@ -60,6 +61,14 @@ export class PaymentsService {
         where: { studyCafe_id },
         lock: { mode: 'pessimistic_write' },
       });
+
+      const administer = await queryRunner.manager.findOne(Administer, {
+        where: { studyCafes: { studyCafe_id } },
+        lock: { mode: 'pessimistic_write' },
+      });
+      administer.administer_point += payment_point;
+      await queryRunner.manager.save(administer);
+
       // Payment 테이블 저장 (point, user)
       const payment = await this.paymentsRepository.create({
         payment_point,
