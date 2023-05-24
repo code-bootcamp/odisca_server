@@ -83,6 +83,10 @@ export class StudyCafe {
   @Field(() => Int)
   studyCafe_floorPlanY: number;
 
+  @Column({ default: 0 })
+  @Field(() => Int, { nullable: true })
+  studyCafe_inUseSeat: number;
+
   @ManyToOne(() => Administer, (administer) => administer.studyCafes)
   @Field(() => Administer)
   administer: Administer;

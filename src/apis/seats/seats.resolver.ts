@@ -7,7 +7,9 @@ import { SeatsService } from './seats.service';
 
 @Resolver()
 export class SeatsResolver {
-  constructor(private readonly seatsService: SeatsService) {}
+  constructor(
+    private readonly seatsService: SeatsService, //
+  ) {}
 
   // 좌석 등록
   @UseGuards(GqlAuthGuard('administer-access'))
@@ -34,5 +36,11 @@ export class SeatsResolver {
   @Mutation(() => String)
   updateSeatEveryMinute() {
     return this.seatsService.updateSeatEveryMinute();
+  }
+
+  // 1분마다 이용중인 좌석 저장
+  @Mutation(() => Boolean)
+  countInUseSeat() {
+    return this.seatsService.countInUseSeat();
   }
 }
