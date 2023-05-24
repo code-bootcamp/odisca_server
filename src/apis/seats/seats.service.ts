@@ -24,8 +24,8 @@ export class SeatsService {
             studyCafe_id,
           },
         });
-        return true;
       }
+      return true;
     } catch {
       return false;
     }

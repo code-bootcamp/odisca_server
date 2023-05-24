@@ -14,7 +14,8 @@ import * as jwt from 'jsonwebtoken';
 import { Cache } from 'cache-manager';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { MailerService } from '@nest-modules/mailer';
-
+import coolsms from 'coolsms-node-sdk';
+import { verificationCode, template } from './email.template';
 @Injectable()
 export class AuthService {
   constructor(
@@ -28,15 +29,13 @@ export class AuthService {
 
   // 인증번호 이메일 전송 //
   async sendVerificationCode({ email }) {
-    const verificationCode = String(
-      Math.floor(Math.random() * 1000000),
-    ).padStart(6, '0');
     try {
       await this.mailerService.sendMail({
         to: email,
         from: process.env.MAIL,
         subject: '[odisca] : 인증번호를 안내드립니다.',
-        html: `회원님의 인증번호는 ${verificationCode}입니다.`,
+        html: template,
+        // `회원님의 인증번호는 ${verificationCode}입니다.`,
       });
       await this.cacheManager.set(
         `verificationCode:${verificationCode}`,
@@ -328,5 +327,40 @@ export class AuthService {
     } catch (error) {
       throw new UnauthorizedException();
     }
+  }
+
+  // sms 인증번호 전송
+  async sendVerificationCodeBySMS({ phone }) {
+    const sms = coolsms;
+    const messageService = new sms(process.env.SMS_KEY, process.env.SMS_SECRET);
+    try {
+      await messageService.sendOne({
+        to: phone,
+        from: process.env.SMS_SENDER,
+        text: `[odisca] 인증번호는 ${verificationCode}입니다`,
+        autoTypeDetect: true,
+      });
+      await this.cacheManager.set(
+        `verificationToken:${verificationCode}`,
+        verificationCode,
+        {
+          ttl: 180,
+        },
+      );
+    } catch (error) {
+      console.log(error);
+      throw new NotAcceptableException();
+    }
+    return `인증번호:${verificationCode} 전송완료`;
+  }
+
+  // sms 인증번호 인증
+  async checkVerificationCodeBySMS({ verificationCode }) {
+    const savedVerificationCode = await this.cacheManager.get(
+      `verificationToken:${verificationCode}`,
+    );
+    if (verificationCode !== savedVerificationCode)
+      throw new UnauthorizedException('인증실패');
+    return '인증완료';
   }
 }
