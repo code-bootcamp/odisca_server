@@ -7,7 +7,6 @@ import {
   IReviewsServiceCancel,
   IReviewsServiceCreate,
   IReviewsServiceUpdate,
-  IReviewsServiceFindOneByVisitId,
 } from './interfaces/reviews-service.interface';
 import { VisitService } from '../visit/visit.service';
 import { StudyCafesService } from '../studyCafes/studyCafes.service';
