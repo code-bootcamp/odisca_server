@@ -40,12 +40,6 @@ export class PaymentsService {
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
     try {
-      // Seat테이블 seatId로 조회
-      const seat = await queryRunner.manager.findOne(Seat, {
-        where: { seat_id },
-        lock: { mode: 'pessimistic_write' },
-      });
-
       // User테이블 _user.id로 조회
       const user = await queryRunner.manager.findOne(User, {
         where: { user_id },
@@ -77,6 +71,12 @@ export class PaymentsService {
       administer.administer_point += payment_point;
       await queryRunner.manager.save(administer);
 
+      // Seat테이블 seatId로 조회
+      const seat = await queryRunner.manager.findOne(Seat, {
+        where: { seat_id },
+        lock: { mode: 'pessimistic_write' },
+      });
+
       // Payment테이블 저장 (point, user)
       const payment = await this.paymentsRepository.create({
         payment_point,
@@ -90,6 +90,7 @@ export class PaymentsService {
       const createVisit = await this.visitRepository.create({
         user: user,
         studyCafe: studyCafe,
+        seat: seat,
       });
       await queryRunner.manager.save(createVisit);
 
