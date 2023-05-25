@@ -6,7 +6,15 @@ import { SeatsService } from './seats.service';
 import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Seat, StudyCafe])],
-  providers: [SeatsResolver, SeatsService],
+  imports: [
+    TypeOrmModule.forFeature([
+      Seat, //
+      StudyCafe, //
+    ]),
+  ],
+  providers: [
+    SeatsResolver, //
+    SeatsService, //
+  ],
 })
 export class SeatsModule {}

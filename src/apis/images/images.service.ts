@@ -8,7 +8,7 @@ import { IImagesServiceCreate } from './interfaces/images-service.interface';
 export class ImagesService {
   constructor(
     @InjectRepository(Image)
-    private readonly imagesRepository: Repository<Image>,
+    private readonly imagesRepository: Repository<Image>, //
   ) {}
 
   // 스터디 카페 ID 별로 이미지 조회
@@ -51,13 +51,12 @@ export class ImagesService {
       urls.push(el.image_url);
       isMain.push(el.image_isMain);
     });
-    console.log(urls, isMain);
+
     for (let i = 0; i < urls.length; i++) {
       await this.imagesRepository.save({
         image_url: urls[i],
         image_isMain: isMain[i],
         studyCafe: { studyCafe_id: result.studyCafe_id },
-        // result,
       });
     }
     return;

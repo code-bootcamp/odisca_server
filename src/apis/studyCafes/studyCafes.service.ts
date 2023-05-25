@@ -15,8 +15,9 @@ import {
 export class StudyCafesService {
   constructor(
     @InjectRepository(StudyCafe)
-    private readonly studyCafeRepository: Repository<StudyCafe>,
-    private readonly imageService: ImagesService,
+    private readonly studyCafeRepository: Repository<StudyCafe>, //
+
+    private readonly imageService: ImagesService, //
   ) {}
 
   // 스터디 카페 등록

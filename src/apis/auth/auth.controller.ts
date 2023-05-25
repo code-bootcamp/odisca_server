@@ -4,15 +4,6 @@ import { AuthService } from './auth.service';
 import { DynamicAuthGuard } from './guards/dynamic-auth.guard';
 import { IOAuthUser } from './interfaces/auth-service.interface';
 
-// interface IOAuthUser {
-//   user: {
-//     name: string;
-//     email: string;
-//     password: string;
-//     phone: string;
-//   };
-// }
-
 @Controller()
 export class AuthController {
   constructor(
@@ -27,7 +18,6 @@ export class AuthController {
     @Res() res: Response,
   ) {
     req.params;
-    console.log(req, res);
     return this.authService.socialUserLogin({ req, res });
   }
 

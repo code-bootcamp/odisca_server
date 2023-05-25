@@ -10,16 +10,12 @@ import {
   IUsersServiceUpdate,
 } from './interfaces/users-service.interface';
 import * as bcrypt from 'bcrypt';
-import { VisitService } from '../visit/visit.service';
-import { ImagesService } from '../images/images.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
-    private readonly visitService: VisitService,
-    private readonly imagesService: ImagesService,
+    private readonly usersRepository: Repository<User>, //
   ) {}
   // 로그인 상태 유저 조회
   async findOneById({ user_id }: IUsersServiceFindOneById): Promise<User> {

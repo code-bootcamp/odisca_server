@@ -5,7 +5,14 @@ import { ImagesResolver } from './images.resolver';
 import { ImagesService } from './images.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Image])],
-  providers: [ImagesResolver, ImagesService],
+  imports: [
+    TypeOrmModule.forFeature([
+      Image, //
+    ]),
+  ],
+  providers: [
+    ImagesResolver, //
+    ImagesService, //
+  ],
 })
 export class ImagesModule {}

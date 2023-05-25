@@ -16,8 +16,8 @@ export class PaymentsResolver {
   @UseGuards(GqlAuthGuard('user-access'))
   @Mutation(() => CreatePaymentObject)
   createLoginPayment(
-    @Args('createPaymentInput') createPaymentInput: CreatePaymentInput,
-    @Context() context: IContext,
+    @Args('createPaymentInput') createPaymentInput: CreatePaymentInput, //
+    @Context() context: IContext, //
   ): Promise<CreatePaymentObject> {
     const user_id = context.req.user.id;
     const payment_point = createPaymentInput.payment_point;

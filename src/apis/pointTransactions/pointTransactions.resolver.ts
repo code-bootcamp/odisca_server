@@ -12,7 +12,7 @@ import { GqlAuthGuard } from '../auth/guards/gql-auth.guard';
 @Resolver()
 export class PointTransactionsResolver {
   constructor(
-    private readonly pointTransactionsService: PointTransactionsService,
+    private readonly pointTransactionsService: PointTransactionsService, //
   ) {}
 
   // userId로 모든 포인트 결제내역 찾기
@@ -29,8 +29,8 @@ export class PointTransactionsResolver {
   @Mutation(() => Boolean)
   createLoginPointTransaction(
     @Args('createPointTransactionInput')
-    createPointTransactionInput: CreatePointTransactionInput,
-    @Context() context: IContext,
+    createPointTransactionInput: CreatePointTransactionInput, //
+    @Context() context: IContext, //
   ): Promise<boolean> {
     const user_id = context.req.user.id;
     const pointTransaction_impUid =
@@ -49,8 +49,8 @@ export class PointTransactionsResolver {
   @Mutation(() => Boolean)
   cancelLoginPointTransaction(
     @Args('cancelPointTransactionInput')
-    cancelPointTransactionInput: CancelPointTransactionInput,
-    @Context() context: IContext,
+    cancelPointTransactionInput: CancelPointTransactionInput, //
+    @Context() context: IContext, //
   ): Promise<boolean> {
     const user_id = context.req.user.id;
     const pointTransaction_impUid =

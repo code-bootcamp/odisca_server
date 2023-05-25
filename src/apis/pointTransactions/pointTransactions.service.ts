@@ -22,14 +22,14 @@ import { IamportService } from '../iamport/iamport.service';
 export class PointTransactionsService {
   constructor(
     @InjectRepository(PointTransaction)
-    private readonly pointTransactionsRepository: Repository<PointTransaction>,
+    private readonly pointTransactionsRepository: Repository<PointTransaction>, //
 
     @InjectRepository(User)
-    private readonly usersRepository: Repository<User>,
+    private readonly usersRepository: Repository<User>, //
 
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource, //
 
-    private readonly iamportService: IamportService,
+    private readonly iamportService: IamportService, //
   ) {}
   findByUserId({ userId }): Promise<PointTransaction[]> {
     return this.pointTransactionsRepository.find({
@@ -40,7 +40,7 @@ export class PointTransactionsService {
 
   // PointTransaction 테이블에 pointTransaction_impUid(결제 아이디)가 있는지 확인
   findOneByImpUid({
-    pointTransaction_impUid,
+    pointTransaction_impUid, //
   }: IPointTransactionsServiceFindOneByImpUid): Promise<PointTransaction> {
     return this.pointTransactionsRepository.findOne({
       where: { pointTransaction_impUid },
@@ -49,7 +49,7 @@ export class PointTransactionsService {
 
   // 이미 pointTransaction_impUid(결제 아이디)가 등록되어 있으면 에러
   async checkDuplication({
-    pointTransaction_impUid,
+    pointTransaction_impUid, //
   }: IPointTransactionsServiceCheckDuplication): Promise<void> {
     const result = await this.findOneByImpUid({ pointTransaction_impUid });
     if (result) throw new ConflictException('이미 등록된 결제 아이디입니다.');
@@ -57,9 +57,9 @@ export class PointTransactionsService {
 
   // 포인트 결제 등록 API
   async create({
-    pointTransaction_impUid,
-    pointTransaction_amount,
-    user_id,
+    pointTransaction_impUid, //
+    pointTransaction_amount, //
+    user_id, //
   }: IPointTransactionsServiceCreate): Promise<boolean> {
     const queryRunner = this.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -71,6 +71,8 @@ export class PointTransactionsService {
         pointTransaction_impUid,
         pointTransaction_amount,
       });
+
+      // 이미 pointTransaction_impUid(결제 아이디)가 등록되어 있으면 에러
       await this.checkDuplication({ pointTransaction_impUid });
 
       // PointTransaction 테이블에 결제내역 저장
@@ -128,6 +130,7 @@ export class PointTransactionsService {
           lock: { mode: 'pessimistic_write' },
         },
       );
+
       // 취소된 내역이 있으면 에러
       if (pointTransactionCancel) {
         throw new UnprocessableEntityException('이미 취소된 내역입니다.');
