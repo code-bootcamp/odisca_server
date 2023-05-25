@@ -14,12 +14,12 @@ import { Administer } from '../administers/entities/administer.entity';
 export class PaymentsService {
   constructor(
     @InjectRepository(Payment)
-    private readonly paymentsRepository: Repository<Payment>,
+    private readonly paymentsRepository: Repository<Payment>, //
 
     @InjectRepository(Visit)
-    private readonly visitRepository: Repository<Visit>,
+    private readonly visitRepository: Repository<Visit>, //
 
-    private readonly dataSource: DataSource,
+    private readonly dataSource: DataSource, //
   ) {}
   // 종료시간 구하기
   getExpiredTime({ payment_time }) {
@@ -40,36 +40,44 @@ export class PaymentsService {
     await queryRunner.connect();
     await queryRunner.startTransaction('SERIALIZABLE');
     try {
-      // Seat 테이블 seatId로 조회
+      // Seat테이블 seatId로 조회
       const seat = await queryRunner.manager.findOne(Seat, {
         where: { seat_id },
         lock: { mode: 'pessimistic_write' },
       });
+
       // User테이블 _user.id로 조회
       const user = await queryRunner.manager.findOne(User, {
         where: { user_id },
         lock: { mode: 'pessimistic_write' },
       });
+
+      // 결제 포인트보다 유저 포인트가 적으면 에러
       if (user.user_point < payment_point) {
         throw new UnprocessableEntityException('포인트가 부족합니다!');
       }
+
       // User테이블 업데이트 (user포인트 차감)
       user.user_point -= payment_point;
       await queryRunner.manager.save(user);
-      // StudyCafe 테이블 studyCafeId로 조회
+
+      // StudyCafe테이블 studyCafe_id로 조회
       const studyCafe = await queryRunner.manager.findOne(StudyCafe, {
         where: { studyCafe_id },
         lock: { mode: 'pessimistic_write' },
       });
 
+      // Administer테이블 studyCafe_id로 조회
       const administer = await queryRunner.manager.findOne(Administer, {
         where: { studyCafes: { studyCafe_id } },
         lock: { mode: 'pessimistic_write' },
       });
+
+      // Administer테이블 업데이트 (administer_point 증가)
       administer.administer_point += payment_point;
       await queryRunner.manager.save(administer);
 
-      // Payment 테이블 저장 (point, user)
+      // Payment테이블 저장 (point, user)
       const payment = await this.paymentsRepository.create({
         payment_point,
         payment_time,
@@ -88,9 +96,11 @@ export class PaymentsService {
       // expiredTime(종료시간) 구하기
       const expiredTimeMs = await this.getExpiredTime({ payment_time });
       const expiredTimeString = String(new Date(Number(expiredTimeMs)));
+
       // remainTime남은 시간 구하기
       const now = new Date().setUTCHours(new Date().getUTCHours() + 9);
       const remainTime = Number(expiredTimeMs) - now;
+
       // Seat테이블 업데이트 (user, expiredTime)
       seat.user = user;
       seat.seat_expiredTime = expiredTimeString;

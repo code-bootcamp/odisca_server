@@ -31,7 +31,6 @@ export class FilesService {
           }),
       ),
     );
-    console.log('파일 업로드 성공');
     return results;
   }
 }

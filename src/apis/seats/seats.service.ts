@@ -3,20 +3,17 @@ import { Cron } from '@nestjs/schedule';
 import { InjectRepository } from '@nestjs/typeorm';
 import { IsNull, Not, Repository } from 'typeorm';
 import { Seat } from './entities/seat.entity';
-import {
-  ICountInUseSeat,
-  ISeatsServiceCreate,
-} from './interfaces/seats-service.interface';
+import { ISeatsServiceCreate } from './interfaces/seats-service.interface';
 import { StudyCafe } from '../studyCafes/entities/studyCafe.entity';
 
 @Injectable()
 export class SeatsService {
   constructor(
     @InjectRepository(Seat)
-    private readonly seatsRepository: Repository<Seat>,
+    private readonly seatsRepository: Repository<Seat>, //
 
     @InjectRepository(StudyCafe)
-    private readonly studyCafesRepository: Repository<StudyCafe>,
+    private readonly studyCafesRepository: Repository<StudyCafe>, //
   ) {}
 
   // 좌석 등록
@@ -100,7 +97,8 @@ export class SeatsService {
     return '업데이트 완료';
   }
 
-  // 이용중인 좌석 저장
+  // 1분마다 이용중인 좌석 저장
+  @Cron('* * * * *')
   async countInUseSeat(): Promise<boolean> {
     // 스터디카페 테이블에 모든 정보 조회
     const studyCafe = await this.studyCafesRepository.find();

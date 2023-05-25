@@ -1,6 +1,5 @@
 import { CreateCafeFloorPlanInput } from '../dto/create-floorPlan.input';
 import { CreateStudyCafeInput } from '../dto/create-studyCafe.input';
-import { FetchAllStudyCafesInput } from '../dto/fetch-all-studyCafes.input';
 import { UpdateStudyCafeInput } from '../dto/update-studyCafe.input';
 
 export interface IStudyCafesServiceCreate {
@@ -23,8 +22,4 @@ export interface IStudyCafesServiceFetchStudyCafesById {
 
 export interface IStudyCafesServiceFetchStudyCafeById {
   studyCafe_id: string;
-}
-
-export interface IStudyCafesServiceFetchAllStudyCafes {
-  fetchAllStudyCafesInput: FetchAllStudyCafesInput;
 }

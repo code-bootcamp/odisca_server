@@ -9,12 +9,14 @@ import { Administer } from './entities/administer.entity';
 
 @Resolver()
 export class AdministersResolver {
-  constructor(private readonly administersService: AdministersService) {}
+  constructor(
+    private readonly administersService: AdministersService, //
+  ) {}
 
   // 회원 가입
   @Mutation(() => Administer)
   createAdminister(
-    @Args('createAdministerInput') createAdministerInput: CreateAdministerInput,
+    @Args('createAdministerInput') createAdministerInput: CreateAdministerInput, //
   ): Promise<Administer> {
     return this.administersService.create({ createAdministerInput });
   }
@@ -22,7 +24,9 @@ export class AdministersResolver {
   // 회원 정보 조회
   @UseGuards(GqlAuthGuard('administer-access'))
   @Query(() => Administer)
-  fetchLoginAdminister(@Context() context: IContext): Promise<Administer> {
+  fetchLoginAdminister(
+    @Context() context: IContext, //
+  ): Promise<Administer> {
     const administer_id = context.req.user.id;
     return this.administersService.findAdminWithStudyCafes({ administer_id });
   }
@@ -31,9 +35,9 @@ export class AdministersResolver {
   @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => Administer)
   updateLoginAdminister(
-    @Context() context: IContext,
+    @Context() context: IContext, //
     @Args('updateLoginAdministerInput')
-    updateLoginAdministerInput: UpdateLoginAdministerInput,
+    updateLoginAdministerInput: UpdateLoginAdministerInput, //
   ): Promise<Administer> {
     const administer_id = context.req.user.id;
     return this.administersService.update({
@@ -45,7 +49,9 @@ export class AdministersResolver {
   // 회원 탈퇴(정보 삭제)
   @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => Boolean)
-  deleteLoginAdminister(@Context() context: IContext): Promise<boolean> {
+  deleteLoginAdminister(
+    @Context() context: IContext, //
+  ): Promise<boolean> {
     const administer_id = context.req.user.id;
     return this.administersService.softDelete({ administer_id });
   }

@@ -15,17 +15,17 @@ import { StudyCafesService } from '../studyCafes/studyCafes.service';
 export class ReviewsService {
   constructor(
     @InjectRepository(Review)
-    private readonly reviewsRepository: Repository<Review>,
+    private readonly reviewsRepository: Repository<Review>, //
 
-    private readonly visitService: VisitService,
+    private readonly visitService: VisitService, //
 
-    private readonly studyCafesService: StudyCafesService,
+    private readonly studyCafesService: StudyCafesService, //
   ) {}
 
+  // Review테이블에 user_id로 조회하기
   async findByUserId({
     user: user_id, //
   }: IReviewsServiceFindByUserId): Promise<Review[]> {
-    // Review테이블에 user_id 조회하기
     const checkUser = await this.reviewsRepository.find({
       where: { user: { user_id } },
       relations: ['user'],
@@ -43,7 +43,6 @@ export class ReviewsService {
     try {
       // Visit테이블에 visit_id로 조회하기
       const checkVisit = await this.visitService.findByVisitId({ visit_id });
-      console.log(checkVisit);
 
       // checkVisit에 user_id가 현재 로그인한 유저와 같은지 확인
       if (!checkVisit) {

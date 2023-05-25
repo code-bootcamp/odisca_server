@@ -11,6 +11,7 @@ import {
 
 @Injectable()
 export class IamportService {
+  // axios에서 access_token 받아오기
   async getToken(): Promise<string> {
     try {
       const result = await axios.post(`https://api.iamport.kr/users/getToken`, {
@@ -26,9 +27,10 @@ export class IamportService {
     }
   }
 
+  // axios에서 금액 받아와서 입력된 금액이랑 맞는지 확인하기
   async checkPaid({
-    pointTransaction_impUid,
-    pointTransaction_amount,
+    pointTransaction_impUid, //
+    pointTransaction_amount, //
   }: IIamportServiceCheckPaid): Promise<void> {
     try {
       const token = await this.getToken();
@@ -43,7 +45,6 @@ export class IamportService {
         );
       }
     } catch (error) {
-      // console.log(error);
       if (error.response.data) {
         throw new HttpException(
           error.response.data.message,
@@ -55,6 +56,7 @@ export class IamportService {
     }
   }
 
+  // axios에서 결제 취소하기
   async cancel({
     pointTransaction_impUid,
   }: IIamportServiceCancel): Promise<void> {
@@ -74,7 +76,6 @@ export class IamportService {
       });
       return;
     } catch (error) {
-      // console.log(error);
       if (error.response.data) {
         throw new HttpException(
           error.response.data.message,

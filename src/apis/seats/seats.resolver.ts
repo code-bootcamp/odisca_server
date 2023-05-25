@@ -15,7 +15,7 @@ export class SeatsResolver {
   @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => Boolean)
   createSeats(
-    @Args('createSeatsInput') createSeatsInput: CreateSeatsInput,
+    @Args('createSeatsInput') createSeatsInput: CreateSeatsInput, //
   ): Promise<boolean> {
     return this.seatsService.create({ createSeatsInput });
   }
@@ -30,17 +30,5 @@ export class SeatsResolver {
   @Query(() => Seat)
   fetchOneSeatsBySeatId(@Args('seat_id') seat_id: string) {
     return this.seatsService.fetchOneSeatBySeatId({ seat_id });
-  }
-
-  // 1분마다 좌석 잔여시간 및 이용여부 업데이트
-  @Mutation(() => String)
-  updateSeatEveryMinute() {
-    return this.seatsService.updateSeatEveryMinute();
-  }
-
-  // 1분마다 이용중인 좌석 저장
-  @Mutation(() => Boolean)
-  countInUseSeat() {
-    return this.seatsService.countInUseSeat();
   }
 }

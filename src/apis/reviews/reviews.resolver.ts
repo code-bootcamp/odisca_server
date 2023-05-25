@@ -33,8 +33,8 @@ export class ReviewsResolver {
   @Mutation(() => Boolean)
   createLoginReview(
     @Args('createReviewInput')
-    createReviewInput: CreateReviewInput,
-    @Context() context: IContext,
+    createReviewInput: CreateReviewInput, //
+    @Context() context: IContext, //
   ): Promise<boolean> {
     const review_content = createReviewInput.review_content;
     const visit_id = createReviewInput.visit_id;
@@ -51,8 +51,8 @@ export class ReviewsResolver {
   @Mutation(() => Boolean)
   updateLoginReview(
     @Args('updateReviewInput')
-    updateReviewInput: UpdateReviewInput,
-    @Context() context: IContext,
+    updateReviewInput: UpdateReviewInput, //
+    @Context() context: IContext, //
   ): Promise<boolean> {
     const review_content = updateReviewInput.review_content;
     const review_id = updateReviewInput.review_id;
@@ -69,8 +69,8 @@ export class ReviewsResolver {
   @Mutation(() => Boolean)
   deleteLoginReview(
     @Args('cancelReviewInput')
-    cancelReviewInput: CancelReviewInput,
-    @Context() context: IContext,
+    cancelReviewInput: CancelReviewInput, //
+    @Context() context: IContext, //
   ): Promise<boolean> {
     const review_id = cancelReviewInput.review_id;
     const user_id = context.req.user.id;

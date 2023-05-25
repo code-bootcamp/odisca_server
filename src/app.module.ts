@@ -65,7 +65,5 @@ import { ScheduleModule } from '@nestjs/schedule';
       isGlobal: true,
     }),
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
 })
 export class AppModule {}

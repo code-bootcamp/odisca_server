@@ -7,9 +7,10 @@ import { Injectable } from '@nestjs/common';
 export class VisitService {
   constructor(
     @InjectRepository(Visit)
-    private readonly visitRepository: Repository<Visit>,
+    private readonly visitRepository: Repository<Visit>, //
   ) {}
 
+  // visit테이블에 visit_id로 조회
   async findByVisitId({
     visit_id, //
   }): Promise<Visit> {
@@ -43,16 +44,5 @@ export class VisitService {
       skip: pageSize * (page - 1),
     });
     return visit;
-  }
-
-  async create({
-    user, //
-    studyCafe, //
-  }): Promise<Visit> {
-    const visit = await this.visitRepository.create({
-      user,
-      studyCafe,
-    });
-    return await this.visitRepository.save({ ...visit });
   }
 }

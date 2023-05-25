@@ -19,12 +19,13 @@ import { verificationCode, template } from './email.template';
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly administersService: AdministersService,
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
-    private readonly mailerService: MailerService,
+    private readonly administersService: AdministersService, //
+    private readonly usersService: UsersService, //
+    private readonly jwtService: JwtService, //
+    private readonly mailerService: MailerService, //
+
     @Inject(CACHE_MANAGER)
-    private readonly cacheManager: Cache,
+    private readonly cacheManager: Cache, //
   ) {}
 
   // 인증번호 이메일 전송 //
@@ -35,7 +36,6 @@ export class AuthService {
         from: process.env.MAIL,
         subject: '[odisca] : 인증번호를 안내드립니다.',
         html: template,
-        // `회원님의 인증번호는 ${verificationCode}입니다.`,
       });
       await this.cacheManager.set(
         `verificationCode:${verificationCode}`,
@@ -45,8 +45,7 @@ export class AuthService {
         },
       );
     } catch (error) {
-      console.log(error);
-      throw new NotAcceptableException();
+      throw new NotAcceptableException(error);
     }
     return `인증번호:${verificationCode} 전송완료`;
   }
@@ -155,7 +154,6 @@ export class AuthService {
 
   // 유저 access 토큰 발급 //
   getAccessTokenForUser({ user }): string {
-    console.log('ACC', user);
     return this.jwtService.sign(
       { sub: user },
       { secret: process.env.JWT_ACCESS_KEY_USER, expiresIn: '1h' },
@@ -164,7 +162,6 @@ export class AuthService {
 
   // 유저 refresh 토큰 발급
   setRefreshTokenForUser({ user, res, req }): void {
-    console.log('REF', user);
     const refreshToken = this.jwtService.sign(
       { sub: user },
       { secret: process.env.JWT_REFRESH_KEY_USER, expiresIn: '2w' },
@@ -193,7 +190,6 @@ export class AuthService {
 
   // 관리자 access 토큰 발급 //
   getAccessTokenForAdminister({ administer }): string {
-    console.log('ACC', administer);
     return this.jwtService.sign(
       { sub: administer },
       { secret: process.env.JWT_ACCESS_KEY_ADMINISTER, expiresIn: '1h' },
@@ -202,7 +198,6 @@ export class AuthService {
 
   // 관리자 refresh 토큰 발급
   setRefreshTokenForAdminister({ administer, res, req }): void {
-    console.log('REF', administer.administer_id);
     const refreshToken = this.jwtService.sign(
       { sub: administer },
       { secret: process.env.JWT_REFRESH_KEY_ADMINISTER, expiresIn: '2w' },
@@ -348,8 +343,7 @@ export class AuthService {
         },
       );
     } catch (error) {
-      console.log(error);
-      throw new NotAcceptableException();
+      throw new NotAcceptableException(error);
     }
     return `인증번호:${verificationCode} 전송완료`;
   }

@@ -6,18 +6,17 @@ import * as bcrypt from 'bcrypt';
 import {
   IAdministerServiceUpdate,
   IAdministersServiceCreate,
-  IAdministersServiceFindOne,
+  IAdministersServiceFindAdminWithStudyCafes,
+  IAdministersServiceFindOneByEmail,
   IAdministersServiceFindOneById,
   IAdministersServiceSoftDelete,
 } from './interfaces/administers-service.interface';
-import { StudyCafesService } from '../studyCafes/studyCafes.service';
 
 @Injectable()
 export class AdministersService {
   constructor(
     @InjectRepository(Administer)
     private readonly administersRepository: Repository<Administer>,
-    private readonly studyCafesService: StudyCafesService,
   ) {}
 
   // 로그인 상태 유저 조회
@@ -32,7 +31,7 @@ export class AdministersService {
   // 이메일로 조회
   findOneByEmail({
     administer_email,
-  }: IAdministersServiceFindOne): Promise<Administer> {
+  }: IAdministersServiceFindOneByEmail): Promise<Administer> {
     return this.administersRepository.findOne({ where: { administer_email } });
   }
 
@@ -62,7 +61,9 @@ export class AdministersService {
   }
 
   // 관리자 id로 관리자 정보 찾기
-  findAdminWithStudyCafes({ administer_id }): Promise<Administer> {
+  findAdminWithStudyCafes({
+    administer_id, //
+  }: IAdministersServiceFindAdminWithStudyCafes): Promise<Administer> {
     return this.administersRepository.findOne({
       where: { administer_id },
       relations: ['studyCafes', 'studyCafes.images'],
