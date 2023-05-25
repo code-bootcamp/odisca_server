@@ -29,7 +29,7 @@ export class AuthService {
   ) {}
 
   // 인증번호 이메일 전송 //
-  async sendVerificationCode({ email }) {
+  async sendVerificationCode({ email }): Promise<string> {
     try {
       await this.mailerService.sendMail({
         to: email,
@@ -51,7 +51,7 @@ export class AuthService {
   }
 
   // 인증 번호 확인 //
-  async checkVerificationCode({ verificationCode }) {
+  async checkVerificationCode({ verificationCode }): Promise<string> {
     const savedVerificationCode = await this.cacheManager.get(
       `verificationCode:${verificationCode}`,
     );
