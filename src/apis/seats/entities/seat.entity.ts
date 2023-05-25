@@ -9,6 +9,7 @@ import {
 import { StudyCafe } from 'src/apis/studyCafes/entities/studyCafe.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import { Payment } from 'src/apis/payments/entities/payment.entity';
+import { Visit } from 'src/apis/visit/entities/visit.entity';
 
 @Entity()
 @ObjectType()
@@ -44,4 +45,8 @@ export class Seat {
   @OneToMany(() => Payment, (payment) => payment.seat)
   @Field(() => [Payment])
   payment: Payment[];
+
+  @OneToMany(() => Visit, (visit) => visit.seat)
+  @Field(() => [Visit])
+  visit: Visit[];
 }
