@@ -36,12 +36,11 @@ export class User {
   user_point?: number;
 
   @Column({
-    default:
-      'https://storage.googleapis.com/wisc-storage/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-25%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%202.23.07.png',
+    default: 'https://storage.googleapis.com/wisc-storage/My%20project-1.png',
   })
   @Field(() => String, {
     defaultValue:
-      'https://storage.googleapis.com/wisc-storage/%E1%84%89%E1%85%B3%E1%84%8F%E1%85%B3%E1%84%85%E1%85%B5%E1%86%AB%E1%84%89%E1%85%A3%E1%86%BA%202023-05-25%20%E1%84%8B%E1%85%A9%E1%84%92%E1%85%AE%202.23.07.png',
+      'https://storage.googleapis.com/wisc-storage/My%20project-1.png',
   })
   user_image?: string;
 

@@ -51,7 +51,7 @@ export class StudyCafesService {
     const pageSize = 10;
     return this.studyCafeRepository.find({
       where: { studyCafe_city } && { studyCafe_district },
-      relations: ['images'],
+      relations: ['images', 'review'],
       order: { studyCafe_name: 'ASC' },
       take: pageSize,
       skip: pageSize * (page - 1),

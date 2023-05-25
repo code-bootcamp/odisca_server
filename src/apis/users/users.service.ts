@@ -23,9 +23,9 @@ export class UsersService {
       where: { user_id },
       relations: [
         'visits',
+        'visits.seat',
         'visits.studyCafe',
         'visits.studyCafe.images',
-        'seat',
       ],
       order: { visits: { visit_createdAt: 'desc' } },
     });
@@ -61,9 +61,14 @@ export class UsersService {
     user_id,
     updateLoginUserInput,
   }: IUsersServiceUpdate): Promise<boolean> {
-    const { user_password, user_phone, user_image } = updateLoginUserInput;
+    const { user_password, user_phone } = updateLoginUserInput;
+    let user_image = updateLoginUserInput.user_image;
     const user = await this.usersRepository.findOne({ where: { user_id } });
     const hashedPassword = await bcrypt.hash(user_password, 10);
+    if (!user_image) {
+      user_image =
+        'https://storage.googleapis.com/wisc-storage/My%20project-1.png';
+    }
     const result = await this.usersRepository.update(
       {
         user_id: user.user_id,
