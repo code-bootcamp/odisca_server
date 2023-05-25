@@ -36,6 +36,7 @@ export class VisitService {
         'studyCafe.images',
         'studyCafe.seats',
         'studyCafe.seats.payment',
+        'seat',
       ],
       order: {
         visit_createdAt: 'DESC',
