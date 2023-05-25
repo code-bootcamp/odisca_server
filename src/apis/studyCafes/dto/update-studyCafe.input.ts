@@ -3,6 +3,9 @@ import { CreateImageInput } from 'src/apis/images/dto/create-image.input';
 
 @InputType()
 export class UpdateStudyCafeInput {
+  @Field(() => String)
+  studyCafe_id: string;
+
   @Field(() => String, { nullable: true })
   studyCafe_name?: string;
 

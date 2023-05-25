@@ -11,16 +11,14 @@ import { StudyCafesService } from './studyCafes.service';
 
 @Resolver()
 export class StudyCafesResolver {
-  constructor(
-    private readonly studyCafesService: StudyCafesService, //
-  ) {}
+  constructor(private readonly studyCafesService: StudyCafesService) {}
 
   // 스터디 카페 등록
   @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => StudyCafe)
   createLoginStudyCafe(
-    @Args('createStudyCafeInput') createStudyCafeInput: CreateStudyCafeInput, //
-    @Context() context: IContext, //
+    @Context() context: IContext,
+    @Args('createStudyCafeInput') createStudyCafeInput: CreateStudyCafeInput,
   ): Promise<StudyCafe> {
     const administer_id = context.req.user.id;
     return this.studyCafesService.createStudyCafe({
@@ -34,7 +32,7 @@ export class StudyCafesResolver {
   @Mutation(() => Boolean)
   createLoginCafeFloorPlanAndSeats(
     @Args('createCafeFloorPlanInput')
-    createCafeFloorPlanInput: CreateCafeFloorPlanInput, //
+    createCafeFloorPlanInput: CreateCafeFloorPlanInput,
   ): Promise<boolean> {
     return this.studyCafesService.createCafeFloorPlanAndSeats({
       createCafeFloorPlanInput,
@@ -45,7 +43,7 @@ export class StudyCafesResolver {
   @Query(() => [StudyCafe])
   fetchAllStudyCafes(
     @Args('fetchAllStudyCafesInput')
-    fetchAllStudyCafesInput: FetchAllStudyCafesInput, //
+    fetchAllStudyCafesInput: FetchAllStudyCafesInput,
   ): Promise<StudyCafe[]> {
     return this.studyCafesService.fetchAllStudyCafes({
       fetchAllStudyCafesInput,
@@ -55,7 +53,7 @@ export class StudyCafesResolver {
   // 등록한 스터디 카페 전체 조회
   @Query(() => [StudyCafe])
   fetchAllStudyCafesByAdminId(
-    @Args('administer_id') administer_id: string, //
+    @Args('administer_id') administer_id: string,
   ): Promise<StudyCafe[]> {
     return this.studyCafesService.fetchStudyCafesById({ administer_id });
   }
@@ -63,7 +61,7 @@ export class StudyCafesResolver {
   // 등록한 스터디 카페 하나 조회(유저용 - 상세페이지)
   @Query(() => StudyCafe)
   fetchOneStudyCafeForUser(
-    @Args('studyCafe_id') studyCafe_id: string, //
+    @Args('studyCafe_id') studyCafe_id: string,
   ): Promise<StudyCafe> {
     return this.studyCafesService.fetchStudyCafeByIdForUser({ studyCafe_id });
   }
@@ -72,19 +70,19 @@ export class StudyCafesResolver {
   @UseGuards(GqlAuthGuard('administer-access'))
   @Query(() => StudyCafe)
   fetchOneStudyCafeForAdminister(
-    @Args('studyCafe_id') studyCafe_id: string, //
+    @Args('studyCafe_id') studyCafe_id: string,
   ): Promise<StudyCafe> {
     return this.studyCafesService.fetchStudyCafeByIdForAdmin({ studyCafe_id });
   }
 
   // 스터디 카페 수정
   @UseGuards(GqlAuthGuard('administer-access'))
-  @Mutation(() => StudyCafe)
+  @Mutation(() => Boolean)
   updateLoginStudyCafe(
-    @Context() context: IContext, //
+    @Context() context: IContext,
     @Args('updateStudyCafeInput')
-    updateStudyCafeInput: UpdateStudyCafeInput, //
-  ): Promise<StudyCafe> {
+    updateStudyCafeInput: UpdateStudyCafeInput,
+  ): Promise<boolean> {
     const administer_id = context.req.user.id;
     return this.studyCafesService.updateStudyCafe({
       updateStudyCafeInput,

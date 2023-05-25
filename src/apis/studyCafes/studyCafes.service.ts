@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnprocessableEntityException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ImagesService } from '../images/images.service';
@@ -92,13 +92,17 @@ export class StudyCafesService {
   async updateStudyCafe({
     updateStudyCafeInput,
     administer_id,
-  }: IStudyCafesServiceUpdate): Promise<StudyCafe> {
+  }: IStudyCafesServiceUpdate): Promise<boolean> {
     const { image, ...StudyCafe } = updateStudyCafeInput;
-    const result = await this.studyCafeRepository.save({
-      ...StudyCafe,
-      administer: { administer_id },
-    });
-    await this.imageService.update({ image, result });
-    return result;
+    try {
+      const result = await this.studyCafeRepository.save({
+        ...StudyCafe,
+        administer: { administer_id },
+      });
+      if (image) await this.imageService.update({ image, result });
+      return true;
+    } catch {
+      throw new UnprocessableEntityException('스터디카페 정보수정 실패!');
+    }
   }
 }
