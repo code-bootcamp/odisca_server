@@ -38,5 +38,5 @@ export class Review {
   @JoinColumn()
   @OneToOne(() => Visit)
   @Field(() => Visit, { nullable: true })
-  visit: Visit;
+  visit?: Visit;
 }

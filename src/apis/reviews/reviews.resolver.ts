@@ -23,8 +23,19 @@ export class ReviewsResolver {
     @Context() context: IContext, //
   ): Promise<Review[]> {
     const user = context.req.user.id;
-    return await this.reviewsService.findByUserId({
+    return this.reviewsService.findByUserId({
       user,
+    });
+  }
+
+  // Review테이블에 visit_id로 리뷰 조회
+  @UseGuards(GqlAuthGuard('user-access'))
+  @Query(() => Review)
+  async fetchLoginReviewByVisitId(
+    @Args('visit_id') visit_id: string,
+  ): Promise<Review> {
+    return this.reviewsService.findByVisitId({
+      visit_id,
     });
   }
 

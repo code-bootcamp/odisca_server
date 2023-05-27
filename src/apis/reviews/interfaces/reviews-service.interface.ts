@@ -18,6 +18,10 @@ export interface IReviewsServiceFindByUserId {
   user: string;
 }
 
+export interface IReviewsServiceFindByVisitId {
+  visit_id: string;
+}
+
 export interface IReviewsServiceCancel {
   review_id: string;
   user_id: string;
