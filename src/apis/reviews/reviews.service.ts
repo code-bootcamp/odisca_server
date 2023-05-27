@@ -7,6 +7,7 @@ import {
   IReviewsServiceCancel,
   IReviewsServiceCreate,
   IReviewsServiceUpdate,
+  IReviewsServiceFindByVisitId,
 } from './interfaces/reviews-service.interface';
 import { VisitService } from '../visit/visit.service';
 import { StudyCafesService } from '../studyCafes/studyCafes.service';
@@ -32,6 +33,30 @@ export class ReviewsService {
     });
 
     return checkUser;
+  }
+
+  // Review테이블에 visit_id로 조회하기
+  async findByVisitId({
+    visit_id,
+  }: IReviewsServiceFindByVisitId): Promise<Review> {
+    try {
+      const checkReview = await this.reviewsRepository.findOne({
+        where: { visit: { visit_id } },
+        relations: [
+          'user',
+          'visit',
+          'studyCafe',
+          'studyCafe.images',
+          'visit.seat',
+        ],
+      });
+
+      if (!checkReview) throw new Error();
+
+      return checkReview;
+    } catch {
+      throw new UnprocessableEntityException('작성된 리뷰가 없습니다!');
+    }
   }
 
   // 리뷰 추가
