@@ -11,7 +11,7 @@ export class AuthController {
   ) {}
 
   //유저 소셜로그인
-  @Get('/login/:social')
+  @Get('/user/login/:social')
   @UseGuards(DynamicAuthGuard)
   loginUserOAuth(
     @Req() req: Request & IOAuthUser, //
@@ -22,7 +22,7 @@ export class AuthController {
   }
 
   //관리자 소셜로그인
-  @Get('/login/:social')
+  @Get('/admin/login/:social')
   @UseGuards(DynamicAuthGuard)
   loginAdministerOAuth(
     @Req() req: Request & IOAuthUser, //
