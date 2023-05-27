@@ -11,6 +11,7 @@ async function bootstrap() {
       'http://127.0.0.1:3000',
       'https://34.64.94.142:3000',
       'https://odisca.store',
+      'https://odisca.co.kr',
     ],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,

@@ -172,6 +172,7 @@ export class AuthService {
       'https://odisca.store',
       'http://127.0.0.1:3000',
       'https://34.64.94.142:3000',
+      'https://odisca.co.kr',
     ];
     const origin = req.headers.origin;
     if (Origins.includes(origin)) {
@@ -208,6 +209,7 @@ export class AuthService {
       'https://odisca.store',
       'http://127.0.0.1:3000',
       'https://34.64.94.142:3000',
+      'https://odisca.co.kr',
     ];
     const origin = req.headers.origin;
     if (Origins.includes(origin)) {
