@@ -191,7 +191,7 @@ export class AuthService {
 
     // 회원가입이 완료된 상태라면 로그인하기
     this.setRefreshTokenForUser({ user, res, req });
-    res.redirect('http://127.0.0.1:5501/frontend%20/login/index.html');
+    res.redirect('https://odisca.co.kr/user');
   }
 
   // 관리자 소셜로그인 //
@@ -213,7 +213,7 @@ export class AuthService {
     }
     // 회원가입이 완료된 상태라면 로그인하기
     this.setRefreshTokenForAdminister({ administer, res, req });
-    res.redirect('http://127.0.0.1:5501/frontend%20/login/index.html');
+    res.redirect('https://odisca.co.kr/admin');
   }
 
   // 유저 access 토큰 발급 //
