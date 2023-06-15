@@ -89,4 +89,15 @@ export class StudyCafesResolver {
       administer_id,
     });
   }
+
+  // 스터디 카페 삭제
+  @UseGuards(GqlAuthGuard('administer-access'))
+  @Mutation(() => Boolean)
+  deleteLoginStudyCafe(
+    @Args('studyCafe_id') studyCafe_id: string,
+  ): Promise<boolean> {
+    return this.studyCafesService.deleteStudyCafe({
+      studyCafe_id,
+    });
+  }
 }

@@ -6,6 +6,7 @@ import { StudyCafe } from './entities/studyCafe.entity';
 import {
   IStudyCafesServiceCreate,
   IStudyCafesServiceCreateCafeFloorPlan,
+  IStudyCafesServiceDeleteStudyCafe,
   IStudyCafesServiceFetchStudyCafeById,
   IStudyCafesServiceFetchStudyCafesById,
   IStudyCafesServiceUpdate,
@@ -104,5 +105,15 @@ export class StudyCafesService {
     } catch {
       throw new UnprocessableEntityException('스터디카페 정보수정 실패!');
     }
+  }
+
+  // 스터디 카페 삭제
+  async deleteStudyCafe({
+    studyCafe_id,
+  }: IStudyCafesServiceDeleteStudyCafe): Promise<boolean> {
+    const deletedStudyCafe = await this.studyCafeRepository.delete({
+      studyCafe_id,
+    });
+    return deletedStudyCafe.affected ? true : false;
   }
 }

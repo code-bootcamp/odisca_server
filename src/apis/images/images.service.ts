@@ -2,6 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Image } from './entities/image.entity';
+import {
+  IImagesServiceCreate,
+  IImagesServiceFindImagesByStudyCafeIds,
+} from './interfaces/images-service.interface';
 import { IImagesServiceCreate } from './interfaces/images-service.interface';
 
 @Injectable()
@@ -12,7 +16,9 @@ export class ImagesService {
   ) {}
 
   // 스터디 카페 ID 별로 이미지 조회
-  async findImagesByStudyCafeIds({ studyCafe_id }) {
+async findImagesByStudyCafeIds({
+    studyCafe_id,
+  }: IImagesServiceFindImagesByStudyCafeIds) {
     return this.imagesRepository.find({
       where: { studyCafe: { studyCafe_id } },
     });
@@ -24,7 +30,7 @@ export class ImagesService {
   }
 
   // 선택한 카페 메인 이미지 조회
-  async findOneByStudyCafe({ studyCafe_id }) {
+async findOneByStudyCafe({ studyCafe_id }): Promise<Image> {
     const result = await this.imagesRepository
       .createQueryBuilder('image')
       .innerJoinAndSelect('image.studyCafe', 'studyCafe')

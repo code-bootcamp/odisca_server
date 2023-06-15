@@ -23,3 +23,7 @@ export interface IStudyCafesServiceFetchStudyCafesById {
 export interface IStudyCafesServiceFetchStudyCafeById {
   studyCafe_id: string;
 }
+
+export interface IStudyCafesServiceDeleteStudyCafe {
+  studyCafe_id: string;
+}

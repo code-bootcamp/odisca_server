@@ -12,7 +12,7 @@ export class ImagesResolver {
   @Query(() => Image)
   fetchCafeMainImage(
     @Args('studyCafe_id') studyCafe_id: string, //
-  ) {
+  ): Promise<Image> {
     return this.imagesService.findOneByStudyCafe({ studyCafe_id });
   }
 }

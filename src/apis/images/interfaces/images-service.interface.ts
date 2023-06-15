@@ -5,3 +5,7 @@ export interface IImagesServiceCreate {
   image: CreateImageInput[];
   result: StudyCafe;
 }
+
+export interface IImagesServiceFindImagesByStudyCafeIds {
+  studyCafe_id: string;
+}
