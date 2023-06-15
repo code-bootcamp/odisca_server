@@ -6,6 +6,7 @@ import {
   IImagesServiceCreate,
   IImagesServiceFindImagesByStudyCafeIds,
 } from './interfaces/images-service.interface';
+import { IImagesServiceCreate } from './interfaces/images-service.interface';
 
 @Injectable()
 export class ImagesService {
@@ -15,7 +16,7 @@ export class ImagesService {
   ) {}
 
   // 스터디 카페 ID 별로 이미지 조회
-  async findImagesByStudyCafeIds({
+async findImagesByStudyCafeIds({
     studyCafe_id,
   }: IImagesServiceFindImagesByStudyCafeIds) {
     return this.imagesRepository.find({
@@ -29,7 +30,7 @@ export class ImagesService {
   }
 
   // 선택한 카페 메인 이미지 조회
-  async findOneByStudyCafe({ studyCafe_id }): Promise<Image> {
+async findOneByStudyCafe({ studyCafe_id }): Promise<Image> {
     const result = await this.imagesRepository
       .createQueryBuilder('image')
       .innerJoinAndSelect('image.studyCafe', 'studyCafe')
