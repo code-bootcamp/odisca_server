@@ -29,9 +29,8 @@ export class ReviewsService {
   }: IReviewsServiceFindByUserId): Promise<Review[]> {
     const checkUser = await this.reviewsRepository.find({
       where: { user: { user_id } },
-      relations: ['user'],
+      relations: ['user', 'studyCafe', 'studyCafe.images'],
     });
-
     return checkUser;
   }
 
