@@ -1,22 +1,31 @@
 import { Field, InputType } from '@nestjs/graphql';
 
 @InputType()
+export class FetchImageByVisitIdInput {
+  @Field(() => String)
+  visit_id: string;
+}
+
+@InputType()
 export class CreateReviewInput {
   @Field(() => String)
-  content: string;
+  review_content: string;
 
   @Field(() => String)
-  visitId: string;
+  visit_id: string;
 }
 
 @InputType()
 export class UpdateReviewInput {
   @Field(() => String)
-  reviewId: string;
+  review_id: string;
 
   @Field(() => String)
-  content: string;
+  review_content: string;
+}
 
+@InputType()
+export class CancelReviewInput {
   @Field(() => String)
-  visitId: string;
+  review_id: string;
 }

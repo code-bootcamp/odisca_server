@@ -12,15 +12,27 @@ import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 import { MailerModule } from '@nest-modules/mailer';
+import { VisitModule } from './apis/visit/visit.module';
+import { ImagesModule } from './apis/images/images.module';
+import { FilesModule } from './apis/files/files.module';
+import { SeatsModule } from './apis/seats/seats.module';
+import { PaymentsModule } from './apis/payments/payment.module';
+import { ScheduleModule } from '@nestjs/schedule';
 @Module({
   imports: [
     AdministersModule,
     AuthModule,
+    FilesModule,
+    ImagesModule,
+    PaymentsModule,
     PointTransactionsModule,
+    SeatsModule,
     StudyCafesModule,
     UsersModule,
     ReviewsModule,
     MailerModule,
+    VisitModule,
+    ScheduleModule.forRoot(),
     ConfigModule.forRoot(),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
@@ -53,7 +65,5 @@ import { MailerModule } from '@nest-modules/mailer';
       isGlobal: true,
     }),
   ],
-  // controllers: [AppController],
-  // providers: [AppService],
 })
 export class AppModule {}

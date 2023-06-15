@@ -1,18 +1,28 @@
-import { IAuthUser } from '../../../common/interfaces/context';
-
 export interface IReviewsServiceCreate {
-  content: string;
-  user: IAuthUser['user'];
-  visitId: string;
+  review_content: string;
+  user_id: string;
+  visit_id: string;
 }
 
 export interface IReviewsServiceUpdate {
-  reviewId: string;
-  content: string;
-  user: IAuthUser['user'];
-  visitId: string;
+  review_id: string;
+  review_content: string;
+  user_id: string;
 }
 
 export interface IReviewsServiceFindOneByVisitId {
-  visitId: string;
+  review_id: string;
+}
+
+export interface IReviewsServiceFindByUserId {
+  user: string;
+}
+
+export interface IReviewsServiceFindByVisitId {
+  visit_id: string;
+}
+
+export interface IReviewsServiceCancel {
+  review_id: string;
+  user_id: string;
 }

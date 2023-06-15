@@ -1,7 +1,8 @@
 import { CreateAdministerInput } from '../dto/create-administer.input';
+import { UpdateLoginAdministerInput } from '../dto/update-login-administer.input';
 
-export interface IAdministersServiceFindOne {
-  email: string;
+export interface IAdministersServiceFindOneByEmail {
+  administer_email: string;
 }
 
 export interface IAdministersServiceCreate {
@@ -9,9 +10,18 @@ export interface IAdministersServiceCreate {
 }
 
 export interface IAdministersServiceFindOneById {
-  adminId: string;
+  administer_id: string;
 }
 
 export interface IAdministersServiceSoftDelete {
-  adminId: string;
+  administer_id: string;
+}
+
+export interface IAdministerServiceUpdate {
+  administer_id: string;
+  updateLoginAdministerInput: UpdateLoginAdministerInput;
+}
+
+export interface IAdministersServiceFindAdminWithStudyCafes {
+  administer_id: string;
 }

@@ -6,16 +6,14 @@ export class JwtNaverStrategy extends PassportStrategy(Strategy, 'naver') {
     super({
       clientID: process.env.NAVER_CLIENT_ID,
       clientSecret: process.env.NAVER_CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/login/naver',
+      callbackURL:
+        'https://odisca.store/user/login/naver' ||
+        'https://odisca.store/admin/login/naver',
       scope: ['email', 'name'],
     });
   }
 
   validate(accessToken: string, refreshToken: string, profile: Profile) {
-    console.log(accessToken);
-    console.log(refreshToken);
-    console.log(profile);
-
     return {
       name: profile.name,
       email: profile.email,

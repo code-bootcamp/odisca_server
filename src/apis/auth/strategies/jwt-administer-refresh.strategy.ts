@@ -4,7 +4,10 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Cache } from 'cache-manager';
 import { Strategy } from 'passport-jwt';
 
-export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
+export class JwtAdministerRefreshStrategy extends PassportStrategy(
+  Strategy,
+  'administer-refresh',
+) {
   constructor(
     @Inject(CACHE_MANAGER)
     private readonly cacheManager: Cache,
@@ -15,7 +18,7 @@ export class JwtRefreshStrategy extends PassportStrategy(Strategy, 'refresh') {
         const refreshToken = cookie.replace('refreshToken=', '');
         return refreshToken;
       },
-      secretOrKey: process.env.JWT_REFRESH_KEY,
+      secretOrKey: process.env.JWT_REFRESH_KEY_ADMINISTER,
       passReqToCallback: true,
     });
   }

@@ -1,11 +1,11 @@
 import { Field, ObjectType } from '@nestjs/graphql';
 import { Review } from 'src/apis/reviews/entities/review.entity';
+import { Seat } from 'src/apis/seats/entities/seat.entity';
 import { StudyCafe } from 'src/apis/studyCafes/entities/studyCafe.entity';
 import { User } from 'src/apis/users/entities/user.entity';
 import {
   CreateDateColumn,
   Entity,
-  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -16,22 +16,25 @@ import {
 export class Visit {
   @PrimaryGeneratedColumn('uuid')
   @Field(() => String)
-  id: string;
+  visit_id: string;
 
   @CreateDateColumn()
   @Field(() => Date)
-  createdAt: Date;
+  visit_createdAt: Date;
 
-  @JoinColumn()
   @OneToOne(() => Review)
   @Field(() => Review)
   review: Review;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, (user) => user.visits)
   @Field(() => User)
   user: User;
 
-  @ManyToOne(() => StudyCafe)
+  @ManyToOne(() => StudyCafe, (studyCafe) => studyCafe.visit)
   @Field(() => StudyCafe)
   studyCafe: StudyCafe;
+
+  @ManyToOne(() => Seat, (seat) => seat.visit)
+  @Field(() => Seat)
+  seat: Seat;
 }
