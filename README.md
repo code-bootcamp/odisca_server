@@ -1,73 +1,252 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# 📖 어디스카(Where is StudyCafe?)
+## ✔ 팀원 소개
+<table align="center">
+    <tr align="center">
+        <td style="min-width: 240px;">
+            <a href="https://github.com/eunpyeong114">
+              <img src="https://github.com/eunpyeong114.png" width="100">
+              <br />
+              <b>전은평</b>
+            </a> 
+        </td>
+        <td style="min-width: 220px;">
+            <a href="https://github.com/Middledown">
+              <img src="https://github.com/Middledown.png" width="100">
+              <br />
+              <b>마정하 </b>
+            </a>
+        </td>
+      </tr>
+        <td>
+        - 초기 배포 및 배포 관리
+		    <br>
+        - google-storage관리
+        <br>
+        - user API 
+        <br>
+        - administer API
+        <br>
+        - studyCafeAPI
+        <br>
+      	- seat API   
+        <br>
+       	- Image API 
+        <br>
+        - 좌석별 잔여시간 1분마다 업데이트 API
+        <br>
+        - git 관리
+        </td>
+        <td>
+        - 배포 관리
+        <br>
+        - Review API
+        <br>
+        - Payment API
+        <br>
+        - PointTransaction API
+        <br>
+        - Visit API
+        <br>
+        - iamport결제 검증 API
+        <br>
+        - 좌석별 잔여시간 1분마다 업데이트 API
+        <br>
+        - git 관리
+        </td>
+</table>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+ ## ✔ 프로젝트 목표
+‘카공족’이라는 신조어가 생길 정도로 카페에서 하루종일 공부하는 것이 사회적으로 문제가 되고 있고, 이에 맞춰 스터디 카페가 대거 등장하고 있습니다.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+하지만 스터디 카페가 많이 생겨난 만큼, 스터디 카페에 대한 정보를 얻기란 여간 번거로운 일이 아닙니다. 비록 찾아서 가더라도 만석이라, 헛걸음을 하는 경우도 많습니다.
 
-## Description
+'어디스카'를 이용하게 되면 내 주변 스터디 카페 검색 뿐만 아니라 실시간으로 사용가능 좌석 및 남은 시간을 확인할 수 있으며, 동시에 해당 좌석 사용 결제도 가능합니다.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+1분 1초가 아까운 시험기간, 여러 스터디 카페를 배회하며 시간을 버리는 것이 아니라, '오로지 공부에만 집중'할 수 있게 도와줄 수 있습니다.
 
-## Installation
 
-```bash
-$ yarn install
+ ## ✔ 기술 스택
+<img src="asset/기술스택.png">
+ 
+ ## ✔ ERD(Entity-Relationship Diagram)
+<img src="asset/어디스카ERD.png">
+
+## ✔ UserFlow
+<img src="asset/userflow.png">
+
+## ✔ API Document
+<img src="asset/APIDoc.png">
+
+## 
+ ## ✔ 폴더구조
 ```
+📦src
+ ┣ 📂apis
+ ┃ ┣ 📂administers
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┣ 📜create-administer.input.ts
+ ┃ ┃ ┃ ┗ 📜update-login-administer.input.ts
+ ┃ ┃ ┣ 📂entities
+ ┃ ┃ ┃ ┗ 📜administer.entity.ts
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜administers-service.interface.ts
+ ┃ ┃ ┣ 📜administers.module.ts
+ ┃ ┃ ┣ 📜administers.resolver.ts
+ ┃ ┃ ┗ 📜administers.service.ts
+ ┃ ┣ 📂auth
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┣ 📜login-administer.input.ts
+ ┃ ┃ ┃ ┗ 📜login-user.input.ts
+ ┃ ┃ ┣ 📂guards
+ ┃ ┃ ┃ ┣ 📜dynamic-auth.guard.ts
+ ┃ ┃ ┃ ┗ 📜gql-auth.guard.ts
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜auth-service.interface.ts
+ ┃ ┃ ┣ 📂strategies
+ ┃ ┃ ┃ ┣ 📜jwt-administer-access.strategy.ts
+ ┃ ┃ ┃ ┣ 📜jwt-administer-refresh.strategy.ts
+ ┃ ┃ ┃ ┣ 📜jwt-social-google.strategy.ts
+ ┃ ┃ ┃ ┣ 📜jwt-social-kakao.strategy.ts
+ ┃ ┃ ┃ ┣ 📜jwt-social-naver.strategy.ts
+ ┃ ┃ ┃ ┣ 📜jwt-user-access.strategy.ts
+ ┃ ┃ ┃ ┗ 📜jwt-user-refresh.strategy.ts
+ ┃ ┃ ┣ 📜auth.controller.ts
+ ┃ ┃ ┣ 📜auth.module.ts
+ ┃ ┃ ┣ 📜auth.resolever.ts
+ ┃ ┃ ┗ 📜auth.service.ts
+ ┃ ┣ 📂files
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜files-service.interface.ts
+ ┃ ┃ ┣ 📜files.module.ts
+ ┃ ┃ ┣ 📜files.resolver.ts
+ ┃ ┃ ┗ 📜files.service.ts
+ ┃ ┣ 📂iamport
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜iamport-service.interface.ts
+ ┃ ┃ ┗ 📜iamport.service.ts
+ ┃ ┣ 📂images
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┗ 📜create-image.input.ts
+ ┃ ┃ ┣ 📂entities
+ ┃ ┃ ┃ ┗ 📜image.entity.ts
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜images-service.interface.ts
+ ┃ ┃ ┣ 📜images.module.ts
+ ┃ ┃ ┣ 📜images.resolver.ts
+ ┃ ┃ ┗ 📜images.service.ts
+ ┃ ┣ 📂payments
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┣ 📜create-payment.input.ts
+ ┃ ┃ ┃ ┣ 📜create-payment.object.ts
+ ┃ ┃ ┃ ┗ 📜create-payment.return.ts
+ ┃ ┃ ┣ 📂entities
+ ┃ ┃ ┃ ┗ 📜payment.entity.ts
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜payment-service.interface.ts
+ ┃ ┃ ┣ 📜payment.module.ts
+ ┃ ┃ ┣ 📜payment.resolver.ts
+ ┃ ┃ ┗ 📜payment.service.ts
+ ┃ ┣ 📂pointTransactions
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┗ 📜create-pointTransactions.input.ts
+ ┃ ┃ ┣ 📂entities
+ ┃ ┃ ┃ ┗ 📜pointTransaction.entity.ts
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜pointTransactions-service.interface.ts
+ ┃ ┃ ┣ 📜pointTransactions.module.ts
+ ┃ ┃ ┣ 📜pointTransactions.resolver.ts
+ ┃ ┃ ┗ 📜pointTransactions.service.ts
+ ┃ ┣ 📂reviews
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┗ 📜create-reviews.input.ts
+ ┃ ┃ ┣ 📂entities
+ ┃ ┃ ┃ ┗ 📜review.entity.ts
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜reviews-service.interface.ts
+ ┃ ┃ ┣ 📜reviews.module.ts
+ ┃ ┃ ┣ 📜reviews.resolver.ts
+ ┃ ┃ ┗ 📜reviews.service.ts
+ ┃ ┣ 📂seats
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┣ 📜create-seats-information.input.ts
+ ┃ ┃ ┃ ┗ 📜create-seats.input.ts
+ ┃ ┃ ┣ 📂entities
+ ┃ ┃ ┃ ┗ 📜seat.entity.ts
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜seats-service.interface.ts
+ ┃ ┃ ┣ 📜seats.module.ts
+ ┃ ┃ ┣ 📜seats.resolver.ts
+ ┃ ┃ ┗ 📜seats.service.ts
+ ┃ ┣ 📂studyCafes
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┣ 📜create-floorPlan.input.ts
+ ┃ ┃ ┃ ┣ 📜create-studyCafe.input.ts
+ ┃ ┃ ┃ ┣ 📜fetch-all-studyCafes.input.ts
+ ┃ ┃ ┃ ┗ 📜update-studyCafe.input.ts
+ ┃ ┃ ┣ 📂entities
+ ┃ ┃ ┃ ┗ 📜studyCafe.entity.ts
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜studyCafes-service.interfaces.ts
+ ┃ ┃ ┣ 📜studyCafes.module.ts
+ ┃ ┃ ┣ 📜studyCafes.resolver.ts
+ ┃ ┃ ┗ 📜studyCafes.service.ts
+ ┃ ┣ 📂users
+ ┃ ┃ ┣ 📂dto
+ ┃ ┃ ┃ ┣ 📜create-user.input.ts
+ ┃ ┃ ┃ ┗ 📜update-login-user.input.ts
+ ┃ ┃ ┣ 📂entities
+ ┃ ┃ ┃ ┗ 📜user.entity.ts
+ ┃ ┃ ┣ 📂interfaces
+ ┃ ┃ ┃ ┗ 📜users-service.interface.ts
+ ┃ ┃ ┣ 📜users.module.ts
+ ┃ ┃ ┣ 📜users.resolver.ts
+ ┃ ┃ ┗ 📜users.service.ts
+ ┃ ┗ 📂visit
+ ┃ ┃ ┣ 📂entities
+ ┃ ┃ ┃ ┗ 📜visit.entity.ts
+ ┃ ┃ ┣ 📜visit.module.ts
+ ┃ ┃ ┣ 📜visit.resolver.ts
+ ┃ ┃ ┗ 📜visit.service.ts
+ ┣ 📂common
+ ┃ ┗ 📂interfaces
+ ┃ ┃ ┗ 📜context.ts
+ ┣ 📜app.module.ts
+ ┗ 📜main.ts
+ ```
+ 
+ ### ✔ URL
+ Service : https://odisca.co.kr/<hr>
+ Client: https://github.com/code-bootcamp/odisca_client<hr>
+ Server : https://github.com/code-bootcamp/odisca_server
+ ## ✔ 구현 화면
+## 📚 랜딩 페이지
+<img src="asset/랜딩페이지.gif">
 
-## Running the app
+## 📚 회원가입 페이지
+<img src="asset/회원가입.gif">
 
-```bash
-# development
-$ yarn run start
+## 📚 로그인
+<img src="asset/로그인.gif">
 
-# watch mode
-$ yarn run start:dev
+## 📚 소셜로그인
+<img src="asset/소셜로그인.gif">
 
-# production mode
-$ yarn run start:prod
-```
+## 📚 메인페이지
+<img src="asset/메인페이지.gif">
 
-## Test
+## 📚 스터디카페 상세페이지
+<img src="asset/스터디카페상세페이지.gif">
 
-```bash
-# unit tests
-$ yarn run test
+## 📚 좌석 조회 및 결제페이지
+<img src="asset/좌석조회 및 결제.gif">
 
-# e2e tests
-$ yarn run test:e2e
+## 📚 유저 마이페이지
+<img src="asset/유저마이페이지.gif">
 
-# test coverage
-$ yarn run test:cov
-```
+## 📚 관리자 페이지
+<img src="asset/관리자페이지.gif">
 
-## Support
+## 📚 리뷰 페이지
+<img src="asset/리뷰페이지.gif">
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+### <a href="https://www.youtube.com/watch?v=A8hUqDYSWu0">📺 시현 영상 보러가기</a>
