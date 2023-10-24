@@ -11,6 +11,7 @@ import {
 
 @Injectable()
 export class IamportService {
+  // axios에서 access_token 받아오기
   async getToken(): Promise<string> {
     try {
       const result = await axios.post(`https://api.iamport.kr/users/getToken`, {
@@ -26,21 +27,24 @@ export class IamportService {
     }
   }
 
-  async checkPaid({ impUid, amount }: IIamportServiceCheckPaid): Promise<void> {
+  // axios에서 금액 받아와서 입력된 금액이랑 맞는지 확인하기
+  async checkPaid({
+    pointTransaction_impUid, //
+    pointTransaction_amount, //
+  }: IIamportServiceCheckPaid): Promise<void> {
     try {
       const token = await this.getToken();
       const result = await axios.get(
-        `https://api.iamport.kr/payments/${impUid}`,
+        `https://api.iamport.kr/payments/${pointTransaction_impUid}`,
         { headers: { Authorization: token } },
       );
 
-      if (amount !== result.data.response.amount) {
+      if (pointTransaction_amount !== result.data.response.amount) {
         throw new UnprocessableEntityException(
           '유효하지 않은 결제 금액입니다.',
         );
       }
     } catch (error) {
-      // console.log(error);
       if (error.response.data) {
         throw new HttpException(
           error.response.data.message,
@@ -52,7 +56,10 @@ export class IamportService {
     }
   }
 
-  async cancel({ impUid }: IIamportServiceCancel): Promise<void> {
+  // axios에서 결제 취소하기
+  async cancel({
+    pointTransaction_impUid,
+  }: IIamportServiceCancel): Promise<void> {
     try {
       const mytoken = await this.getToken();
 
@@ -64,12 +71,11 @@ export class IamportService {
           Authorization: `Bearer ${mytoken}`, // 포트원 서버로부터 발급받은 엑세스 토큰
         },
         data: {
-          imp_uid: impUid, // imp_uid를 환불 `unique key`로 입력
+          imp_uid: pointTransaction_impUid, // imp_uid를 환불 `unique key`로 입력
         },
       });
       return;
     } catch (error) {
-      // console.log(error);
       if (error.response.data) {
         throw new HttpException(
           error.response.data.message,

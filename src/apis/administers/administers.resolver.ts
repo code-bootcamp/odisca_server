@@ -9,44 +9,50 @@ import { Administer } from './entities/administer.entity';
 
 @Resolver()
 export class AdministersResolver {
-  constructor(private readonly administersService: AdministersService) {}
+  constructor(
+    private readonly administersService: AdministersService, //
+  ) {}
 
   // 회원 가입
   @Mutation(() => Administer)
   createAdminister(
-    @Args('createAdministerInput') createAdministerInput: CreateAdministerInput,
+    @Args('createAdministerInput') createAdministerInput: CreateAdministerInput, //
   ): Promise<Administer> {
     return this.administersService.create({ createAdministerInput });
   }
 
   // 회원 정보 조회
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Query(() => Administer)
-  fetchLoginAdminister(@Context() context: IContext) {
-    const adminId = context.req.user.id;
-    return this.administersService.findOneById({ adminId });
+  fetchLoginAdminister(
+    @Context() context: IContext, //
+  ): Promise<Administer> {
+    const administer_id = context.req.user.id;
+    return this.administersService.findAdminWithStudyCafes({ administer_id });
   }
 
   // 회원 정보 수정
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => Administer)
   updateLoginAdminister(
-    @Context() context: IContext,
+    @Context() context: IContext, //
     @Args('updateLoginAdministerInput')
-    updateLoginAdministerInput: UpdateLoginAdministerInput,
-  ) {
-    const adminId = context.req.user.id;
+    updateLoginAdministerInput: UpdateLoginAdministerInput, //
+  ): Promise<Administer> {
+    const administer_id = context.req.user.id;
     return this.administersService.update({
-      adminId,
+      administer_id,
       updateLoginAdministerInput,
     });
   }
 
   // 회원 탈퇴(정보 삭제)
-  @UseGuards(GqlAuthGuard('access'))
+  @UseGuards(GqlAuthGuard('administer-access'))
   @Mutation(() => Boolean)
-  deleteLoginAdminister(@Context() context: IContext): Promise<boolean> {
-    const adminId = context.req.user.id;
-    return this.administersService.softDelete({ adminId });
+  deleteLoginAdminister(
+    @Context() context: IContext, //
+  ): Promise<boolean> {
+    const administer_id = context.req.user.id;
+    return this.administersService.softDelete({ administer_id });
   }
 }

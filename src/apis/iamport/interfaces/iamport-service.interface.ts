@@ -1,8 +1,8 @@
 export interface IIamportServiceCheckPaid {
-  impUid: string;
-  amount: number;
+  pointTransaction_impUid: string;
+  pointTransaction_amount: number;
 }
 
 export interface IIamportServiceCancel {
-  impUid: string;
+  pointTransaction_impUid: string;
 }

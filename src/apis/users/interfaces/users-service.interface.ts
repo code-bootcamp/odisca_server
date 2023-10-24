@@ -1,16 +1,22 @@
 import { CreateUserInput } from '../dto/create-user.input';
+import { UpdateLoginUserInput } from '../dto/update-login-user.input';
 
 export interface IUsersServiceFindOneById {
-  userId: string;
+  user_id: string;
 }
 export interface IUsersServiceCreate {
   createUserInput: CreateUserInput;
 }
 
 export interface IUsersServiceFindOneByEmail {
-  email: string;
+  user_email: string;
 }
 
 export interface IUsersServiceSoftDelete {
-  userId: string;
+  user_id: string;
+}
+
+export interface IUsersServiceUpdate {
+  user_id: string;
+  updateLoginUserInput: UpdateLoginUserInput;
 }
